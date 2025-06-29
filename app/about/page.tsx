@@ -8,33 +8,22 @@ import { motion } from "framer-motion"
 
 export default function AboutPage() {
   const technicalSkills = [
+    "HTML",
+    "CSS",
     "JavaScript",
     "TypeScript",
     "React",
-    "Next.js",
-    "Vue.js",
-    "Node.js",
-    "Python",
-    "PostgreSQL",
-    "MongoDB",
-    "AWS",
-    "Docker",
+    "Next.js",    
     "Git",
-    "Tailwind CSS",
-    "GraphQL",
-    "REST APIs",
-    "Microservices",
+    "Tailwind CSS"
   ]
 
   const softSkills = [
     "Problem Solving",
-    "Team Leadership",
     "Communication",
-    "Project Management",
     "Critical Thinking",
     "Adaptability",
-    "Mentoring",
-    "Agile Methodology",
+    "Mentoring"
   ]
 
   const values = [
@@ -106,8 +95,8 @@ export default function AboutPage() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Image
-                src="/placeholder.svg?height=300&width=300"
-                alt="Sarah Chen"
+                src="/hph_portrait.jpg"
+                alt="Hset Paing"
                 width={300}
                 height={300}
                 className="rounded-2xl mx-auto lg:mx-0 shadow-xl ring-4 ring-navy-100 dark:ring-navy-800"

@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Github, Linkedin, Mail, Twitter, Send } from "lucide-react"
+import { Github, Linkedin, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { PageTransition } from "@/components/page-transition"
 import { motion } from "framer-motion"
@@ -42,9 +42,9 @@ export default function ContactPage() {
   }
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+    { icon: Github, href: "https://github.com/hsetpainghtoogithub.com", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-74a6542aa/", label: "LinkedIn" },
+    { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
   ]
 
   return (
@@ -152,12 +152,10 @@ export default function ContactPage() {
                         className="w-full bg-primary hover:bg-primary text-white"
                       >
                         {isSubmitting ? (
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                          >
+
+                          <>
                             Sending...
-                          </motion.div>
+                          </>
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />

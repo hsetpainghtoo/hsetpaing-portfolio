@@ -7,27 +7,27 @@ import { ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { PageTransition } from "@/components/page-transition"
-import { motion } from "framer-motion"
+import { cubicBezier, motion } from "framer-motion"
 
 export default function ProjectsPage() {
   const projects = [
     {
-      title: "E-Commerce Platform",
+      title: "Myanmar Express Hub",
       description:
-        "Full-stack e-commerce solution with React, Node.js, and PostgreSQL featuring real-time inventory management.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
-      liveUrl: "#",
+        "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
+      image: "/myanmarexpresshub_3D.png?height=250&width=400",
+      technologies: ["Next.js", "TypeScript", "Groq AI API","i18n", "Shadcn UI"],
+      liveUrl: "https://myanmarexpresshub.com/",
       githubUrl: "#",
     },
     {
-      title: "Task Management App",
+      title: "Fake Store API Practice Project",
       description:
-        "Collaborative task management tool with real-time updates, team collaboration, and project tracking.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["React", "Node.js", "Socket.io", "MongoDB"],
-      liveUrl: "#",
-      githubUrl: "#",
+        "A practice eCommerce frontend built with React, TypeScript, and Tailwind CSS, fetching product data from the Fake Store API to display dynamic product listings, details, and cart functionality.",
+      image: "/online-shop.gif",
+      technologies: ["React", "Tailwind CSS", "Redux Toolkit"],
+      liveUrl: "https://fake-store-flame.vercel.app/",
+      githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
     },
     {
       title: "Weather Dashboard",
@@ -98,7 +98,8 @@ export default function ProjectsPage() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        // ease: "easeInOut", // cubic-bezier for 'ease-in-out'
+        ease: cubicBezier(0.42, 0, 0.58, 1)
       },
     },
   }
@@ -140,11 +141,11 @@ export default function ProjectsPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <Image
-                      src={project.image || "/placeholder.svg"}
+                      src={project.image || "/placeholder.svg?height=250&width=400"}
                       alt={project.title}
                       width={400}
                       height={250}
-                      className="w-full h-48 object-cover"
+                      className="w-fit mx-auto h-48 object-contain"
                     />
                   </motion.div>
                   <CardHeader>
@@ -180,7 +181,7 @@ export default function ProjectsPage() {
                     <div className="flex gap-2">
                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
                         <Button size="sm" asChild className="w-full bg-primary hover:bg-primary text-white">
-                          <Link href={project.liveUrl}>
+                          <Link href={project.liveUrl} target="_blank">
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Live Demo
                           </Link>
@@ -193,7 +194,7 @@ export default function ProjectsPage() {
                           asChild
                           className="w-full bg-transparent border-navy-600 text-navy-600 hover:bg-navy-50 dark:border-navy-400 dark:text-navy-400 dark:hover:bg-navy-900/20"
                         >
-                          <Link href={project.githubUrl}>
+                          <Link href={project.githubUrl} target="_blank">
                             <Github className="w-4 h-4 mr-2" />
                             Code
                           </Link>
