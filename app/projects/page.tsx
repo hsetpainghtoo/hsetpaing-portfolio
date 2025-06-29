@@ -12,12 +12,12 @@ import { motion } from "framer-motion"
 export default function ProjectsPage() {
   const projects = [
     {
-      title: "E-Commerce Platform",
+      title: "Myanmar Express Hub",
       description:
         "Full-stack e-commerce solution with React, Node.js, and PostgreSQL featuring real-time inventory management.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
-      liveUrl: "#",
+      image: "/myanmarexpresshub_3D.png?height=250&width=400",
+      technologies: ["Next.js", "TypeScript", "Groq API","i18n", "Shadcn UI"],
+      liveUrl: "https://myanmarexpresshub.com/",
       githubUrl: "#",
     },
     {
@@ -140,11 +140,11 @@ export default function ProjectsPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <Image
-                      src={project.image || "/placeholder.svg"}
+                      src={project.image || "/placeholder.svg?height=250&width=400"}
                       alt={project.title}
                       width={400}
                       height={250}
-                      className="w-full h-48 object-cover"
+                      className="w-fit mx-auto h-48 object-cover"
                     />
                   </motion.div>
                   <CardHeader>
@@ -180,7 +180,7 @@ export default function ProjectsPage() {
                     <div className="flex gap-2">
                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
                         <Button size="sm" asChild className="w-full bg-primary hover:bg-primary text-white">
-                          <Link href={project.liveUrl}>
+                          <Link href={project.liveUrl} target="_blank">
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Live Demo
                           </Link>

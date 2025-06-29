@@ -30,7 +30,7 @@ export function Navbar() {
             <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white">
               <Image
                 src="/hsetpaing_logo.png"
-                alt="Logo"
+                alt="HPH"
                 width={200} // Adjust based on your SVG's viewBox width
                 height={50} // Adjust based on your SVG's viewBox height
                 layout="intrinsic" // or "responsive", "fixed", etc.

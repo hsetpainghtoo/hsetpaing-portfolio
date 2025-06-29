@@ -152,12 +152,10 @@ export default function ContactPage() {
                         className="w-full bg-primary hover:bg-primary text-white"
                       >
                         {isSubmitting ? (
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                          >
+
+                          <>
                             Sending...
-                          </motion.div>
+                          </>
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />
