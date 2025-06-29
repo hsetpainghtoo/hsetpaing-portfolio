@@ -95,7 +95,7 @@ export default function AboutPage() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Image
-                src="/profile_me.jpg"
+                src="/hph_portrait.jpg"
                 alt="Hset Paing"
                 width={300}
                 height={300}

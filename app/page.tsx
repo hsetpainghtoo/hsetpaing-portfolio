@@ -4,7 +4,7 @@ import "./globals.css"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ExternalLink, Github, Linkedin, Twitter } from "lucide-react"
+import { ArrowRight, ExternalLink, Github, Linkedin, MessageCircle } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { PageTransition } from "@/components/page-transition"
@@ -17,7 +17,8 @@ export default function HomePage() {
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
           {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-navy-50/50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-navy-900/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-white to-blue-300/30 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20"></div>
+
 
           {/* Animated Background Shapes */}
           <motion.div
@@ -71,7 +72,7 @@ export default function HomePage() {
                   className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
                 >
                   Hi, I'm{" "}
-                  <span className="bg-gradient-to-l from-navy-600 to-blue-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-tl from-navy-600 to-blue-600 bg-clip-text text-transparent">
                     Hset Paing
                   </span>
                 </motion.h1>
@@ -82,7 +83,7 @@ export default function HomePage() {
                   transition={{ duration: 0.8, delay: 0.8 }}
                   className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed"
                 >
-                  Full Stack Developer who crafts exceptional digital experiences with modern technologies.
+                  Passionate Frontend Developer creating seamless, engaging digital experiences with modern tools and frameworks.
                 </motion.p>
 
                 <motion.div
@@ -116,7 +117,7 @@ export default function HomePage() {
                       variant="outline"
                       size="lg"
                       asChild
-                      className="border-2 border-navy-600 text-navy-600 hover:bg-navy-600 hover:text-white dark:border-navy-400 dark:text-navy-400 dark:hover:bg-navy-400 dark:hover:text-gray-900 px-8 py-6 text-lg bg-transparent"
+                      className="border-2 border-navy-600 text-navy-600 hover:bg-navy-600 hover:text-white dark:border-navy-400 dark:text-navy-400 dark:hover:bg-navy-400 dark:hover:text-white px-8 py-6 text-lg bg-transparent"
                     >
                       <Link href="/contact">Let's Talk</Link>
                     </Button>
@@ -132,15 +133,15 @@ export default function HomePage() {
                 >
                   <span className="text-sm text-gray-500 dark:text-gray-400">Follow me:</span>
                   {[
-                    { icon: Github, href: "https://github.com", label: "GitHub" },
-                    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-                    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+                    { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-74a6542aa/", label: "LinkedIn" },
+                    { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
                   ].map((social, index) => (
                     <motion.div
                       key={social.label}
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: 1.3 + index * 0.1 }}
+                      transition={{ duration: 0.3 }}
                       whileHover={{ scale: 1.2, y: -2 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -187,7 +188,7 @@ export default function HomePage() {
                         alt="Hset Paing"
                         width={400}
                         height={400}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover "
                       />
                     </div>
                   </motion.div>
@@ -200,7 +201,7 @@ export default function HomePage() {
                     className="absolute -left-8 top-1/2 transform -translate-y-1/2"
                   >
                     <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700">
-                      <div className="text-2xl font-bold text-navy-600 dark:text-navy-400">3+</div>
+                      <div className="text-2xl font-bold text-navy-600 dark:text-navy-400">1+</div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">Years Exp</div>
                     </div>
                   </motion.div>
@@ -212,7 +213,7 @@ export default function HomePage() {
                     className="absolute -right-8 bottom-1/4"
                   >
                     <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700">
-                      <div className="text-2xl font-bold text-navy-600 dark:text-navy-400">50+</div>
+                      <div className="text-2xl font-bold text-navy-600 dark:text-navy-400">2+</div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">Projects</div>
                     </div>
                   </motion.div>
@@ -276,10 +277,10 @@ export default function HomePage() {
                     transition={{ duration: 0.3 }}
                   >
                     <Image
-                      src="/placeholder.svg?height=400&width=600"
-                      alt="E-Commerce Platform"
+                      src="/myanmarexpresshub_3D.png"
+                      alt="Myanmar Express Hub"
                       fill
-                      className="object-cover"
+                      className="object-contain mx-auto"
                     />
                   </motion.div>
                   <div className="p-8 lg:p-12">
@@ -291,11 +292,10 @@ export default function HomePage() {
                         viewport={{ once: true }}
                       >
                         <CardTitle className="text-2xl md:text-3xl text-gray-900 dark:text-white mb-3">
-                          E-Commerce Platform
+                          Myanmar Express Hub
                         </CardTitle>
                         <CardDescription className="text-lg text-gray-600 dark:text-gray-400">
-                          A full-stack e-commerce solution built with Next.js, featuring real-time inventory management,
-                          secure payment processing, and an intuitive admin dashboard.
+                          Myanmar Express Hub is an international shopping and shipping service platform built with Next.js, TypeScript, and Groq API. It features dynamic content management with Sanity CMS, multilingual support with i18n, and a modern, responsive interface powered by Shadcn UI and Tailwind CSS.
                         </CardDescription>
                       </motion.div>
                     </CardHeader>
@@ -307,7 +307,7 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         className="flex flex-wrap gap-2 mb-6"
                       >
-                        {["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Tailwind CSS"].map((tech, index) => (
+                        {["Next.js", "TypeScript", "Groq AI API", "i18n", "Shadcn UI"].map((tech, index) => (
                           <motion.div
                             key={tech}
                             initial={{ opacity: 0, scale: 0.8 }}
@@ -334,7 +334,7 @@ export default function HomePage() {
                       >
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
                           <Button asChild className="w-full bg-primary hover:bg-primary text-white">
-                            <Link href="/projects">
+                            <Link href="https://myanmarexpresshub.com/" target="_blank">
                               <ExternalLink className="mr-2 h-4 w-4" />
                               View Project
                             </Link>

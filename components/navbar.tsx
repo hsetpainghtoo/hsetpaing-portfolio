@@ -29,6 +29,7 @@ export function Navbar() {
           <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
             <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white">
               <Image
+                className=" filter brightness-75 contrast-125"
                 src="/hsetpaing_logo.png"
                 alt="HPH"
                 width={200} // Adjust based on your SVG's viewBox width
