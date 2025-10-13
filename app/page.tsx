@@ -19,20 +19,6 @@ export default function HomePage() {
           {/* Background Elements */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-white to-blue-300/30 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20"></div>
 
-
-          {/* Animated Background Shapes */}
-          <motion.div
-            className="absolute top-20 left-10 w-72 h-72 bg-navy-100/20 dark:bg-navy-900/10 rounded-full blur-3xl"
-            animate={{
-              x: [0, 30, 0],
-              y: [0, -30, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-          />
           <motion.div
             className="absolute bottom-20 right-10 w-96 h-96 bg-blue-100/20 dark:bg-blue-900/10 rounded-full blur-3xl"
             animate={{
