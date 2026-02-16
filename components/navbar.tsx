@@ -31,11 +31,11 @@ export function Navbar() {
 
     <GlassSurface
       displace={4}
-      distortionScale={-70}
+      distortionScale={-80}
       saturation={1}
-      redOffset={10}
-      greenOffset={10}
-      blueOffset={13}
+      redOffset={12}
+      greenOffset={15}
+      blueOffset={20}
       brightness={20}
       opacity={10}
       borderRadius={50}
