@@ -6,9 +6,12 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 import Image from 'next/image';
+import GlassSurface from "./GlassSurface"
+import { useTheme } from "next-themes"
 
 export function Navbar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { theme, setTheme } = useTheme()
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -18,19 +21,36 @@ export function Navbar() {
   ]
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md"
+    // <motion.nav
+    //   initial={{ y: -100, opacity: 0 }}
+    //   animate={{ y: 0, opacity: 1 }}
+    //   transition={{ duration: 0.6, ease: "easeOut" }}
+    //   className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md"
+    // >
+    // </motion.nav>
+
+    <GlassSurface
+      displace={4}
+      distortionScale={-80}
+      saturation={1}
+      redOffset={12}
+      greenOffset={15}
+      blueOffset={20}
+      brightness={20}
+      opacity={10}
+      borderRadius={50}
+      borderWidth={0.07}
+      blur={10}
+      mixBlendMode="luminosity"
+      className="sticky top-5 z-50 !w-[80%] mx-auto"
     >
-      <div className="max-w-6xl mx-auto px-6 py-4">
+      <div className="max-w-6xl mx-auto px-6 py-4 w-full">
         <div className="flex items-center justify-between">
           <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
             <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white">
               <Image
-                className=" filter brightness-75 contrast-125"
-                src="/hsetpaing_logo.png"
+                className="filter brightness-75 contrast-125"
+                src={`${theme == "dark" ? "/hset_paing_logo_white.png" : "/hsetpaing_logo.png"}`}
                 alt="HPH"
                 width={200} // Adjust based on your SVG's viewBox width
                 height={50} // Adjust based on your SVG's viewBox height
@@ -50,7 +70,7 @@ export function Navbar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-navy-600 dark:hover:text-navy-400 relative",
+                    "text-xl font-medium transition-colors hover:text-navy-600 dark:hover:text-navy-400 relative",
                     pathname === item.href ? "text-navy-600 dark:text-navy-400" : "text-gray-700 dark:text-gray-300",
                   )}
                 >
@@ -69,7 +89,7 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <ThemeToggle />
+            <ThemeToggle theme={theme || ""} setTheme={setTheme}/>
 
             {/* Mobile menu button */}
             <div className="md:hidden">
@@ -106,6 +126,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-    </motion.nav>
+    </GlassSurface>
   )
 }
