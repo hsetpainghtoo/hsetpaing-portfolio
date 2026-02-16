@@ -21,7 +21,7 @@ export default function ProjectsPage() {
       title: "Myanmar Express Hub",
       description:
         "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
-      image: "/myanmarexpresshub_3D.png?height=250&width=400",
+      image: "/myanmarexpresshub_3D.png",
       technologies: [
         "Next.js",
         "TypeScript",
@@ -45,7 +45,7 @@ export default function ProjectsPage() {
       title: "Fuel Station Management System",
       description:
         "Fuel Station Management System is a comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
-      image: "/placeholder.svg?height=250&width=400",
+      image: "/placeholder.svg",
       technologies: ["Next.js", "TypeScript", "i18n", "Shadcn UI"],
       liveUrl: "#",
       githubUrl: "#",
@@ -115,9 +115,7 @@ export default function ProjectsPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <Image
-                      src={
-                        project.image || "/placeholder.svg?height=250&width=400"
-                      }
+                      src={project.image || "/placeholder.svg"}
                       alt={project.title}
                       width={400}
                       height={250}
