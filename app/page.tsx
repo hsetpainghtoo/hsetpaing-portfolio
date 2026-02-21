@@ -16,23 +16,96 @@ import {
   Github,
   Linkedin,
   MessageCircle,
+  Code2,
+  FileCode2,
+  Braces,
+  FileType,
+  Palette,
+  Layout,
+  Layers,
+  GitBranch,
+  Globe,
+  Figma,
+  Lightbulb,
+  Users,
+  Brain,
+  RefreshCcw,
+  HeartHandshake,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { ProjectModal, type Project } from "@/components/ProjectModal";
+
+const projects: Project[] = [
+  {
+    title: "Myanmar Express Hub",
+    description:
+      "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
+    image: "/myanmarexpresshub_3D.png",
+    technologies: ["Next.js", "TypeScript", "Groq AI API", "i18n", "Shadcn UI"],
+    liveUrl: "https://myanmarexpresshub.com/",
+    githubUrl: "#",
+  },
+  {
+    title: "Fake Store API Practice Project",
+    description:
+      "A practice eCommerce frontend built with React, TypeScript, and Tailwind CSS, fetching product data from the Fake Store API to display dynamic product listings, details, and cart functionality.",
+    image: "/online-shop.gif",
+    technologies: ["React", "Tailwind CSS", "Redux Toolkit"],
+    liveUrl: "https://fake-store-flame.vercel.app/",
+    githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
+  },
+  {
+    title: "Fuel Station Management System",
+    description:
+      "A comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
+    image: "/placeholder.svg",
+    technologies: ["Next.js", "TypeScript", "i18n", "Shadcn UI"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+];
+
+const technicalSkills = [
+  { name: "HTML", icon: Code2 },
+  { name: "CSS", icon: Palette },
+  { name: "JavaScript", icon: Braces },
+  { name: "TypeScript", icon: FileType },
+  { name: "React.js", icon: Layers },
+  { name: "Next.js", icon: Globe },
+  { name: "Tailwind CSS", icon: Layout },
+  { name: "Git", icon: GitBranch },
+  { name: "Figma", icon: Figma },
+  { name: "Redux", icon: FileCode2 },
+];
 
 export default function HomePage() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const skillCardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
     <PageTransition>
       <div className="bg-background text-foreground transition-colors duration-300">
         {/* Hero Section */}
         <section className="relative min-h-[95vh] flex flex-col justify-center items-center overflow-hidden pt-10">
           {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 z-0"></div>
+          <div className="absolute inset-0 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 z-0"></div>
 
           {/* Huge Background Text */}
-          <div className="absolute top-10 md:top-20 left-0 w-full flex justify-center z-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-10 md:top-20 left-0 w-full h-full flex justify-center z-0 pointer-events-none overflow-hidden">
             <motion.h1
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -45,7 +118,7 @@ export default function HomePage() {
 
           <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Column (Bio/Intro) - Desktop Order 1 */}
+              {/* Left Column (Bio/Intro) */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -63,8 +136,11 @@ export default function HomePage() {
                 </div>
 
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-lg">
-                  <span className="text-blue-500 font-semibold">Passionate Frontend Developer</span> creating seamless, engaging
-                  digital experiences with modern tools and frameworks.
+                  <span className="text-blue-500 font-semibold">
+                    Passionate Frontend Developer
+                  </span>{" "}
+                  creating seamless, engaging digital experiences with modern
+                  tools and frameworks.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-12 w-full sm:w-auto">
@@ -83,7 +159,7 @@ export default function HomePage() {
                     size="lg"
                     className="border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-8 py-6 text-lg bg-transparent"
                   >
-                    <Link href="/contact">Let's Talk</Link>
+                    <Link href="/contact">Let&apos;s Talk</Link>
                   </Button>
                 </div>
 
@@ -121,7 +197,7 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* Center Column (Profile Image) - Desktop Order 2 */}
+              {/* Center Column (Profile Image) */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -138,11 +214,10 @@ export default function HomePage() {
                     quality={100}
                   />
                 </div>
-                {/* Glow behind image */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-400/20 dark:bg-blue-600/20 rounded-full blur-[100px] -z-10"></div>
               </motion.div>
 
-              {/* Right Column (Stats/Bio) - Desktop Order 3 */}
+              {/* Right Column (Stats/Bio) */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -171,7 +246,6 @@ export default function HomePage() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                     Client Satisfaction
                   </p>
-                  {/* Decorative underline/scribble could go here */}
                   <svg
                     className="absolute -bottom-2 left-0 w-full h-3 text-blue-400"
                     viewBox="0 0 100 10"
@@ -190,7 +264,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Project Section */}
+        {/* Projects Carousel Section */}
         <section className="py-20 px-6 bg-muted/50">
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -201,7 +275,7 @@ export default function HomePage() {
               className="text-center mb-12"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                Featured Project
+                My Projects
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
                 A showcase of my latest and most impactful work
@@ -213,130 +287,191 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              whileHover={{ y: -10 }}
+              className="relative"
             >
-              <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-                <div className="grid grid-cols-1 lg:grid-cols-2">
-                  <motion.div
-                    className="relative h-64 lg:h-full overflow-hidden"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Image
-                      src="/myanmarexpresshub_3D.png"
-                      alt="Myanmar Express Hub"
-                      fill
-                      className="object-contain mx-auto"
-                    />
-                  </motion.div>
-                  <div className="p-8 lg:p-12">
-                    <CardHeader className="p-0 mb-6">
+              <div className="flex flex-col md:flex-row gap-4 w-full h-[600px] mt-10">
+                {projects.map((project, index) => {
+                  const isActive = index === currentSlide;
+                  return (
+                    <motion.div
+                      key={index}
+                      layout // Essential for fluid width animation
+                      onClick={() => {
+                        setCurrentSlide(index);
+                      }}
+                      initial={{ flex: index === 0 ? 4 : 1 }}
+                      animate={{
+                        flex: isActive ? 4 : 1,
+                        opacity: isActive ? 1 : 0.8,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 25,
+                      }}
+                      className={`relative overflow-hidden rounded-[2rem] cursor-pointer group ${
+                        isActive ? "md:max-w-none" : "hover:flex-[1.2]"
+                      }`}
+                    >
+                      <Image
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        fill
+                        className={`object-cover transition-transform duration-700 ${isActive ? "scale-100" : "scale-110 group-hover:scale-105"} bg-gray-100 dark:bg-gray-800`}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+
+                      {/* Persistent Tag/Pill */}
+                      <div className="absolute top-6 left-6 z-20">
+                        <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
+                          Project
+                        </Badge>
+                      </div>
+
+                      {/* Gradient Overlay */}
                       <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        viewport={{ once: true }}
-                      >
-                        <CardTitle className="text-2xl md:text-3xl text-gray-900 dark:text-white mb-3">
-                          Myanmar Express Hub
-                        </CardTitle>
-                        <CardDescription className="text-lg text-gray-600 dark:text-gray-400">
-                          Myanmar Express Hub is an international shopping and
-                          shipping service platform built with Next.js,
-                          TypeScript, and Groq API. It features dynamic content
-                          management with Sanity CMS, multilingual support with
-                          i18n, and a modern, responsive interface powered by
-                          Shadcn UI and Tailwind CSS.
-                        </CardDescription>
-                      </motion.div>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        viewport={{ once: true }}
-                        className="flex flex-wrap gap-2 mb-6"
-                      >
-                        {[
-                          "Next.js",
-                          "TypeScript",
-                          "Groq AI API",
-                          "i18n",
-                          "Shadcn UI",
-                        ].map((tech, index) => (
+                        animate={{ opacity: isActive ? 1 : 0.4 }}
+                        className="absolute inset-0 bg-gradient-to-t from-gray-950/95 via-gray-950/40 to-transparent transition-opacity duration-300"
+                      />
+
+                      {/* Content (Visible only when active) */}
+                      <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
+                        {isActive ? (
                           <motion.div
-                            key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{
-                              duration: 0.3,
-                              delay: 0.5 + index * 0.1,
-                            }}
-                            viewport={{ once: true }}
-                            whileHover={{ scale: 1.1 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.2 }}
+                            className="max-w-xl"
                           >
-                            <Badge
-                              variant="secondary"
-                              className="text-sm bg-navy-100 text-navy-800 dark:bg-navy-900/30 dark:text-navy-300"
+                            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-3 leading-tight drop-shadow-md">
+                              {project.title}
+                            </h3>
+
+                            <p className="text-white/80 font-medium text-sm sm:text-base mb-6 line-clamp-2 md:line-clamp-none">
+                              {project.technologies.join(" • ")}
+                            </p>
+
+                            <div
+                              className="flex items-center text-white font-semibold w-max group/btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedProject(project);
+                              }}
                             >
-                              {tech}
-                            </Badge>
+                              <div className="w-10 h-10 rounded-full border border-white/50 flex flex-shrink-0 items-center justify-center mr-4 group-hover/btn:bg-white group-hover/btn:text-black transition-colors duration-300">
+                                <ArrowRight className="w-4 h-4" />
+                              </div>
+                              <span className="group-hover/btn:underline underline-offset-4">
+                                Read more
+                              </span>
+                            </div>
                           </motion.div>
-                        ))}
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                        viewport={{ once: true }}
-                        className="flex flex-col sm:flex-row gap-3"
-                      >
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex-1"
-                        >
-                          <Button
-                            asChild
-                            className="w-full bg-primary hover:bg-primary text-white"
+                        ) : (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, delay: 0.2 }}
+                            className="absolute bottom-8 left-1/2 -translate-x-1/2 origin-bottom-left -rotate-90 hidden md:flex items-center whitespace-nowrap overflow-hidden"
                           >
-                            <Link
-                              href="https://myanmarexpresshub.com/"
-                              target="_blank"
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              View Project
-                            </Link>
-                          </Button>
-                        </motion.div>
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex-1"
-                        >
-                          <Button
-                            variant="outline"
-                            asChild
-                            className="w-full bg-transparent border-navy-600 text-navy-600 hover:bg-navy-50 dark:border-navy-400 dark:text-navy-400 dark:hover:bg-navy-900/20"
-                          >
-                            <Link href="#">
-                              <Github className="mr-2 h-4 w-4" />
-                              Source Code
-                            </Link>
-                          </Button>
-                        </motion.div>
-                      </motion.div>
-                    </CardContent>
-                  </div>
-                </div>
-              </Card>
+                            <span className="text-white/90 font-bold text-xl tracking-wider select-none truncate max-w-[400px]">
+                              {project.title}
+                            </span>
+                          </motion.div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            {/* View All Projects Link */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-center mt-8"
+            >
+              <Button
+                asChild
+                variant="ghost"
+                className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-base"
+              >
+                <Link href="/projects">
+                  View All Projects <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Skills Section */}
+        <section className="py-20 px-6">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Skills
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Technologies and tools I work with
+              </p>
+            </motion.div>
+
+            {/* Technical Skills */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="mb-16"
+            >
+              <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/50 to-violet-50/80 dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-violet-950/30 border border-blue-100/60 dark:border-blue-800/30 backdrop-blur-sm">
+                {/* Decorative glow */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-300/20 dark:bg-blue-600/10 rounded-full blur-[80px]" />
+                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-violet-300/20 dark:bg-violet-600/10 rounded-full blur-[80px]" />
+
+                <motion.div
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 relative z-10"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ staggerChildren: 0.08 }}
+                >
+                  {technicalSkills.map((skill) => (
+                    <motion.div
+                      key={skill.name}
+                      variants={skillCardVariants}
+                      whileHover={{ scale: 1.08, y: -4 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 15,
+                      }}
+                      className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-400/5 transition-shadow duration-300 cursor-default"
+                    >
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center">
+                        <skill.icon className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                        {skill.name}
+                      </span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
             </motion.div>
           </div>
         </section>
 
         {/* Quick Stats */}
-        <section className="py-20 px-6">
+        <section className="py-20 px-6 bg-muted/50">
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0 }}
@@ -370,6 +505,13 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+
+      {/* Project Modal */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={!!selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </PageTransition>
   );
 }
