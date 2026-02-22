@@ -22,7 +22,7 @@ export default function RootLayout({
       <body >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pt-20">{children}</main>
         </ThemeProvider>
       </body>
     </html>
