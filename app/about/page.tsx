@@ -47,28 +47,28 @@ export default function AboutPage() {
 
   const journey = [
     {
-      year: "2023",
-      title: "Started Learning Web Development",
-      org: "Self-taught",
+      year: "May 2024",
+      title: "Started Programming Journey",
+      org: "Self-taught & Company Project",
       description:
-        "Began my journey into frontend development, learning HTML, CSS, and JavaScript through online resources and personal projects.",
+        "Began learning HTML, CSS, and JavaScript. After 3 months, jumped into React.js and built my company's first static website over the course of a month.",
       icon: GraduationCap,
     },
     {
-      year: "2024",
-      title: "Embraced Modern Frameworks",
-      org: "Personal Projects",
+      year: "Late 2024",
+      title: "Frontend Developer (React.js)",
+      org: "Company Project",
       description:
-        "Deep-dived into React, Next.js, TypeScript, and Tailwind CSS. Built multiple personal projects including an eCommerce frontend and portfolio sites.",
-      icon: Rocket,
+        "Joined the Fuel Stations Management System (FMS) team. Fixed bugs, optimized code blocks, and added new features using React.js until mid-2025.",
+      icon: Briefcase,
     },
     {
-      year: "2024",
-      title: "Frontend Developer at Sixth Kendra",
-      org: "Sixth Kendra",
+      year: "Mid 2025",
+      title: "Next.js & FMS Upgrade",
+      org: "Company Project",
       description:
-        "Collaborated on the Fuel Station Management System, building real-time dashboards and reporting tools with Next.js and TypeScript.",
-      icon: Briefcase,
+        "Moved to the new Next.js version of FMS. Gained hands-on experience with TypeScript and TanStack Query. Developed Cloud Reports, CRUD request functions, and made the Local UI responsive.",
+      icon: Rocket,
     },
     {
       year: "2025",
@@ -181,8 +181,8 @@ export default function AboutPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                 >
-                  I&apos;m a passionate frontend developer with over 3 years of
-                  experience crafting intuitive and scalable digital products.
+                  I&apos;m a passionate frontend developer who rapidly learned
+                  and adapted to craft intuitive and scalable digital products.
                   My journey in tech started with a fascination for how
                   interfaces shape user experiences, which quickly turned into a
                   commitment to building responsive, accessible, and
@@ -194,12 +194,12 @@ export default function AboutPage() {
                   transition={{ duration: 0.6, delay: 0.6 }}
                 >
                   I specialize in modern frontend technologies like React,
-                  Next.js, and Tailwind CSS, with a keen eye for clean UI and
-                  smooth user interactions. Recently, I had the opportunity to
-                  collaborate on the Frontend section of the Fuel Station
-                  Management System at Sixth Kendra, where I contributed to
-                  building real-time dashboards and reporting tools. I also
-                  completed the static website for &quot;Myanmar Express
+                  Next.js, TypeScript, and Tailwind CSS, with a keen eye for
+                  clean UI and smooth user interactions. I collaborated on the
+                  Frontend of the Fuel Station Management System, helping
+                  upgrade it to a Next.js architecture while building complex
+                  Cloud Reports, CRUD operations, and responsive web features. I
+                  also completed the website for &quot;Myanmar Express
                   Hub&quot;, integrating an AI assistant chatbot to enhance user
                   engagement.
                 </motion.p>

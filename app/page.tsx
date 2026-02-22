@@ -98,14 +98,14 @@ export default function HomePage() {
 
   return (
     <PageTransition>
-      <div className="bg-background text-foreground transition-colors duration-300">
+      <div className="bg-background text-foreground transition-colors duration-300 overflow-x-hidden">
         {/* Hero Section */}
         <section className="relative min-h-[95vh] flex flex-col justify-center items-center overflow-hidden pt-10">
           {/* Background Elements */}
           <div className="absolute inset-0 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 z-0"></div>
 
           {/* Huge Background Text */}
-          <div className="absolute top-10 md:top-20 left-0 w-full h-full flex justify-center z-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-10 max-md:hidden left-0 w-full h-full flex justify-center z-0 pointer-events-none overflow-hidden">
             <motion.h1
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -265,7 +265,7 @@ export default function HomePage() {
         </section>
 
         {/* Projects Carousel Section */}
-        <section className="py-20 px-6 bg-muted/50">
+        <section className="py-20 px-6 bg-muted/50 max-md:mt-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -322,10 +322,16 @@ export default function HomePage() {
                       />
 
                       {/* Persistent Tag/Pill */}
-                      <div className="absolute top-6 left-6 z-20">
-                        <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
+                      <div className="absolute top-6 left-6 right-6 z-20 flex flex-col items-start gap-2">
+                        <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md shrink-0">
                           Project
                         </Badge>
+                        {/* Mini title for mobile view */}
+                        {!isActive && (
+                          <span className="text-white/90 font-bold text-xl drop-shadow-md truncate w-full md:hidden">
+                            {project.title}
+                          </span>
+                        )}
                       </div>
 
                       {/* Gradient Overlay */}
@@ -371,10 +377,13 @@ export default function HomePage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.4, delay: 0.2 }}
-                            className="absolute bottom-8 left-1/2 -translate-x-1/2 origin-bottom-left -rotate-90 hidden md:flex items-center whitespace-nowrap overflow-hidden"
+                            className="absolute inset-0 flex flex-col justify-end p-6 pb-8 pointer-events-none hidden md:flex"
                           >
-                            <span className="text-white/90 font-bold text-xl tracking-wider select-none truncate max-w-[400px]">
+                            <span className="text-white/90 font-bold text-xl tracking-wider select-none truncate">
                               {project.title}
+                            </span>
+                            <span className="text-white/60 font-medium text-xs tracking-widest uppercase select-none mt-2 truncate">
+                              {project.technologies.slice(0, 2).join(" • ")}
                             </span>
                           </motion.div>
                         )}
@@ -481,8 +490,8 @@ export default function HomePage() {
               className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
             >
               {[
-                { number: "50+", label: "Projects Completed" },
-                { number: "3+", label: "Years Experience" },
+                { number: "15+", label: "Projects Completed" },
+                { number: "1+", label: "Years Experience" },
                 { number: "100%", label: "Client Satisfaction" },
               ].map((stat, index) => (
                 <motion.div

@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Moon, Sun } from "lucide-react"
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
 // import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 interface ThemeProps {
-  theme: string
-  setTheme: React.Dispatch<React.SetStateAction<string>>
+  theme: string;
+  setTheme: (theme: string) => void;
 }
 
 export function ThemeToggle({ theme, setTheme }: ThemeProps) {
   // const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (
@@ -25,10 +25,10 @@ export function ThemeToggle({ theme, setTheme }: ThemeProps) {
         <Sun className="h-[1.2rem] w-[1.2rem]" />
         <span className="sr-only">Toggle theme</span>
       </Button>
-    )
+    );
   }
 
-  const isDark = theme === "dark"
+  const isDark = theme === "dark";
 
   return (
     <motion.div
@@ -56,5 +56,5 @@ export function ThemeToggle({ theme, setTheme }: ThemeProps) {
         <span className="sr-only">Toggle theme</span>
       </Button>
     </motion.div>
-  )
+  );
 }
