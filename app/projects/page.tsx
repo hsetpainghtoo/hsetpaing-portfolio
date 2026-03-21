@@ -1,13 +1,19 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { PageTransition } from "@/components/page-transition"
-import { cubicBezier, motion } from "framer-motion"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { PageTransition } from "@/components/page-transition";
+import { cubicBezier, motion } from "framer-motion";
 
 export default function ProjectsPage() {
   const projects = [
@@ -15,8 +21,14 @@ export default function ProjectsPage() {
       title: "Myanmar Express Hub",
       description:
         "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
-      image: "/myanmarexpresshub_3D.png?height=250&width=400",
-      technologies: ["Next.js", "TypeScript", "Groq AI API","i18n", "Shadcn UI"],
+      image: "/myanmarexpresshub_3D.png",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "Groq AI API",
+        "i18n",
+        "Shadcn UI",
+      ],
       liveUrl: "https://myanmarexpresshub.com/",
       githubUrl: "#",
     },
@@ -30,56 +42,15 @@ export default function ProjectsPage() {
       githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
     },
     {
-      title: "Weather Dashboard",
-      description: "Interactive weather dashboard with data visualization, forecasts, and location-based services.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["Vue.js", "D3.js", "Weather API", "Chart.js"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-    {
-      title: "Social Media Analytics",
-      description: "Analytics platform for social media performance tracking with comprehensive reporting features.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["React", "Python", "Django", "PostgreSQL"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-    {
-      title: "Mobile Banking App",
+      title: "Fuel Station Management System",
       description:
-        "Secure mobile banking application with biometric authentication and real-time transaction processing.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["React Native", "Firebase", "Stripe", "Node.js"],
+        "Fuel Station Management System is a comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
+      image: "/placeholder.svg",
+      technologies: ["Next.js", "TypeScript", "i18n", "Shadcn UI"],
       liveUrl: "#",
       githubUrl: "#",
     },
-    {
-      title: "AI Content Generator",
-      description: "AI-powered content generation tool for marketing teams with customizable templates and workflows.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["Next.js", "OpenAI API", "Tailwind", "Prisma"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-    {
-      title: "Real Estate Platform",
-      description:
-        "Comprehensive real estate platform with property listings, virtual tours, and mortgage calculators.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["React", "Node.js", "MongoDB", "Mapbox"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-    {
-      title: "Learning Management System",
-      description: "Educational platform with course management, progress tracking, and interactive learning modules.",
-      image: "/placeholder.svg?height=250&width=400",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "AWS"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-  ]
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -89,7 +60,7 @@ export default function ProjectsPage() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -99,10 +70,10 @@ export default function ProjectsPage() {
       transition: {
         duration: 0.6,
         // ease: "easeInOut", // cubic-bezier for 'ease-in-out'
-        ease: cubicBezier(0.42, 0, 0.58, 1)
+        ease: cubicBezier(0.42, 0, 0.58, 1),
       },
     },
-  }
+  };
 
   return (
     <PageTransition>
@@ -114,10 +85,13 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">My Projects</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              My Projects
+            </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              A collection of projects that showcase my skills in full-stack development, UI/UX design, and
-              problem-solving across various technologies and industries.
+              A collection of projects that showcase my skills in full-stack
+              development, UI/UX design, and problem-solving across various
+              technologies and industries.
             </p>
           </motion.div>
 
@@ -141,7 +115,7 @@ export default function ProjectsPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <Image
-                      src={project.image || "/placeholder.svg?height=250&width=400"}
+                      src={project.image || "/placeholder.svg"}
                       alt={project.title}
                       width={400}
                       height={250}
@@ -149,7 +123,9 @@ export default function ProjectsPage() {
                     />
                   </motion.div>
                   <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white text-xl">{project.title}</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-white text-xl">
+                      {project.title}
+                    </CardTitle>
                     <CardDescription className="text-gray-600 dark:text-gray-400">
                       {project.description}
                     </CardDescription>
@@ -179,15 +155,27 @@ export default function ProjectsPage() {
                       ))}
                     </motion.div>
                     <div className="flex gap-2">
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
-                        <Button size="sm" asChild className="w-full bg-primary hover:bg-primary text-white">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1"
+                      >
+                        <Button
+                          size="sm"
+                          asChild
+                          className="w-full bg-primary hover:bg-primary text-white"
+                        >
                           <Link href={project.liveUrl} target="_blank">
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Live Demo
                           </Link>
                         </Button>
                       </motion.div>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1"
+                      >
                         <Button
                           variant="outline"
                           size="sm"
@@ -209,5 +197,5 @@ export default function ProjectsPage() {
         </div>
       </div>
     </PageTransition>
-  )
+  );
 }

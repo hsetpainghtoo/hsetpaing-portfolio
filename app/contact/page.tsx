@@ -2,7 +2,6 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,33 +11,56 @@ import { Github, Linkedin, Mail, MessageCircle, Send } from "lucide-react"
 import Link from "next/link"
 import { PageTransition } from "@/components/page-transition"
 import { motion } from "framer-motion"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { toast } from "sonner"
+
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+})
+
+type ContactFormValues = z.infer<typeof contactSchema>
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const onSubmit = async (data: ContactFormValues) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+      console.log(response, "Email Response")
 
-    console.log("Form submitted:", formData)
-    setFormData({ name: "", email: "", message: "" })
-    setIsSubmitting(false)
-    alert("Thank you for your message! I'll get back to you soon.")
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
+      if (response.ok) {
+        toast.success("Thank you for your message! I'll get back to you soon.")
+        reset()
+      } else {
+        toast.error("Failed to send message. Please try again.")
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      toast.error("Failed to send message. Please try again.")
+    }
   }
 
   const socialLinks = [
@@ -79,7 +101,7 @@ export default function ContactPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -91,14 +113,14 @@ export default function ContactPage() {
                       </Label>
                       <Input
                         id="name"
-                        name="name"
                         type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
+                        {...register("name")}
                         className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-navy-500 dark:focus:border-navy-400"
                         placeholder="Your full name"
                       />
+                      {errors.name && (
+                        <p className="text-sm text-red-500">{errors.name.message}</p>
+                      )}
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -111,14 +133,14 @@ export default function ContactPage() {
                       </Label>
                       <Input
                         id="email"
-                        name="email"
                         type="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
+                        {...register("email")}
                         className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-navy-500 dark:focus:border-navy-400"
                         placeholder="your.email@example.com"
                       />
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email.message}</p>
+                      )}
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -131,13 +153,13 @@ export default function ContactPage() {
                       </Label>
                       <Textarea
                         id="message"
-                        name="message"
-                        required
-                        value={formData.message}
-                        onChange={handleChange}
+                        {...register("message")}
                         className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 min-h-[120px] focus:border-navy-500 dark:focus:border-navy-400"
                         placeholder="Tell me about your project or just say hello..."
                       />
+                      {errors.message && (
+                        <p className="text-sm text-red-500">{errors.message.message}</p>
+                      )}
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -149,7 +171,7 @@ export default function ContactPage() {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-primary hover:bg-primary text-white"
+                        className="w-full bg-primary hover:bg-primary cursor-pointer text-white"
                       >
                         {isSubmitting ? (
 
@@ -218,6 +240,7 @@ export default function ContactPage() {
                           whileTap={{ scale: 0.95 }}
                         >
                           <Link
+                            target="_blank"
                             href={social.href}
                           >
                             <social.icon className="w-5 h-5" />
