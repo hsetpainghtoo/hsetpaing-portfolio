@@ -106,13 +106,22 @@ function NavContent({
             href="/"
             className="text-2xl font-bold text-gray-900 dark:text-white"
           >
-            <Image
-              src={`${theme == "dark" ? "/hset_paing_logo_white.png" : "/hsetpaing_logo.png"}`}
-              alt="HPH"
-              width={150}
-              height={50}
-              className="filter brightness-75 contrast-125 h-auto"
-            />
+            <>
+              <Image
+                src="/hset_paing_logo_white.png"
+                alt="HPH"
+                width={150}
+                height={50}
+                className="hidden dark:block filter brightness-75 contrast-125 h-auto"
+              />
+              <Image
+                src="/hsetpaing_logo.png"
+                alt="HPH"
+                width={150}
+                height={50}
+                className="block dark:hidden filter brightness-75 contrast-125 h-auto"
+              />
+            </>
           </Link>
         </motion.div>
 
