@@ -2,6 +2,14 @@ import { type Project } from "@/components/ProjectModal";
 
 export const projects: Project[] = [
   {
+    title: "DET Static Website",
+    description: "My first static website for my company, Ditital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
+    image: "/DET.png",
+    technologies: ["React.js", "i18n", "Tailwind CSS"],
+    liveUrl: "https://det-static-website.vercel.app",
+    githubUrl: "https://github.com/hsetpainghtoo/DET-Static-Website.git",
+  },
+  {
     title: "Myanmar Express Hub",
     description:
       "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
@@ -37,12 +45,4 @@ export const projects: Project[] = [
     liveUrl: "https://www.r2r-mm.com/",
     githubUrl: "#",
   },
-  {
-    title: "DET Static Website",
-    description: "My first static website for my company, Ditital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
-    image: "/DET.png",
-    technologies: ["React.js", "i18n", "Tailwind CSS"],
-    liveUrl: "https://det-static-website.vercel.app",
-    githubUrl: "https://github.com/hsetpainghtoo/DET-Static-Website.git",
-  }
 ];

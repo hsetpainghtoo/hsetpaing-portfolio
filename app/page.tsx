@@ -39,6 +39,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { ProjectModal, type Project } from "@/components/ProjectModal";
 import { projects } from "@/lib/projects";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const technicalSkills = [
   { name: "HTML", icon: "/html-5.png" },
@@ -49,7 +55,7 @@ const technicalSkills = [
   { name: "Next.js", icon: "/nextjs.svg" },
   { name: "Tailwind CSS", icon: "/tailwindcss.svg" },
   { name: "Git", icon: "/github.png" },
-  { name: "Redux Toolkit", icon: "/redux-toolkit.svg" }
+  { name: "Redux Toolkit", icon: "/redux-toolkit.svg" },
 ];
 
 export default function HomePage() {
@@ -80,7 +86,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="text-[12vw] md:text-[14vw] font-bold text-gray-100 dark:text-white/5 tracking-normal leading-none whitespace-nowrap select-none"
+              className="text-[12vw] md:text-[14vw] font-bold text-gray-200/60 dark:text-white/5 tracking-normal leading-none whitespace-nowrap select-none"
             >
               Hset Paing
             </motion.h1>
@@ -235,7 +241,7 @@ export default function HomePage() {
         </section>
 
         {/* Projects Carousel Section */}
-        <section className="py-20 px-6 bg-muted/50 max-md:mt-10">
+        <section className="py-20 px-6 bg-muted/50 max-md:mt-10 overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -257,81 +263,77 @@ export default function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              className="relative"
+              className="relative w-full"
             >
-              <div className="flex flex-col md:flex-row gap-4 w-full h-[600px] mt-10 overflow-hidden">
-                {projects.slice(0, 5).map((project, index) => {
-                  const isActive = index === currentSlide;
-                  // Detect logo-based imagery based on keywords
-                  const isLogo = project.image?.toLowerCase().match(/logo|3d|shop|det/);
-
-                  return (
-                    <motion.div
-                      key={index}
-                      layout // Essential for fluid width animation
-                      onClick={() => {
-                        setCurrentSlide(index);
-                      }}
-                      initial={{ flex: index === 0 ? 4 : 1 }}
-                      animate={{
-                        flex: isActive ? 4 : 1,
-                        opacity: isActive ? 1 : 0.8,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 25,
-                      }}
-                      className={`relative overflow-hidden rounded-[2rem] cursor-pointer group ${
-                        isActive ? "md:max-w-none" : "hover:flex-[1.2]"
-                      }`}
-                    >
-                      <Image
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        fill
-                        className={`transition-transform duration-300 group-hover:scale-95 brightness-75 contrast-90 bg-gray-100 dark:bg-gray-800 ${
-                          isLogo ? "object-contain p-6 scale-90" : "object-cover"
+              <Swiper
+                effect="coverflow"
+                grabCursor={true}
+                centeredSlides={true}
+                slidesPerView="auto"
+                loop={projects.length > 2}
+                coverflowEffect={{
+                  rotate: 20,
+                  stretch: 0,
+                  depth: 250,
+                  modifier: 1,
+                  slideShadows: true,
+                }}
+                pagination={{ clickable: true }}
+                navigation={{
+                  nextEl: ".projects-swiper-next",
+                  prevEl: ".projects-swiper-prev",
+                }}
+                modules={[EffectCoverflow, Pagination, Navigation]}
+                onRealIndexChange={(swiper) =>
+                  setCurrentSlide(swiper.realIndex)
+                }
+                className="projects-swiper !overflow-visible py-12"
+              >
+                {projects.map((project, index) => (
+                  <SwiperSlide
+                    key={index}
+                    className="!w-[320px] sm:!w-[420px] lg:!w-[520px] aspect-[4/5] mb-12"
+                  >
+                    {({ isActive }) => (
+                      <div
+                        className={`relative w-full h-full rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 cursor-pointer border-2 bg-gray-100 dark:bg-gray-900 ${
+                          isActive
+                            ? "border-blue-500 scale-100 opacity-100"
+                            : "border-transparent scale-95 opacity-70 dark:opacity-50"
                         }`}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
+                        onClick={() => isActive && setSelectedProject(project)}
+                      >
+                        {/* Background Image */}
+                        <Image
+                          src={project.image || "/placeholder.svg"}
+                          alt={project.title}
+                          fill
+                          className="object-contain p-10 scale-90 brightness-95 dark:brightness-75 contrast-95 dark:contrast-90"
+                          sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 520px"
+                        />
 
-                      {/* Persistent Tag/Pill */}
-                      <div className="absolute top-6 left-6 right-6 z-20 flex flex-col items-start gap-2">
-                        <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md shrink-0">
-                          Project
-                        </Badge>
-                        {/* Mini title for mobile view */}
-                        {!isActive && (
-                          <span className="text-white/90 font-bold text-xl drop-shadow-md truncate w-full md:hidden">
+                        {/* Gradient Overlay */}
+                        <div
+                          className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/20 to-gray-100/10 dark:from-black/85 dark:via-black/35 dark:to-transparent pointer-events-none"
+                        />
+
+                        {/* Badge */}
+                        <div className="absolute top-6 left-6 z-20">
+                          <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
+                            Project
+                          </Badge>
+                        </div>
+
+                        {/* Bottom Content */}
+                        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 z-10">
+                          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
                             {project.title}
-                          </span>
-                        )}
-                      </div>
+                          </h3>
+                          <p className="text-white/70 text-xs sm:text-sm mb-5 line-clamp-1">
+                            {project.technologies.join(" • ")}
+                          </p>
 
-                      {/* Gradient Overlay */}
-                      <motion.div
-                        animate={{ opacity: isActive ? 1 : 0.4 }}
-                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent transition-opacity duration-300 pointer-events-none"
-                      />
-
-                      {/* Content (Visible only when active) */}
-                      <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
-                        {isActive ? (
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.4, delay: 0.2 }}
-                            className="max-w-xl"
-                          >
-                            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-3 leading-tight drop-shadow-md">
-                              {project.title}
-                            </h3>
-
-                            <p className="text-white/80 font-medium text-sm sm:text-base mb-6 line-clamp-2 md:line-clamp-none">
-                              {project.technologies.join(" • ")}
-                            </p>
-
+                          {isActive && (
                             <div
                               className="flex items-center text-white font-semibold w-max group/btn"
                               onClick={(e) => {
@@ -346,27 +348,42 @@ export default function HomePage() {
                                 Read more
                               </span>
                             </div>
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.4, delay: 0.2 }}
-                            className="absolute inset-0 flex flex-col justify-end p-6 pb-8 pointer-events-none hidden md:flex"
-                          >
-                            <span className="text-white/90 font-bold text-xl tracking-wider select-none truncate">
-                              {project.title}
-                            </span>
-                            <span className="text-white/60 font-medium text-xs tracking-widest uppercase select-none mt-2 truncate">
-                              {project.technologies.slice(0, 2).join(" • ")}
-                            </span>
-                          </motion.div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+                    )}
+                  </SwiperSlide>
+                ))}
+
+                {/* Navigation Arrows */}
+                <div className="projects-swiper-prev !hidden md:!flex" />
+                <div className="projects-swiper-next !hidden md:!flex" />
+              </Swiper>
+
+              {/* Swiper custom styles */}
+              <style>{`
+                .projects-swiper .swiper-button-next,
+                .projects-swiper .swiper-button-prev,
+                .projects-swiper-next,
+                .projects-swiper-prev {
+                  color: #2563eb;
+                }
+                .projects-swiper .swiper-button-next:after,
+                .projects-swiper .swiper-button-prev:after {
+                  font-size: 1.5rem;
+                }
+                .projects-swiper .swiper-pagination-bullet {
+                  background: #2563eb;
+                  opacity: 0.4;
+                  width: 8px;
+                  height: 8px;
+                }
+                .projects-swiper .swiper-pagination-bullet-active {
+                  opacity: 1;
+                  background: #2563eb;
+                  box-shadow: 0 0 6px #2563eb;
+                }
+              `}</style>
             </motion.div>
 
             {/* View All Projects Link */}
@@ -375,7 +392,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
-              className="text-center mt-8"
+              className="text-center mt-4"
             >
               <Button
                 asChild
@@ -482,7 +499,7 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <h3 className="text-4xl font-bold text-navy-600 dark:text-navy-400 mb-2">
+                  <h3 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                     {stat.number}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
