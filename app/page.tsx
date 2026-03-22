@@ -38,48 +38,18 @@ import { PageTransition } from "@/components/page-transition";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { ProjectModal, type Project } from "@/components/ProjectModal";
-
-const projects: Project[] = [
-  {
-    title: "Myanmar Express Hub",
-    description:
-      "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
-    image: "/myanmarexpresshub_3D.png",
-    technologies: ["Next.js", "TypeScript", "Groq AI API", "i18n", "Shadcn UI"],
-    liveUrl: "https://myanmarexpresshub.com/",
-    githubUrl: "#",
-  },
-  {
-    title: "Fake Store API Practice Project",
-    description:
-      "A practice eCommerce frontend built with React, TypeScript, and Tailwind CSS, fetching product data from the Fake Store API to display dynamic product listings, details, and cart functionality.",
-    image: "/online-shop.gif",
-    technologies: ["React", "Tailwind CSS", "Redux Toolkit"],
-    liveUrl: "https://fake-store-flame.vercel.app/",
-    githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
-  },
-  {
-    title: "Fuel Station Management System",
-    description:
-      "A comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
-    image: "/placeholder.svg",
-    technologies: ["Next.js", "TypeScript", "i18n", "Shadcn UI"],
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-];
+import { projects } from "@/lib/projects";
 
 const technicalSkills = [
-  { name: "HTML", icon: Code2 },
-  { name: "CSS", icon: Palette },
-  { name: "JavaScript", icon: Braces },
-  { name: "TypeScript", icon: FileType },
-  { name: "React.js", icon: Layers },
-  { name: "Next.js", icon: Globe },
-  { name: "Tailwind CSS", icon: Layout },
-  { name: "Git", icon: GitBranch },
-  { name: "Figma", icon: Figma },
-  { name: "Redux", icon: FileCode2 },
+  { name: "HTML", icon: "/html-5.png" },
+  { name: "CSS", icon: "/css-3.png" },
+  { name: "JavaScript", icon: "/js.png" },
+  { name: "TypeScript", icon: "/typescript.png" },
+  { name: "React.js", icon: "/reactjs.png" },
+  { name: "Next.js", icon: "/nextjs.svg" },
+  { name: "Tailwind CSS", icon: "/tailwindcss.svg" },
+  { name: "Git", icon: "/github.png" },
+  { name: "Redux Toolkit", icon: "/redux-toolkit.svg" }
 ];
 
 export default function HomePage() {
@@ -289,9 +259,12 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="flex flex-col md:flex-row gap-4 w-full h-[600px] mt-10">
-                {projects.map((project, index) => {
+              <div className="flex flex-col md:flex-row gap-4 w-full h-[600px] mt-10 overflow-hidden">
+                {projects.slice(0, 5).map((project, index) => {
                   const isActive = index === currentSlide;
+                  // Detect logo-based imagery based on keywords
+                  const isLogo = project.image?.toLowerCase().match(/logo|3d|shop|det/);
+
                   return (
                     <motion.div
                       key={index}
@@ -317,7 +290,9 @@ export default function HomePage() {
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
                         fill
-                        className={`object-cover transition-transform duration-700 ${isActive ? "scale-100" : "scale-110 group-hover:scale-105"} bg-gray-100 dark:bg-gray-800`}
+                        className={`transition-transform duration-300 group-hover:scale-95 brightness-75 contrast-90 bg-gray-100 dark:bg-gray-800 ${
+                          isLogo ? "object-contain p-6 scale-90" : "object-cover"
+                        }`}
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
 
@@ -337,7 +312,7 @@ export default function HomePage() {
                       {/* Gradient Overlay */}
                       <motion.div
                         animate={{ opacity: isActive ? 1 : 0.4 }}
-                        className="absolute inset-0 bg-gradient-to-t from-gray-950/95 via-gray-950/40 to-transparent transition-opacity duration-300"
+                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent transition-opacity duration-300 pointer-events-none"
                       />
 
                       {/* Content (Visible only when active) */}
@@ -465,8 +440,13 @@ export default function HomePage() {
                       }}
                       className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-400/5 transition-shadow duration-300 cursor-default"
                     >
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center">
-                        <skill.icon className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center">
+                        <Image
+                          src={skill.icon}
+                          alt={skill.name}
+                          width={40}
+                          height={40}
+                        />
                       </div>
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
                         {skill.name}

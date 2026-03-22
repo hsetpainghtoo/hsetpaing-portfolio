@@ -239,3 +239,10 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+.inter-font {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900;
+  font-style: normal;
+}

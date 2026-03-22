@@ -19,6 +19,7 @@ import {
   GraduationCap,
   Rocket,
   Star,
+  PenTool,
 } from "lucide-react";
 
 export default function AboutPage() {
@@ -77,6 +78,14 @@ export default function AboutPage() {
       description:
         "Completed a multilingual shopping and shipping platform with AI chatbot integration, Groq API, and Sanity CMS.",
       icon: Star,
+    },
+    {
+      year: "Mar 2026",
+      title: "Roots to Rooms (Frontend Modified)",
+      org: "Company Project",
+      description:
+        "Modified the frontend of Roots to Rooms to improve user experience and add new UI designs.",
+      icon: PenTool,
     },
   ];
 
