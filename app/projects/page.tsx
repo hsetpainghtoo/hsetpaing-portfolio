@@ -14,44 +14,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
 import { cubicBezier, motion } from "framer-motion";
+import { projects } from "@/lib/projects";
 
 export default function ProjectsPage() {
-  const projects = [
-    {
-      title: "Myanmar Express Hub",
-      description:
-        "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
-      image: "/myanmarexpresshub_3D.png",
-      technologies: [
-        "Next.js",
-        "TypeScript",
-        "Groq AI API",
-        "i18n",
-        "Shadcn UI",
-      ],
-      liveUrl: "https://myanmarexpresshub.com/",
-      githubUrl: "#",
-    },
-    {
-      title: "Fake Store API Practice Project",
-      description:
-        "A practice eCommerce frontend built with React, TypeScript, and Tailwind CSS, fetching product data from the Fake Store API to display dynamic product listings, details, and cart functionality.",
-      image: "/online-shop.gif",
-      technologies: ["React", "Tailwind CSS", "Redux Toolkit"],
-      liveUrl: "https://fake-store-flame.vercel.app/",
-      githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
-    },
-    {
-      title: "Fuel Station Management System",
-      description:
-        "Fuel Station Management System is a comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
-      image: "/placeholder.svg",
-      technologies: ["Next.js", "TypeScript", "i18n", "Shadcn UI"],
-      liveUrl: "#",
-      githubUrl: "#",
-    },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

@@ -19,7 +19,7 @@ import { toast } from "sonner"
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string().min(5, "Message must be at least 5 characters"),
 })
 
 type ContactFormValues = z.infer<typeof contactSchema>
@@ -64,7 +64,7 @@ export default function ContactPage() {
   }
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/hsetpainghtoogithub.com", label: "GitHub" },
+    { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-74a6542aa/", label: "LinkedIn" },
     { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
   ]
