@@ -15,7 +15,7 @@ export const projects: Project[] = [
       "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
     image: "/myanmarexpresshub_3D.png",
     technologies: ["Next.js", "TypeScript", "Groq AI API", "i18n", "Shadcn UI"],
-    liveUrl: "https://myanmarexpresshub.com/",
+    liveUrl: "https://myanmar-express-hub.vercel.app/",
     githubUrl: "#",
   },
   {
