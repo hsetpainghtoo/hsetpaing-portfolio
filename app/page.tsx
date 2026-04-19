@@ -2,36 +2,8 @@
 
 import "./globals.css";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  ArrowRight,
-  ExternalLink,
-  Github,
-  Linkedin,
-  MessageCircle,
-  Code2,
-  FileCode2,
-  Braces,
-  FileType,
-  Palette,
-  Layout,
-  Layers,
-  GitBranch,
-  Globe,
-  Figma,
-  Lightbulb,
-  Users,
-  Brain,
-  RefreshCcw,
-  HeartHandshake,
-} from "lucide-react";
+import { ArrowRight, Github, Linkedin, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
@@ -313,9 +285,7 @@ export default function HomePage() {
                         />
 
                         {/* Gradient Overlay */}
-                        <div
-                          className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/20 to-gray-100/10 dark:from-black/85 dark:via-black/35 dark:to-transparent pointer-events-none"
-                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/20 to-gray-100/10 dark:from-black/85 dark:via-black/35 dark:to-transparent pointer-events-none" />
 
                         {/* Badge */}
                         <div className="absolute top-6 left-6 z-20">
@@ -487,8 +457,8 @@ export default function HomePage() {
               className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
             >
               {[
-                { number: "15+", label: "Projects Completed" },
-                { number: "1+", label: "Years Experience" },
+                { number: "5+", label: "Projects Completed" },
+                { number: "2+", label: "Years Experience" },
                 { number: "100%", label: "Client Satisfaction" },
               ].map((stat, index) => (
                 <motion.div
