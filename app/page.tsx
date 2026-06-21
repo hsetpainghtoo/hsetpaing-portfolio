@@ -78,7 +78,7 @@ export default function HomePage() {
                       Available for new projects
                     </span>
                   </div>
-                  <p className="text-base md:text-lg lg:text-xl font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm text-left max-w-[280px] md:max-w-[320px]">
+                  <p className="text-base md:text-lg  font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm text-left max-w-[280px] md:max-w-[550px]">
                     <span className="text-blue-600 dark:text-blue-400 font-bold block mb-1">Passionate Frontend Developer</span>
                     creating seamless digital experiences with modern tools.
                   </p>
@@ -127,7 +127,7 @@ export default function HomePage() {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="absolute top-full right-0 mt-4 md:mt-8 w-[280px] md:w-[400px] lg:w-[450px] pointer-events-auto text-right flex flex-col items-end"
                 >
-                  <p className="text-base md:text-lg lg:text-xl text-gray-700 dark:text-gray-300 leading-snug drop-shadow-sm">
+                  <p className="text-base md:text-lg  text-gray-700 dark:text-gray-300 leading-snug drop-shadow-sm">
                     <span className="font-bold text-gray-900 dark:text-white block mb-1">The Next Step for Brands Ready to Grow.</span>
                     I craft data-driven digital strategies to scale faster.
                   </p>
@@ -163,7 +163,7 @@ export default function HomePage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 1.5, ease: "easeOut" }}
-                  className={`${anton.className} absolute top-10 text-[26vw] text-gray-200/80 dark:text-white/10 tracking-wider leading-none whitespace-nowrap select-none uppercase z-10`}
+                  className={`${anton.className} absolute top-10 text-[18vw] text-gray-200/80 dark:text-white/10 tracking-wider leading-none whitespace-nowrap select-none uppercase z-10`}
                 >
                   Hset Paing
                 </motion.h1>
@@ -430,7 +430,7 @@ export default function HomePage() {
                 <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-violet-300/20 dark:bg-violet-600/10 rounded-full blur-[80px]" />
 
                 <motion.div
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 relative z-10"
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 relative z-10 items-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
