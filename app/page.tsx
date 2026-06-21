@@ -79,7 +79,7 @@ export default function HomePage() {
                     </span>
                   </div>
                   <p className="text-base md:text-lg  font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm text-left max-w-[280px] md:max-w-[550px]">
-                    <span className="text-blue-600 dark:text-blue-400 font-bold block mb-1">Passionate Frontend Developer</span>
+                    <span className="text-primary font-bold block mb-1">Passionate Frontend Developer</span>
                     creating seamless digital experiences with modern tools.
                   </p>
                 </motion.div>
@@ -105,7 +105,7 @@ export default function HomePage() {
                     <Button
                       asChild
                       size="default"
-                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5 py-4 shadow-lg shadow-blue-600/20 transition-all hover:scale-105 border-none"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 shadow-lg shadow-primary/20 transition-all hover:scale-105 border-none"
                     >
                       <Link href="/projects">View My Work</Link>
                     </Button>
@@ -151,7 +151,7 @@ export default function HomePage() {
                 priority
                 quality={100}
               />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-tr from-blue-500/30 via-indigo-500/20 to-purple-500/30 rounded-full blur-[100px] -z-10 animate-pulse pointer-events-none"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-tr from-primary/30 via-indigo-500/20 to-purple-500/30 rounded-full blur-[100px] -z-10 animate-pulse pointer-events-none"></div>
             </motion.div>
           </div>
 
@@ -202,12 +202,12 @@ export default function HomePage() {
                 </div>
 
                 <p className="text-lg font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm px-2 mb-8">
-                  <span className="text-blue-600 dark:text-blue-400 font-bold block mb-1">Passionate Frontend Developer</span>
+                  <span className="text-primary font-bold block mb-1">Passionate Frontend Developer</span>
                   creating seamless, engaging digital experiences with modern tools and frameworks.
                 </p>
 
                 <div className="flex flex-col w-full gap-3 max-w-[320px] mb-8">
-                  <Button asChild size="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-6 shadow-lg shadow-blue-600/20 border-none group">
+                  <Button asChild size="default" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 shadow-lg shadow-primary/20 border-none group">
                     <Link href="/projects" className="flex items-center justify-center gap-2 text-base">
                       View My Work <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
@@ -224,7 +224,7 @@ export default function HomePage() {
                     { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/" },
                     { icon: MessageCircle, href: "https://m.me/hset.htoo.35" },
                   ].map((social, i) => (
-                    <Link key={i} href={social.href} className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    <Link key={i} href={social.href} className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                       <social.icon className="w-5 h-5" />
                     </Link>
                   ))}
@@ -291,7 +291,7 @@ export default function HomePage() {
                       <div
                         className={`relative w-full h-full rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 cursor-pointer border-2 bg-gray-100 dark:bg-gray-900 ${
                           isActive
-                            ? "border-blue-500 scale-100 opacity-100"
+                            ? "border-primary scale-100 opacity-100"
                             : "border-transparent scale-95 opacity-70 dark:opacity-50"
                         }`}
                         onClick={() => isActive && setSelectedProject(project)}
@@ -310,7 +310,7 @@ export default function HomePage() {
 
                         {/* Badge */}
                         <div className="absolute top-6 left-6 z-20">
-                          <Badge className="bg-blue-600/90 hover:bg-blue-600 text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
+                          <Badge className="bg-primary/90 hover:bg-primary text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
                             Project
                           </Badge>
                         </div>
@@ -388,7 +388,7 @@ export default function HomePage() {
               <Button
                 asChild
                 variant="ghost"
-                className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-base"
+                className="text-primary hover:bg-primary/10 text-base"
               >
                 <Link href="/projects">
                   View All Projects <ArrowRight className="ml-2 w-4 h-4" />
@@ -424,9 +424,9 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="mb-16"
             >
-              <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/50 to-violet-50/80 dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-violet-950/30 border border-blue-100/60 dark:border-blue-800/30 backdrop-blur-sm">
+              <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border border-primary/20 backdrop-blur-sm">
                 {/* Decorative glow */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-300/20 dark:bg-blue-600/10 rounded-full blur-[80px]" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-[80px]" />
                 <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-violet-300/20 dark:bg-violet-600/10 rounded-full blur-[80px]" />
 
                 <motion.div
@@ -446,9 +446,9 @@ export default function HomePage() {
                         stiffness: 400,
                         damping: 15,
                       }}
-                      className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-400/5 transition-shadow duration-300 cursor-default"
+                      className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-shadow duration-300 cursor-default"
                     >
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                         <Image
                           src={skill.icon}
                           alt={skill.name}
@@ -490,7 +490,7 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <h3 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                  <h3 className="text-4xl font-bold text-primary mb-2">
                     {stat.number}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">

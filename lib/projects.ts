@@ -28,7 +28,7 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
   },
   {
-    title: "Fuel Station Management System",
+    title: "Fuel Station Management System (Frontend)",
     description:
       "A comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
     image: "/fuel_station_new.png",

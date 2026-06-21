@@ -15,6 +15,7 @@ import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
 import { cubicBezier, motion } from "framer-motion";
 import { projects } from "@/lib/projects";
+import BorderGlow from "@/components/BorderGlow";
 
 export default function ProjectsPage() {
   const containerVariants = {
@@ -72,10 +73,17 @@ export default function ProjectsPage() {
                 variants={itemVariants}
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="h-full"
               >
-                <Card className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-full">
-                  <motion.div
-                    className="relative overflow-hidden rounded-t-lg"
+                <BorderGlow
+                  className="h-full"
+                  borderRadius={12}
+                  backgroundColor="transparent"
+                  colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+                >
+                  <Card className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none h-full flex flex-col relative z-10">
+                    <motion.div
+                      className="relative overflow-hidden rounded-t-xl"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -155,7 +163,8 @@ export default function ProjectsPage() {
                       </motion.div>
                     </div>
                   </CardContent>
-                </Card>
+                  </Card>
+                </BorderGlow>
               </motion.div>
             ))}
           </motion.div>

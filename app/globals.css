@@ -9,29 +9,39 @@ html {
 .scroll-container::-webkit-scrollbar {
   width: 7px;
 }
+
 .scroll-container::-webkit-scrollbar-track {
   border-radius: 5px;
 }
+
 .scroll-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, var(--primary), var(--primary)); /* Gradient thumb */
+  background: linear-gradient(45deg, var(--primary), var(--primary));
+  /* Gradient thumb */
   border-radius: 5px;
 }
+
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, var(--primary), var(--primary)); /* Darker gradient */
+  background: linear-gradient(45deg, var(--primary), var(--primary));
+  /* Darker gradient */
 }
 
 .mini-scroll-container::-webkit-scrollbar {
   width: 3px;
 }
+
 .mini-scroll-container::-webkit-scrollbar-track {
   border-radius: 5px;
 }
+
 .mini-scroll-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, var(--primary), var(--primary)); /* Gradient thumb */
+  background: linear-gradient(45deg, var(--primary), var(--primary));
+  /* Gradient thumb */
   border-radius: 5px;
 }
+
 .mini-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, var(--primary), var(--primary)); /* Darker gradient */
+  background: linear-gradient(45deg, var(--primary), var(--primary));
+  /* Darker gradient */
 }
 
 @theme inline {
@@ -147,14 +157,14 @@ html {
   justify-content: center;
   align-items: center;
   position: relative;
-  box-shadow: 0 14px 26px rgba(0,0,0,0.04);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease-out;
   /* text-decoration: none; */
 }
 
 .card:hover {
   transform: translateY(-5px) scale(1.005) translateZ(0);
-  box-shadow: 0 24px 36px rgba(0,0,0,0.11),
+  box-shadow: 0 24px 36px rgba(0, 0, 0, 0.11),
     0 24px 46px var(--box-shadow-color);
 }
 
@@ -177,7 +187,7 @@ html {
 
 .card:active {
   transform: scale(1) translateZ(0);
-  box-shadow: 0 15px 24px rgba(0,0,0,0.11),
+  box-shadow: 0 15px 24px rgba(0, 0, 0, 0.11),
     0 15px 24px var(--box-shadow-color);
 }
 
@@ -235,6 +245,7 @@ html {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
