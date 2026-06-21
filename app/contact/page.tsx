@@ -65,7 +65,7 @@ export default function ContactPage() {
 
   const socialLinks = [
     { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-74a6542aa/", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/", label: "LinkedIn" },
     { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
   ]
 
