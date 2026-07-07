@@ -2,6 +2,22 @@ import { type Project } from "@/components/ProjectModal";
 
 export const projects: Project[] = [
   {
+    title: "Transtak Pte Ltd Website",
+    description: "Official corporate website for Transtak Pte Ltd, providing end-to-end engineering, logistics, and e-commerce solutions for SMEs across Southeast Asia.",
+    image: "/transtak_project.png",
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Radix UI", "Nodemailer", "React Bits"],
+    liveUrl: "https://transtak.com.sg",
+    githubUrl: "#",
+  },
+  {
+    title: "Mahar Engineering Website",
+    description: "Official corporate website for Mahar Engineering, a Singapore-registered Mechanical & Electrical (M&E) contractor specializing in large-scale infrastructure projects.",
+    image: "/mahar_project.png",
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Radix UI", "Nodemailer"],
+    liveUrl: "https://www.maharengr.com",
+    githubUrl: "#",
+  },
+  {
     title: "DET Static Website",
     description: "My first static website for my company, Ditital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
     image: "/det_project_new.png",

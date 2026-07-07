@@ -478,7 +478,7 @@ export default function HomePage() {
               className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
             >
               {[
-                { number: "5+", label: "Projects Completed" },
+                { number: "7+", label: "Projects Completed" },
                 { number: "2+", label: "Years Experience" },
                 { number: "100%", label: "Client Satisfaction" },
               ].map((stat, index) => (
