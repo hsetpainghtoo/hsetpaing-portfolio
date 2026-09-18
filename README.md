@@ -1,4 +1,4 @@
-Portfolio Project - Hset Paing
+# Portfolio Project - Hset Paing
 
 This is a personal portfolio website built with Next.js, designed to showcase my projects, skills, and experience as a frontend developer. The site features a modern, responsive design and interactive UI components.
 
