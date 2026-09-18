@@ -1,403 +1,346 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Code2,
   Palette,
   Layers,
-  Zap,
+  Gauge,
   Briefcase,
   GraduationCap,
-  Rocket,
-  Star,
+  Blocks,
+  Milestone,
   PenTool,
+  Globe,
+  Cpu,
 } from "lucide-react";
+import { entryContainer, entryItem, springGentle } from "@/lib/motion";
+import { Button } from "@/components/ui/button";
+import { NestedArrow } from "@/components/nested-arrow";
 
 export default function AboutPage() {
   const values = [
     {
-      title: "Quality First",
+      title: "Code that survives handover",
       description:
-        "I believe in writing clean, maintainable code that stands the test of time and scales with business needs.",
+        "Readable naming, small components and no cleverness that needs a paragraph of explanation. The next person to open the file matters.",
     },
     {
-      title: "Continuous Learning",
+      title: "Learn on the job, then keep the notes",
       description:
-        "Technology evolves rapidly, and I'm committed to staying current with the latest tools and best practices.",
+        "Every project here taught me something I could not do before it. TypeScript came from the fuel station rebuild; most of what I know about motion came from building this site.",
     },
     {
-      title: "User-Centered Design",
+      title: "Design decisions, not defaults",
       description:
-        "Every decision I make is guided by how it will impact the end user's experience and satisfaction.",
+        "Spacing, contrast and motion are choices. I would rather ask why a section looks the way it does than accept whatever the template shipped with.",
     },
     {
-      title: "Collaboration",
+      title: "Finish the unglamorous parts",
       description:
-        "The best solutions come from diverse perspectives working together towards a common goal.",
+        "Loading states, empty states, keyboard focus, mobile breakpoints. The work is not done when the happy path renders.",
     },
   ];
 
   const journey = [
     {
       year: "May 2024",
-      title: "Started Programming Journey",
-      org: "Self-taught & Company Project",
+      title: "Started programming",
+      org: "Self-taught, then Digital Engineering Tech",
       description:
-        "Began learning HTML, CSS, and JavaScript. After 3 months, jumped into React.js and built my company's first static website over the course of a month.",
+        "HTML, CSS and JavaScript from scratch. Three months in I moved to React and built my company's first static site over the following month.",
       icon: GraduationCap,
     },
     {
       year: "Late 2024",
-      title: "Frontend Developer (React.js)",
-      org: "Company Project",
+      title: "Frontend developer, React",
+      org: "Digital Engineering Tech",
       description:
-        "Joined the Fuel Stations Management System (FMS) team. Fixed bugs, optimized code blocks, and added new features using React.js until mid-2025.",
+        "Joined the Fuel Station Management System team. Fixed bugs, tightened up existing code and shipped new features in React through to mid-2025.",
       icon: Briefcase,
     },
     {
       year: "Mid 2025",
-      title: "Next.js & FMS Upgrade",
-      org: "Company Project",
+      title: "Next.js and the FMS rebuild",
+      org: "Digital Engineering Tech",
       description:
-        "Moved to the new Next.js version of FMS. Gained hands-on experience with TypeScript and TanStack Query. Developed Cloud Reports, CRUD request functions, and made the Local UI responsive.",
-      icon: Rocket,
+        "Moved onto the Next.js rewrite of FMS. Picked up TypeScript and TanStack Query, built the Cloud Reports module and CRUD flows, and made the local UI responsive.",
+      icon: Blocks,
     },
     {
       year: "2025",
-      title: "Myanmar Express Hub Launch",
-      org: "Freelance Project",
+      title: "Myanmar Express Hub went live",
+      org: "Freelance",
       description:
-        "Completed a multilingual shopping and shipping platform with AI chatbot integration, Groq API, and Sanity CMS.",
-      icon: Star,
+        "A multilingual shopping and shipping platform with an AI assistant wired through the Groq API and content managed in Sanity.",
+      icon: Milestone,
     },
     {
       year: "Mar 2026",
-      title: "Roots to Rooms (Frontend Modified)",
-      org: "Company Project",
+      title: "Joined Transtak Pte Ltd",
+      org: "Transtak Pte Ltd, Singapore",
       description:
-        "Modified the frontend of Roots to Rooms to improve user experience and add new UI designs.",
+        "Moved to Transtak as a frontend developer. First job in was the Roots to Rooms frontend, smoothing out the user experience and bringing in new interface designs.",
       icon: PenTool,
+    },
+    {
+      year: "Mid 2026",
+      title: "Corporate sites for Transtak and Mahar",
+      org: "Transtak Pte Ltd",
+      description:
+        "Built both company sites in Next.js and TypeScript, with Framer Motion for the page transitions and the enquiry forms wired through Nodemailer.",
+      icon: Globe,
+    },
+    {
+      year: "Sep 2026",
+      title: "ShouXingCare",
+      org: "Transtak Pte Ltd",
+      description:
+        "Marketing site for Transtak's voice-first AI companion device for elderly care, covering the product pages, the feature breakdowns and the waitlist form.",
+      icon: Cpu,
     },
   ];
 
   const whatIDo = [
     {
-      title: "Frontend Development",
+      title: "Frontend development",
       description:
-        "Building responsive, performant web applications with React, Next.js, and TypeScript.",
+        "Responsive, quick web applications in React, Next.js and TypeScript.",
       icon: Code2,
     },
     {
-      title: "UI/UX Implementation",
+      title: "Interface implementation",
       description:
-        "Translating designs into pixel-perfect, accessible interfaces with smooth animations.",
+        "Turning designs into accessible interfaces, with motion that has a reason to be there.",
       icon: Palette,
     },
     {
-      title: "Component Architecture",
+      title: "Component architecture",
       description:
-        "Creating reusable, well-structured component systems and design systems for scalable apps.",
+        "Reusable component systems and tokens that keep a growing app coherent.",
       icon: Layers,
     },
     {
-      title: "Performance Optimization",
+      title: "Performance work",
       description:
-        "Ensuring fast load times, efficient rendering, and smooth interactions across devices.",
-      icon: Zap,
+        "Faster loads, fewer re-renders, and interactions that hold up on mid-range devices.",
+      icon: Gauge,
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-      },
-    },
-  };
+  const reduced = useReducedMotion();
+  const containerVariants = entryContainer(reduced, 0.07);
+  const itemVariants = entryItem(reduced, 20);
 
   return (
     <PageTransition>
-      <div className="bg-background text-foreground transition-colors duration-300 py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
+      <div className="relative z-10 bg-background px-6 py-20 text-foreground md:py-32">
+        <div className="mx-auto max-w-4xl">
+          <motion.header
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={springGentle}
+            className="mb-16 max-w-2xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              About Me
+            <h1 className="mb-5 text-4xl font-semibold md:text-5xl">
+              The person behind the code
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Get to know the person behind the code
+            <p className="measure text-lg text-muted-foreground">
+              Two and a half years in, still counting the things I want to get
+              better at.
             </p>
-          </motion.div>
+          </motion.header>
 
-          {/* Profile Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
+          {/* Profile - offset portrait, asymmetric columns */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-20"
+            transition={{ ...springGentle, delay: reduced ? 0 : 0.06 }}
+            className="mb-24 grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-14"
           >
+            <div className="lg:col-span-2">
+              <div className="hover-lift relative mx-auto w-fit lg:mx-0">
+                <Image
+                  src="/hph_portrait.jpg"
+                  alt="Portrait of Hset Paing Htoo"
+                  width={300}
+                  height={300}
+                  className="rounded-2xl shadow-tinted-lg"
+                />
+                {/* Offset frame - depth without another drop shadow */}
+                <div
+                  className="absolute -bottom-3 -right-3 -z-10 h-full w-full rounded-2xl border border-primary/30"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+
             <motion.div
-              className="lg:col-span-1 text-center lg:text-left"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="lg:col-span-3"
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.12 }}
             >
-              <Image
-                src="/hph_portrait.jpg"
-                alt="Hset Paing"
-                width={300}
-                height={300}
-                className="rounded-2xl mx-auto lg:mx-0 shadow-xl ring-4 ring-navy-100 dark:ring-navy-800"
-              />
-            </motion.div>
-            <motion.div
-              className="lg:col-span-2"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="mb-5 text-2xl font-semibold">
                 Hello, I&apos;m Hset Paing Htoo.
               </h2>
-              <div className="space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                >
-                  I&apos;m a passionate frontend developer who rapidly learned
-                  and adapted to craft intuitive and scalable digital products.
-                  My journey in tech started with a fascination for how
-                  interfaces shape user experiences, which quickly turned into a
-                  commitment to building responsive, accessible, and
-                  user-centered applications.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                >
-                  I specialize in modern frontend technologies like React,
-                  Next.js, TypeScript, and Tailwind CSS, with a keen eye for
-                  clean UI and smooth user interactions. I collaborated on the
-                  Frontend of the Fuel Station Management System, helping
-                  upgrade it to a Next.js architecture while building complex
-                  Cloud Reports, CRUD operations, and responsive web features. I
-                  also completed the website for &quot;Myanmar Express
-                  Hub&quot;, integrating an AI assistant chatbot to enhance user
-                  engagement.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                >
-                  When I&apos;m not coding, I enjoy experimenting with emerging
-                  web tools, refining my design skills, and contributing to
-                  personal projects. I&apos;m always eager to tackle new
-                  challenges and work with teams that value creativity, clean
-                  code, and impactful user experiences.
-                </motion.p>
+              <div className="space-y-4 leading-relaxed text-muted-foreground">
+                <p>
+                  I came to frontend work in 2024 and have not slowed down
+                  since. What pulled me in was how much an interface decides
+                  whether people can actually use a product, and that turned into
+                  a habit of building for responsiveness and accessibility from
+                  the start rather than bolting them on later.
+                </p>
+                <p>
+                  I am a frontend developer at Transtak Pte Ltd in Singapore,
+                  where I build the company's own sites and product work like
+                  ShouXingCare. Before that I worked on the Fuel Station
+                  Management System through its move to Next.js, building the
+                  Cloud Reports module, CRUD operations and the responsive
+                  layouts, and delivered Myanmar Express Hub with an AI
+                  assistant wired in for customer questions.
+                </p>
+                <p>
+                  Outside of client work I spend time on industrial
+                  monitoring: Grafana dashboards, InfluxDB, and Modbus data
+                  coming off real hardware. It is a useful counterweight to
+                  building marketing sites, and I am always up for a problem I
+                  have not solved before.
+                </p>
               </div>
             </motion.div>
-          </motion.div>
+          </motion.section>
 
-          {/* My Journey Timeline */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
+          {/* Journey */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={springGentle}
             viewport={{ once: true }}
-            className="mb-20"
+            className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">
-              My Journey
-            </h2>
-            <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-indigo-400 to-violet-400 dark:from-blue-600 dark:via-indigo-600 dark:to-violet-600" />
+            <h2 className="mb-12 text-3xl font-semibold">How I got here</h2>
 
-              <motion.div
+            <div className="relative">
+              {/* Single-accent rail, fading out at the end */}
+              <div
+                className="absolute bottom-0 left-[1.4375rem] top-2 w-px bg-gradient-to-b from-primary/60 via-primary/25 to-transparent"
+                aria-hidden="true"
+              />
+
+              <motion.ol
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="space-y-12"
+                className="space-y-10"
               >
-                {journey.map((item, index) => {
-                  const isLeft = index % 2 === 0;
-                  return (
-                    <motion.div
-                      key={index}
-                      variants={itemVariants}
-                      className={`relative flex items-start gap-6 md:gap-0 ${
-                        isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                      }`}
-                    >
-                      {/* Timeline Dot */}
-                      <motion.div
-                        className="absolute left-6 md:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-500/30 z-10"
-                        whileHover={{ scale: 1.2 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 10,
-                        }}
-                      >
-                        <item.icon className="w-5 h-5 text-white" />
-                      </motion.div>
+                {journey.map((item) => (
+                  <motion.li
+                    key={item.title}
+                    variants={itemVariants}
+                    className="relative flex gap-6"
+                  >
+                    <span className="relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card shadow-tinted-sm">
+                      <item.icon
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
+                    </span>
 
-                      {/* Content Card */}
-                      <div
-                        className={`ml-20 md:ml-0 ${isLeft ? "md:w-[calc(50%-40px)] md:pr-8" : "md:w-[calc(50%-40px)] md:pl-8"}`}
-                      >
-                        <motion.div
-                          whileHover={{ y: -3 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 20,
-                          }}
-                        >
-                          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-shadow duration-300">
-                            <CardHeader className="pb-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-full">
-                                  {item.year}
-                                </span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  {item.org}
-                                </span>
-                              </div>
-                              <CardTitle className="text-gray-900 dark:text-white text-lg">
-                                {item.title}
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <CardDescription className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                                {item.description}
-                              </CardDescription>
-                            </CardContent>
-                          </Card>
-                        </motion.div>
+                    <div className="pt-1">
+                      <div className="mb-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span className="tabular text-xs font-semibold text-primary">
+                          {item.year}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {item.org}
+                        </span>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* What I Do Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="mb-20"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-              What I Do
-            </h2>
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              {whatIDo.map((item, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardHeader>
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center mb-3">
-                        <item.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <CardTitle className="text-gray-900 dark:text-white text-lg">
-                        {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-gray-600 dark:text-gray-400">
+                      <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
+                      <p className="measure text-sm leading-relaxed text-muted-foreground">
                         {item.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
+                      </p>
+                    </div>
+                  </motion.li>
+                ))}
+              </motion.ol>
+            </div>
+          </motion.section>
 
-          {/* Values Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
+          {/* What I do */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={springGentle}
             viewport={{ once: true }}
+            className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-              My Values & Mission
-            </h2>
-            <motion.div
+            <h2 className="mb-10 text-3xl font-semibold">What I do</h2>
+
+            <motion.ul
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="grid grid-cols-1 gap-x-10 gap-y-9 sm:grid-cols-2"
             >
-              {values.map((value, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 h-full">
-                    <CardHeader>
-                      <CardTitle className="text-gray-900 dark:text-white text-lg">
-                        {value.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-gray-600 dark:text-gray-400">
-                        {value.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+              {whatIDo.map((item) => (
+                <motion.li key={item.title} variants={itemVariants}>
+                  <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-accent">
+                    <item.icon
+                      className="h-5 w-5 text-accent-foreground"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                </motion.li>
               ))}
-            </motion.div>
-          </motion.div>
+            </motion.ul>
+          </motion.section>
+
+          {/* How I work - numbered list, no card chrome */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={springGentle}
+            viewport={{ once: true }}
+          >
+            <h2 className="mb-10 text-3xl font-semibold">How I work</h2>
+
+            <motion.ol
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="divide-y divide-border"
+            >
+              {values.map((value) => (
+                <motion.li key={value.title} variants={itemVariants} className="py-7">
+                  <h3 className="mb-2 text-lg font-semibold">{value.title}</h3>
+                  <p className="measure text-sm leading-relaxed text-muted-foreground">
+                    {value.description}
+                  </p>
+                </motion.li>
+              ))}
+            </motion.ol>
+
+            <div className="mt-14">
+              <Button asChild size="cta" className="group">
+                <Link href="/contact">
+                  Get in touch
+                  <NestedArrow className="bg-primary-foreground/20" />
+                </Link>
+              </Button>
+            </div>
+          </motion.section>
         </div>
       </div>
     </PageTransition>

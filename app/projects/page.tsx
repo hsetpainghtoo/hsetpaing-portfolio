@@ -1,172 +1,169 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
-import { cubicBezier, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { projects } from "@/lib/projects";
 import BorderGlow from "@/components/BorderGlow";
+import { NestedArrow } from "@/components/nested-arrow";
+import { entryContainer, entryItem, springGentle } from "@/lib/motion";
+
+/* A deliberately uneven grid: wide, narrow, narrow, wide - repeating.
+   Beats three identical columns marching down the page. */
+const SPAN_PATTERN = [4, 2, 2, 4];
 
 export default function ProjectsPage() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        // ease: "easeInOut", // cubic-bezier for 'ease-in-out'
-        ease: cubicBezier(0.42, 0, 0.58, 1),
-      },
-    },
-  };
+  const reduced = useReducedMotion();
+  const containerVariants = entryContainer(reduced, 0.07);
+  const itemVariants = entryItem(reduced, 28);
 
   return (
     <PageTransition>
-      <div className="bg-background text-foreground transition-colors duration-300 py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
+      <div className="relative z-10 overflow-x-clip bg-background px-6 py-20 text-foreground md:py-32">
+        <div className="mx-auto max-w-6xl">
+          <motion.header
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={springGentle}
+            className="mb-16 max-w-2xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              My Projects
+            <h1 className="mb-5 text-4xl font-semibold md:text-5xl">
+              Everything I have shipped
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              A collection of projects that showcase my skills in full-stack
-              development, UI/UX design, and problem-solving across various
-              technologies and industries.
+            <p className="measure text-lg text-muted-foreground">
+              Corporate sites, an internal management system, and side builds
+              where I got to try something new. Each one lists the stack it was
+              actually built on.
             </p>
-          </motion.div>
+          </motion.header>
 
-          <motion.div
+          <motion.ul
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 gap-6 md:grid-cols-6"
           >
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -10, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="h-full"
-              >
-                <BorderGlow
-                  className="h-full"
-                  borderRadius={12}
-                  backgroundColor="transparent"
-                  colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+            {projects.map((project, index) => {
+              const span = SPAN_PATTERN[index % SPAN_PATTERN.length];
+              const isWide = span === 4;
+              const hasLive = project.liveUrl !== "#";
+              const hasCode = project.githubUrl !== "#";
+
+              return (
+                <motion.li
+                  key={project.title}
+                  variants={itemVariants}
+                  className={`hover-lift [--lift:-6px] ${
+                    isWide ? "md:col-span-4" : "md:col-span-2"
+                  }`}
                 >
-                  <Card className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none h-full flex flex-col relative z-10">
-                    <motion.div
-                      className="relative overflow-hidden rounded-t-xl"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
+                  <BorderGlow
+                    className="h-full"
+                    borderRadius={14}
+                    backgroundColor="transparent"
+                    glowColor="214 60 55"
+                    colors={["#2a5fa8", "#1d4275", "#4b7fc4"]}
                   >
-                    <Image
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      width={400}
-                      height={250}
-                      className="w-fit mx-auto h-48 object-contain"
-                    />
-                  </motion.div>
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white text-xl">
-                      {project.title}
-                    </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">
-                      {project.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                      className="flex flex-wrap gap-2 mb-4"
-                    >
-                      {project.technologies.map((tech, techIndex) => (
-                        <motion.div
-                          key={techIndex}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3, delay: techIndex * 0.1 }}
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <Badge
-                            variant="secondary"
-                            className="text-xs bg-navy-100 text-navy-800 dark:bg-navy-900/30 dark:text-navy-300"
-                          >
-                            {tech}
-                          </Badge>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                    <div className="flex gap-2">
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex-1"
+                    <article className="relative z-10 flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-card">
+                      <div
+                        className={`relative overflow-hidden bg-surface ${
+                          isWide ? "aspect-[16/8]" : "aspect-[4/3]"
+                        }`}
                       >
-                        <Button
-                          size="sm"
-                          asChild
-                          className="w-full bg-primary hover:bg-primary text-white"
+                        <Image
+                          src={project.image || "/placeholder.svg"}
+                          alt={`${project.title} interface screenshot`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1152px) 50vw, 640px"
+                          className="object-contain p-6 transition-transform duration-500 ease-out hover:scale-[1.04]"
+                        />
+                      </div>
+
+                      <div className="flex flex-1 flex-col p-6">
+                        <h2
+                          className={`mb-2.5 font-semibold text-foreground ${
+                            isWide ? "text-2xl" : "text-lg"
+                          }`}
                         >
-                          <Link href={project.liveUrl} target="_blank">
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            Live Demo
-                          </Link>
-                        </Button>
-                      </motion.div>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex-1"
-                      >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          asChild
-                          className="w-full bg-transparent border-navy-600 text-navy-600 hover:bg-navy-50 dark:border-navy-400 dark:text-navy-400 dark:hover:bg-navy-900/20"
-                        >
-                          <Link href={project.githubUrl} target="_blank">
-                            <Github className="w-4 h-4 mr-2" />
-                            Code
-                          </Link>
-                        </Button>
-                      </motion.div>
-                    </div>
-                  </CardContent>
-                  </Card>
-                </BorderGlow>
-              </motion.div>
-            ))}
+                          {project.title}
+                        </h2>
+                        <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
+                          {project.description}
+                        </p>
+
+                        <ul className="mb-6 flex flex-wrap gap-1.5">
+                          {project.technologies.map((tech) => (
+                            <li key={tech}>
+                              <Badge variant="tag">{tech}</Badge>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Pinned to the bottom so CTAs line up across the row */}
+                        <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border/70 pt-5">
+                          {hasLive ? (
+                            <Button asChild size="sm">
+                              <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                              >
+                                <ExternalLink aria-hidden="true" />
+                                Visit site
+                              </a>
+                            </Button>
+                          ) : (
+                            <span className="inline-flex h-9 items-center gap-2 rounded-md bg-muted px-3 text-sm font-medium text-muted-foreground/70">
+                              <Lock className="h-4 w-4" aria-hidden="true" />
+                              Internal tool
+                            </span>
+                          )}
+
+                          {hasCode ? (
+                            <Button asChild size="sm" variant="quiet">
+                              <a
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                              >
+                                <Github aria-hidden="true" />
+                                Source
+                              </a>
+                            </Button>
+                          ) : (
+                            <span className="inline-flex h-9 items-center px-2 text-sm text-muted-foreground/70">
+                              Private repository
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  </BorderGlow>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={springGentle}
+            className="mt-20 border-t border-border pt-10"
+          >
+            <p className="mb-4 text-xl font-medium tracking-tight">
+              Something you want built next?
+            </p>
+            <Button asChild size="cta" className="group">
+              <Link href="/contact">
+                Get in touch
+                <NestedArrow className="bg-primary-foreground/20" />
+              </Link>
+            </Button>
           </motion.div>
         </div>
       </div>

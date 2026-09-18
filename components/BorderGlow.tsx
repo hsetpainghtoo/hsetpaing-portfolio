@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useEffect, type ReactNode } from 'react';
+import { useRef, useCallback, useState, useEffect, useMemo, type ReactNode } from 'react';
 
 interface BorderGlowProps {
   children?: ReactNode;
@@ -35,6 +35,11 @@ function buildBoxShadow(glowColor: string, intensity: number): string {
     const a = Math.min(alpha * intensity, 100);
     return `${inset ? 'inset ' : ''}${x}px ${y}px ${blur}px ${spread}px hsl(${base} / ${a}%)`;
   }).join(', ');
+}
+
+function prefersReducedMotion() {
+  return typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function easeOutCubic(x: number) { return 1 - Math.pow(1 - x, 3); }
@@ -86,9 +91,19 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [cursorAngle, setCursorAngle] = useState(45);
-  const [edgeProximity, setEdgeProximity] = useState(0);
   const [sweepActive, setSweepActive] = useState(false);
+
+  /* Cursor angle and edge proximity change on every pointermove. Holding them
+     in React state re-rendered this whole subtree (card image, badges,
+     buttons) every frame and rebuilt eight gradient strings, a conic mask and
+     a thirteen-layer box-shadow each time. They live in refs now and are
+     written straight to the DOM on a single rAF tick. */
+  const cursorAngleRef = useRef(45);
+  const edgeProximityRef = useRef(0);
+  const frameRef = useRef<number | null>(null);
+  const borderLayerRef = useRef<HTMLDivElement>(null);
+  const fillLayerRef = useRef<HTMLDivElement>(null);
+  const glowLayerRef = useRef<HTMLSpanElement>(null);
 
   const getCenterOfElement = useCallback((el: HTMLElement) => {
     const { width, height } = el.getBoundingClientRect();
@@ -117,49 +132,101 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
     return degrees;
   }, [getCenterOfElement]);
 
+  const paint = useCallback(() => {
+    frameRef.current = null;
+    const proximity = edgeProximityRef.current;
+    const visible = isHoveredRef.current || sweepActiveRef.current;
+    const colorSensitivity = edgeSensitivity + 20;
+    const borderOpacity = visible
+      ? Math.max(0, (proximity * 100 - colorSensitivity) / (100 - colorSensitivity))
+      : 0;
+    const glowOpacity = visible
+      ? Math.max(0, (proximity * 100 - edgeSensitivity) / (100 - edgeSensitivity))
+      : 0;
+    const angle = `${cursorAngleRef.current.toFixed(2)}deg`;
+    const mask = `conic-gradient(from ${angle} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`;
+
+    const border = borderLayerRef.current;
+    if (border) {
+      border.style.opacity = String(borderOpacity);
+      border.style.maskImage = mask;
+      border.style.webkitMaskImage = mask;
+    }
+    if (fillLayerRef.current) {
+      fillLayerRef.current.style.opacity = String(borderOpacity * fillOpacity);
+    }
+    if (glowLayerRef.current) {
+      glowLayerRef.current.style.opacity = String(glowOpacity);
+    }
+  }, [edgeSensitivity, coneSpread, fillOpacity]);
+
+  const schedulePaint = useCallback(() => {
+    if (frameRef.current !== null) return;
+    frameRef.current = requestAnimationFrame(paint);
+  }, [paint]);
+
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    /* Decorative cursor tracking only. Coarse pointers fire pointermove while
+       scrolling, and reduced-motion users should not get it at all. */
+    if (e.pointerType !== 'mouse' || prefersReducedMotion()) return;
     const card = cardRef.current;
     if (!card) return;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    setEdgeProximity(getEdgeProximity(card, x, y));
-    setCursorAngle(getCursorAngle(card, x, y));
-  }, [getEdgeProximity, getCursorAngle]);
+    edgeProximityRef.current = getEdgeProximity(card, x, y);
+    cursorAngleRef.current = getCursorAngle(card, x, y);
+    schedulePaint();
+  }, [getEdgeProximity, getCursorAngle, schedulePaint]);
+
+  const isHoveredRef = useRef(false);
+  const sweepActiveRef = useRef(false);
+  isHoveredRef.current = isHovered;
+  sweepActiveRef.current = sweepActive;
+
+  useEffect(() => {
+    schedulePaint();
+  }, [isHovered, sweepActive, schedulePaint]);
+
+  useEffect(() => () => {
+    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+  }, []);
 
   useEffect(() => {
     if (!animated) return;
     const angleStart = 110;
     const angleEnd = 465;
+    if (prefersReducedMotion()) return;
     setSweepActive(true);
-    setCursorAngle(angleStart);
+    cursorAngleRef.current = angleStart;
 
-    animateValue({ duration: 500, onUpdate: v => setEdgeProximity(v / 100) });
-    animateValue({ ease: easeInCubic, duration: 1500, end: 50, onUpdate: v => {
-      setCursorAngle((angleEnd - angleStart) * (v / 100) + angleStart);
-    }});
-    animateValue({ ease: easeOutCubic, delay: 1500, duration: 2250, start: 50, end: 100, onUpdate: v => {
-      setCursorAngle((angleEnd - angleStart) * (v / 100) + angleStart);
-    }});
+    const setAngle = (v: number) => {
+      cursorAngleRef.current = (angleEnd - angleStart) * (v / 100) + angleStart;
+      schedulePaint();
+    };
+    const setProximity = (v: number) => {
+      edgeProximityRef.current = v / 100;
+      schedulePaint();
+    };
+
+    animateValue({ duration: 500, onUpdate: setProximity });
+    animateValue({ ease: easeInCubic, duration: 1500, end: 50, onUpdate: setAngle });
+    animateValue({ ease: easeOutCubic, delay: 1500, duration: 2250, start: 50, end: 100, onUpdate: setAngle });
     animateValue({ ease: easeInCubic, delay: 2500, duration: 1500, start: 100, end: 0,
-      onUpdate: v => setEdgeProximity(v / 100),
+      onUpdate: setProximity,
       onEnd: () => setSweepActive(false),
     });
-  }, [animated]);
+  }, [animated, schedulePaint]);
 
-  const colorSensitivity = edgeSensitivity + 20;
   const isVisible = isHovered || sweepActive;
-  const borderOpacity = isVisible
-    ? Math.max(0, (edgeProximity * 100 - colorSensitivity) / (100 - colorSensitivity))
-    : 0;
-  const glowOpacity = isVisible
-    ? Math.max(0, (edgeProximity * 100 - edgeSensitivity) / (100 - edgeSensitivity))
-    : 0;
+  /* Initial paint only. Once mounted, paint() writes these straight to the DOM. */
+  const borderOpacity = 0;
+  const glowOpacity = 0;
 
-  const meshGradients = buildMeshGradients(colors);
+  const meshGradients = useMemo(() => buildMeshGradients(colors), [colors]);
   const borderBg = meshGradients.map(g => `${g} border-box`);
   const fillBg = meshGradients.map(g => `${g} padding-box`);
-  const angleDeg = `${cursorAngle.toFixed(3)}deg`;
+  const angleDeg = `${cursorAngleRef.current.toFixed(2)}deg`;
 
   return (
     <div
@@ -172,11 +239,12 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
         background: backgroundColor,
         borderRadius: `${borderRadius}px`,
         transform: 'translate3d(0, 0, 0.01px)',
-        boxShadow: 'rgba(0,0,0,0.1) 0 1px 2px, rgba(0,0,0,0.1) 0 2px 4px, rgba(0,0,0,0.1) 0 4px 8px, rgba(0,0,0,0.1) 0 8px 16px, rgba(0,0,0,0.1) 0 16px 32px, rgba(0,0,0,0.1) 0 32px 64px',
+        boxShadow: 'var(--shadow-md)',
       }}
     >
       {/* mesh gradient border */}
       <div
+        ref={borderLayerRef}
         className="absolute inset-0 rounded-[inherit] -z-[1]"
         style={{
           border: '1px solid transparent',
@@ -188,12 +256,15 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
           opacity: borderOpacity,
           maskImage: `conic-gradient(from ${angleDeg} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`,
           WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`,
-          transition: isVisible ? 'opacity 0.25s ease-out' : 'opacity 0.75s ease-in-out',
+          transition: isVisible
+            ? 'opacity 250ms cubic-bezier(0.23, 1, 0.32, 1)'
+            : 'opacity 180ms cubic-bezier(0.23, 1, 0.32, 1)',
         }}
       />
 
       {/* mesh gradient fill near edges */}
       <div
+        ref={fillLayerRef}
         className="absolute inset-0 rounded-[inherit] -z-[1]"
         style={{
           border: '1px solid transparent',
@@ -220,12 +291,15 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
           WebkitMaskComposite: 'source-out, source-over, source-over, source-over, source-over, source-over',
           opacity: borderOpacity * fillOpacity,
           mixBlendMode: 'soft-light',
-          transition: isVisible ? 'opacity 0.25s ease-out' : 'opacity 0.75s ease-in-out',
+          transition: isVisible
+            ? 'opacity 250ms cubic-bezier(0.23, 1, 0.32, 1)'
+            : 'opacity 180ms cubic-bezier(0.23, 1, 0.32, 1)',
         } as React.CSSProperties}
       />
 
       {/* outer glow */}
       <span
+        ref={glowLayerRef}
         className="absolute pointer-events-none z-[1] rounded-[inherit]"
         style={{
           inset: `${-glowRadius}px`,
@@ -233,7 +307,9 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
           WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
           opacity: glowOpacity,
           mixBlendMode: 'plus-lighter',
-          transition: isVisible ? 'opacity 0.25s ease-out' : 'opacity 0.75s ease-in-out',
+          transition: isVisible
+            ? 'opacity 250ms cubic-bezier(0.23, 1, 0.32, 1)'
+            : 'opacity 180ms cubic-bezier(0.23, 1, 0.32, 1)',
         } as React.CSSProperties}
       >
         <span

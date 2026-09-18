@@ -2,6 +2,15 @@ import { type Project } from "@/components/ProjectModal";
 
 export const projects: Project[] = [
   {
+    title: "ShouXingCare",
+    description:
+      "Marketing site for a voice-first AI companion device built for elderly care. The device holds a conversation on a wake word, keeps medicine reminders that mirror to family on Telegram, and sends one-tap emergency alerts to up to three contacts.",
+    image: "/shouxingcare_project.png",
+    technologies: ["Next.js", "React 19", "TypeScript", "Tailwind CSS", "Framer Motion", "Nodemailer"],
+    liveUrl: "https://shouxingcare.com",
+    githubUrl: "#",
+  },
+  {
     title: "Transtak Pte Ltd Website",
     description: "Official corporate website for Transtak Pte Ltd, providing end-to-end engineering, logistics, and e-commerce solutions for SMEs across Southeast Asia.",
     image: "/transtak_project.png",

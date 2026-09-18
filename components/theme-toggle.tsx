@@ -1,18 +1,35 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
-// import { useTheme } from "next-themes"
+import { Monitor, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { springSnappy } from "@/lib/motion";
 
 interface ThemeProps {
   theme: string;
   setTheme: (theme: string) => void;
 }
 
+/* Three states rather than a binary switch: the system preference is a real
+   choice, not an absence of one. */
+const ORDER = ["system", "light", "dark"] as const;
+
+const ICONS = {
+  system: Monitor,
+  light: Sun,
+  dark: Moon,
+} as const;
+
+const LABELS = {
+  system: "Theme: following system. Switch to light",
+  light: "Theme: light. Switch to dark",
+  dark: "Theme: dark. Switch to system",
+} as const;
+
+type ThemeName = (typeof ORDER)[number];
+
 export function ThemeToggle({ theme, setTheme }: ThemeProps) {
-  // const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -21,40 +38,48 @@ export function ThemeToggle({ theme, setTheme }: ThemeProps) {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="icon" className="bg-transparent">
-        <Sun className="h-[1.2rem] w-[1.2rem]" />
+      <Button
+        variant="outline"
+        size="icon"
+        className="bg-transparent"
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <Monitor className="h-[1.1rem] w-[1.1rem]" />
         <span className="sr-only">Toggle theme</span>
       </Button>
     );
   }
 
-  const isDark = theme === "dark";
+  const current: ThemeName = (ORDER as readonly string[]).includes(theme)
+    ? (theme as ThemeName)
+    : "system";
+  const Icon = ICONS[current];
+  const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setTheme(next)}
+      aria-label={LABELS[current]}
+      className="border-border bg-transparent hover:border-primary/40 hover:bg-accent"
     >
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setTheme(isDark ? "light" : "dark")}
-        className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-navy-200 dark:border-navy-700"
-      >
-        <motion.div
-          initial={false}
-          animate={{ rotate: isDark ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={current}
+          initial={{ opacity: 0, scale: 0.7, rotate: -35 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 0.7, rotate: 35 }}
+          transition={springSnappy}
+          className="flex items-center justify-center"
         >
-          {isDark ? (
-            <Sun className="h-[1.2rem] w-[1.2rem] text-navy-600 dark:text-navy-400" />
-          ) : (
-            <Moon className="h-[1.2rem] w-[1.2rem] text-navy-600 dark:text-navy-400" />
-          )}
-        </motion.div>
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-    </motion.div>
+          <Icon
+            className="h-[1.1rem] w-[1.1rem] text-foreground"
+            aria-hidden="true"
+          />
+        </motion.span>
+      </AnimatePresence>
+    </Button>
   );
 }

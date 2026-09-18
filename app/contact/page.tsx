@@ -1,30 +1,46 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Github, Linkedin, Mail, MessageCircle, Send } from "lucide-react"
-import Link from "next/link"
-import { PageTransition } from "@/components/page-transition"
-import { motion } from "framer-motion"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { toast } from "sonner"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Github,
+  Linkedin,
+  Loader2,
+  Mail,
+  MessageCircle,
+  Send,
+} from "lucide-react";
+import Link from "next/link";
+import { PageTransition } from "@/components/page-transition";
+import { motion, useReducedMotion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+import { springGentle } from "@/lib/motion";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  message: z.string().min(5, "Message must be at least 5 characters"),
-})
+  name: z.string().min(2, "Please enter at least 2 characters"),
+  email: z.string().email("This does not look like a valid email address"),
+  message: z.string().min(5, "Please write at least 5 characters"),
+});
 
-type ContactFormValues = z.infer<typeof contactSchema>
+type ContactFormValues = z.infer<typeof contactSchema>;
+
+const socialLinks = [
+  { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/",
+    label: "LinkedIn",
+  },
+  { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
+];
 
 export default function ContactPage() {
+  const reduced = useReducedMotion();
   const {
     register,
     handleSubmit,
@@ -32,248 +48,222 @@ export default function ContactPage() {
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
-  })
+    mode: "onBlur",
+    defaultValues: { name: "", email: "", message: "" },
+  });
 
   const onSubmit = async (data: ContactFormValues) => {
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      })
-
-      console.log(response, "Email Response")
+      });
 
       if (response.ok) {
-        toast.success("Thank you for your message! I'll get back to you soon.")
-        reset()
+        toast.success("Message sent. I will get back to you shortly.");
+        reset();
       } else {
-        toast.error("Failed to send message. Please try again.")
+        toast.error("The message could not be sent. Please try again.");
       }
-    } catch (error) {
-      console.error('Submission error:', error)
-      toast.error("Failed to send message. Please try again.")
+    } catch {
+      toast.error("Connection failed. Please check your network and retry.");
     }
-  }
+  };
 
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/", label: "LinkedIn" },
-    { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
-  ]
+  /* Shared field styling keeps the error treatment identical across inputs. */
+  const fieldClass =
+    "bg-background border-input transition-colors focus-visible:border-primary aria-[invalid=true]:border-destructive";
 
   return (
     <PageTransition>
-      <div className="bg-background text-foreground transition-colors duration-300 py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
+      <div className="relative z-10 bg-background px-6 py-20 text-foreground md:py-32">
+        <div className="mx-auto max-w-5xl">
+          <motion.header
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={springGentle}
+            className="mb-16 max-w-2xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              I'm always interested in new opportunities and exciting projects. Let's connect and discuss how we can
-              work together.
+            <h1 className="mb-5 text-4xl font-semibold md:text-5xl">
+              Let&apos;s talk about your project
+            </h1>
+            <p className="measure text-lg text-muted-foreground">
+              Tell me roughly what you need and when you need it. I answer every
+              message, usually within a day or two.
             </p>
-          </motion.div>
+          </motion.header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
+          <div className="grid grid-cols-1 gap-14 lg:grid-cols-5 lg:gap-16">
+            {/* Form */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.06 }}
+              className="lg:col-span-3"
             >
-              <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-                <CardHeader>
-                  <CardTitle className="text-gray-900 dark:text-white">Send me a message</CardTitle>
-                  <CardDescription className="text-gray-600 dark:text-gray-400">
-                    Fill out the form below and I'll get back to you as soon as possible.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.3 }}
-                      className="space-y-2"
+              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-7">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    autoComplete="name"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    {...register("name")}
+                    className={fieldClass}
+                    placeholder="Your full name"
+                  />
+                  {errors.name && (
+                    <p
+                      id="name-error"
+                      role="alert"
+                      className="text-sm text-destructive"
                     >
-                      <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">
-                        Name
-                      </Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        {...register("name")}
-                        className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-navy-500 dark:focus:border-navy-400"
-                        placeholder="Your full name"
-                      />
-                      {errors.name && (
-                        <p className="text-sm text-red-500">{errors.name.message}</p>
-                      )}
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                      className="space-y-2"
-                    >
-                      <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        {...register("email")}
-                        className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-navy-500 dark:focus:border-navy-400"
-                        placeholder="your.email@example.com"
-                      />
-                      {errors.email && (
-                        <p className="text-sm text-red-500">{errors.email.message}</p>
-                      )}
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      className="space-y-2"
-                    >
-                      <Label htmlFor="message" className="text-gray-700 dark:text-gray-300">
-                        Message
-                      </Label>
-                      <Textarea
-                        id="message"
-                        {...register("message")}
-                        className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 min-h-[120px] focus:border-navy-500 dark:focus:border-navy-400"
-                        placeholder="Tell me about your project or just say hello..."
-                      />
-                      {errors.message && (
-                        <p className="text-sm text-red-500">{errors.message.message}</p>
-                      )}
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full bg-primary hover:bg-primary cursor-pointer text-white"
-                      >
-                        {isSubmitting ? (
-
-                          <>
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4 mr-2" />
-                            Send Message
-                          </>
-                        )}
-                      </Button>
-                    </motion.div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Contact Information */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="space-y-8"
-            >
-              <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-                <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Contact Information</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">
-                      Feel free to reach out through any of these channels.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <motion.div whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
-                      <Link
-                        href="mailto:hsetpainghtoo218@gmail.com"
-                        className="flex items-center gap-3 text-gray-700 dark:text-gray-300 hover:text-navy-600 dark:hover:text-navy-400 transition-colors"
-                      >
-                        <Mail className="w-5 h-5" />
-                        hsetpainghtoo218@gmail.com
-                      </Link>
-                    </motion.div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-                <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Follow Me</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">
-                      Connect with me on social media and professional networks.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex gap-4">
-                      {socialLinks.map((social, index) => (
-                        <motion.div
-                          key={social.label}
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3 }}
-                          whileHover={{ scale: 1.1, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Link
-                            target="_blank"
-                            href={social.href}
-                          >
-                            <social.icon className="w-5 h-5" />
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card className="bg-gradient-to-br from-navy-50 to-navy-100 dark:from-navy-900/20 dark:to-navy-800/20 border-navy-200 dark:border-navy-800">
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      Let's Build Something Amazing Together
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Whether you have a project in mind or just want to chat about technology, I'm always open to new
-                      conversations and opportunities.
+                      {errors.name.message}
                     </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    {...register("email")}
+                    className={fieldClass}
+                    placeholder="you@company.com"
+                  />
+                  {errors.email && (
+                    <p
+                      id="email-error"
+                      role="alert"
+                      className="text-sm text-destructive"
+                    >
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea
+                    id="message"
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? "message-error" : undefined}
+                    {...register("message")}
+                    className={`${fieldClass} min-h-[150px] resize-y`}
+                    placeholder="What are you building, and what do you need help with?"
+                  />
+                  {errors.message && (
+                    <p
+                      id="message-error"
+                      role="alert"
+                      className="text-sm text-destructive"
+                    >
+                      {errors.message.message}
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  type="submit"
+                  size="xl"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" aria-hidden="true" />
+                      Sending
+                    </>
+                  ) : (
+                    <>
+                      <Send aria-hidden="true" />
+                      Send message
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-xs text-muted-foreground">
+                  Your details go straight to my inbox and nowhere else. See the{" "}
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-4 hover:text-foreground"
+                  >
+                    privacy note
+                  </Link>
+                  .
+                </p>
+              </form>
             </motion.div>
+
+            {/* Direct channels - plain list, no card stack */}
+            <motion.aside
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.12 }}
+              className="lg:col-span-2"
+            >
+              <p className="mb-5 text-sm font-medium text-foreground">Or reach me directly</p>
+
+              <a
+                href="mailto:hsetpainghtoo218@gmail.com"
+                className="press-feedback group mb-8 block bezel hover:bg-primary/[0.06]"
+              >
+                <span className="bezel-core flex items-start gap-3.5 p-5">
+                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent">
+                    <Mail className="h-4 w-4 text-accent-foreground" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium text-foreground">
+                      Email
+                    </span>
+                    <span className="block truncate text-sm text-muted-foreground group-hover:text-primary">
+                      hsetpainghtoo218@gmail.com
+                    </span>
+                  </span>
+                </span>
+              </a>
+
+              <p className="mb-4 text-sm font-medium text-foreground">Elsewhere</p>
+              <ul className="space-y-1">
+                {socialLinks.map((social) => (
+                  <li key={social.label}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <social.icon
+                        className="h-4 w-4"
+                        aria-hidden="true"
+                      />
+                      {social.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-10 border-t border-border pt-7">
+                <p className="mb-2 font-medium tracking-tight text-foreground">
+                  Response time
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  I check messages on weekday evenings, Myanmar time. If
+                  something is urgent, say so in the first line and I will
+                  prioritise it.
+                </p>
+              </div>
+            </motion.aside>
           </div>
         </div>
       </div>
     </PageTransition>
-  )
+  );
 }

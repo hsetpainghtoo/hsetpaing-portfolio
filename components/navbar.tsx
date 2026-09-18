@@ -8,13 +8,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import GlassSurface from "./GlassSurface";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { springDefault, springSheet, springSnappy } from "@/lib/motion";
 
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -26,7 +32,7 @@ export function Navbar() {
   return (
     <>
       {/* Desktop Navbar (GlassSurface) */}
-      <div className="hidden md:block fixed top-5 z-50 w-[95%] md:w-[80%] inset-x-0 mx-auto">
+      <div className="hidden md:block fixed top-5 z-nav w-[95%] md:w-[80%] inset-x-0 mx-auto">
         <GlassSurface
           displace={4}
           distortionScale={-80}
@@ -41,7 +47,7 @@ export function Navbar() {
           blur={10}
           mixBlendMode="luminosity"
           className="!w-full"
-          style={{ backgroundColor: "rgba(247, 250, 255, 0.6)" }}
+          style={{ backgroundColor: "var(--nav-glass)" }}
         >
           <NavContent
             theme={theme}
@@ -50,13 +56,12 @@ export function Navbar() {
             mobileMenuOpen={mobileMenuOpen}
             setMobileMenuOpen={setMobileMenuOpen}
             setTheme={setTheme}
-            isMobile={false}
           />
         </GlassSurface>
       </div>
 
-      {/* Mobile Navbar (Backdrop Blur) */}
-      <div className="md:hidden fixed top-4 z-50 w-[95%] inset-x-0 mx-auto rounded-3xl border border-gray-200/40 dark:border-gray-700/40 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-sm">
+      {/* Mobile Navbar - single unified container that expands for the menu */}
+      <div className="glass-material backdrop-blur-xl backdrop-saturate-150 md:hidden fixed top-4 z-nav w-[95%] inset-x-0 mx-auto rounded-3xl overflow-hidden">
         <NavContent
           theme={theme}
           navItems={navItems}
@@ -64,7 +69,6 @@ export function Navbar() {
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
           setTheme={setTheme}
-          isMobile={true}
         />
       </div>
     </>
@@ -83,7 +87,6 @@ interface NavContentProps {
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   setTheme: (theme: string) => void;
-  isMobile: boolean;
 }
 
 function NavContent({
@@ -93,37 +96,35 @@ function NavContent({
   mobileMenuOpen,
   setMobileMenuOpen,
   setTheme,
-  isMobile,
 }: NavContentProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 w-full">
       <div className="flex items-center justify-between">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-        >
+        <div>
           <Link
             href="/"
-            className="text-2xl font-bold text-gray-900 dark:text-white"
+            className="text-2xl font-bold text-foreground"
           >
             <>
               <Image
                 src="/hset_paing_logo_white.png"
-                alt="HPH"
+                alt="Hset Paing Htoo, home"
                 width={150}
                 height={50}
+                priority
                 className="hidden dark:block filter brightness-75 contrast-125 h-auto"
               />
               <Image
                 src="/hsetpaing_logo.png"
-                alt="HPH"
+                alt="Hset Paing Htoo, home"
                 width={150}
                 height={50}
+                priority
                 className="block dark:hidden filter brightness-75 contrast-125 h-auto"
               />
             </>
           </Link>
-        </motion.div>
+        </div>
 
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center space-x-8">
@@ -132,22 +133,23 @@ function NavContent({
               key={item.name}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ ...springDefault, delay: index * 0.05 }}
             >
               <Link
                 href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
                 className={cn(
-                  "text-xl font-medium transition-colors hover:text-navy-600 dark:hover:text-navy-400 relative",
+                  "vibrant relative text-[0.95rem] transition-colors hover:text-primary",
                   pathname === item.href
-                    ? "text-navy-600 dark:text-navy-400"
-                    : "text-gray-700 dark:text-gray-300",
+                    ? "text-primary"
+                    : "text-muted-foreground",
                 )}
               >
                 {item.name}
                 {pathname === item.href && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-navy-600 dark:bg-navy-400"
+                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-primary"
                     initial={false}
                     transition={{
                       type: "spring",
@@ -167,10 +169,10 @@ function NavContent({
           {/* Mobile menu toggle button */}
           <div className="md:hidden">
             <motion.button
-              whileTap={{ scale: 0.9 }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700 dark:text-gray-300 p-1"
-              aria-label="Toggle menu"
+              className="press-feedback rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {mobileMenuOpen ? (
@@ -179,7 +181,7 @@ function NavContent({
                     initial={{ rotate: -90, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={springSnappy}
                   >
                     <X className="w-6 h-6" />
                   </motion.div>
@@ -189,7 +191,7 @@ function NavContent({
                     initial={{ rotate: 90, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={springSnappy}
                   >
                     <Menu className="w-6 h-6" />
                   </motion.div>
@@ -200,33 +202,34 @@ function NavContent({
         </div>
       </div>
 
-      {/* Mobile menu – animated dropdown */}
+      {/* Mobile menu - animated dropdown inside the pill */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={springSheet}
             className="md:hidden overflow-hidden"
           >
-            <div className="flex flex-col space-y-3 pt-4 pb-2 border-t border-gray-200/50 dark:border-gray-700/50 mt-3">
+            <div className="mt-3 flex flex-col space-y-1 border-t border-border/60 pt-4 pb-2">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.name}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  transition={{ ...springSnappy, delay: index * 0.04 }}
                 >
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
+                    aria-current={pathname === item.href ? "page" : undefined}
                     className={cn(
-                      "block text-base font-medium transition-colors hover:text-navy-600 dark:hover:text-navy-400 px-2 py-1.5 rounded-lg",
+                      "vibrant block rounded-lg px-2.5 py-2 text-base transition-colors hover:bg-accent hover:text-accent-foreground",
                       pathname === item.href
-                        ? "text-navy-600 dark:text-navy-400 bg-navy-50/50 dark:bg-navy-900/20"
-                        : "text-gray-700 dark:text-gray-300",
+                        ? "bg-accent text-primary"
+                        : "text-muted-foreground",
                     )}
                   >
                     {item.name}
