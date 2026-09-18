@@ -1,20 +1,16 @@
 "use client";
 
-import "./globals.css";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Github, Linkedin, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useCallback, useState } from "react";
 import { ProjectModal, type Project } from "@/components/ProjectModal";
 import { projects } from "@/lib/projects";
+import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Anton } from "next/font/google";
-
-const anton = Anton({ weight: "400", subsets: ["latin"] });
 import { EffectCoverflow, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -35,226 +31,256 @@ const technicalSkills = [
   { name: "Grafana", icon: "/grafana-logo.png" },
 ];
 
+const socialLinks = [
+  { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/",
+    label: "LinkedIn",
+  },
+  { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
+];
+
+/* Figures derived from the real project list rather than invented. */
+const liveCount = projects.filter((p) => p.liveUrl !== "#").length;
+
+const stats = [
+  { value: String(projects.length), label: "Projects shipped" },
+  { value: "2.4", label: "Years writing frontend" },
+  { value: String(liveCount), label: "Live in production" },
+];
+
 export default function HomePage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  /* The panel emerges from whichever card was tapped, so keep its bounds. */
+  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
+  const reduced = useReducedMotion();
 
-  const skillCardVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.5 },
+  const openProject = useCallback(
+    (proj: Project, event: React.MouseEvent<HTMLElement>) => {
+      setOriginRect(event.currentTarget.getBoundingClientRect());
+      setSelectedProject(proj);
     },
-  };
+    []
+  );
+
+  const listVariants = entryContainer(reduced);
+  const skillCardVariants = entryItem(reduced, 24);
 
   return (
     <PageTransition>
-      <div className="bg-background text-foreground transition-colors duration-300 overflow-x-hidden">
-        {/* Hero Section */}
-        <section className="relative min-h-[95vh] flex flex-col justify-center items-center overflow-hidden pt-10">
-          {/* Background Elements */}
-          <div className="absolute inset-0 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 z-0"></div>
-
+      <div className="relative z-10 overflow-x-hidden bg-background text-foreground">
+        {/* Hero */}
+        <section className="relative flex min-h-[95dvh] flex-col items-center justify-center overflow-hidden pt-10">
           {/* DESKTOP LAYOUT */}
-          <div className="relative w-full max-w-7xl mx-auto min-h-[90vh] hidden md:flex justify-center items-center pointer-events-none z-10 px-4">
-             {/* Text Wrapper - Hugs the Huge Text */}
-             <div className="relative flex flex-col pointer-events-none">
-                
-                {/* Top Left Information (ABOVE HSE) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="absolute bottom-full left-0 mb-4 md:mb-8 w-full max-w-2xl pointer-events-auto"
-                >
-                  <div className="inline-flex items-center gap-2 mb-4 bg-white/60 dark:bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-gray-200 dark:border-gray-800 shadow-sm">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                    </span>
-                    <span className="text-xs md:text-sm font-medium text-gray-800 dark:text-gray-200">
-                      Available for new projects
-                    </span>
-                  </div>
-                  <p className="text-base md:text-lg  font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm text-left max-w-[280px] md:max-w-[550px]">
-                    <span className="text-primary font-bold block mb-1">Passionate Frontend Developer</span>
-                    creating seamless digital experiences with modern tools.
-                  </p>
-                </motion.div>
+          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[90dvh] w-full max-w-7xl items-center justify-center px-4 lg:flex">
+            <div className="pointer-events-none relative flex flex-col">
+              {/* Above the wordmark */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
+                className="pointer-events-auto absolute bottom-full left-0 mb-4 w-full max-w-2xl md:mb-8"
+              >
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 shadow-tinted-sm backdrop-blur-md">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                  </span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Available for new projects
+                  </span>
+                </div>
+                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground xl:max-w-[460px] xl:text-lg">
+                  <span className="mb-1 block text-xl font-semibold tracking-tight text-primary md:text-2xl">
+                    Frontend developer
+                  </span>
+                  <span className="text-muted-foreground">
+                    I build the interfaces for corporate sites, management
+                    dashboards and industrial monitoring tools.
+                  </span>
+                </p>
+              </motion.div>
 
-                {/* Huge Background Text */}
-                <motion.h1
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className={`${anton.className} text-[15vw] lg:text-[18vw] text-gray-200/80 dark:text-white/10 tracking-wider leading-none whitespace-nowrap select-none uppercase`}
-                >
-                  Hset Paing
-                </motion.h1>
+              {/* Wordmark */}
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ ...springGentle, delay: reduced ? 0 : 0.04 }}
+                className="select-none whitespace-nowrap font-display text-[15vw] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] lg:text-[18vw] dark:text-foreground/[0.09]"
+              >
+                Hset Paing
+              </motion.h1>
 
-                {/* Bottom Left Information (BELOW HSE) */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="absolute top-full left-0 mt-4 md:mt-8 pointer-events-auto"
-                >
-                  <div className="flex gap-3">
-                    <Button
-                      asChild
-                      size="default"
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 py-4 shadow-lg shadow-primary/20 transition-all hover:scale-105 border-none"
-                    >
-                      <Link href="/projects">View My Work</Link>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      asChild
-                      size="default"
-                      className="border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 hover:bg-white/80 dark:hover:bg-gray-800 rounded-xl px-5 py-4 bg-white/60 dark:bg-black/60 backdrop-blur-md transition-all hover:scale-105 shadow-sm"
-                    >
-                      <Link href="/contact">Let's Talk</Link>
-                    </Button>
-                  </div>
-                </motion.div>
+              {/* Below, left */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...springGentle, delay: reduced ? 0 : 0.16 }}
+                className="pointer-events-auto absolute top-full left-0 mt-4 md:mt-8"
+              >
+                <div className="flex items-center gap-3">
+                  <Button asChild size="xl" className="group">
+                    <Link href="/projects">
+                      View my work
+                      <ArrowRight
+                        className="transition-transform duration-200 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="xl">
+                    <Link href="/contact">Get in touch</Link>
+                  </Button>
+                </div>
+              </motion.div>
 
-                {/* Bottom Right Information (BELOW AING) */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="absolute top-full right-0 mt-4 md:mt-8 w-[280px] md:w-[400px] lg:w-[450px] pointer-events-auto text-right flex flex-col items-end"
-                >
-                  <p className="text-base md:text-lg  text-gray-700 dark:text-gray-300 leading-snug drop-shadow-sm">
-                    <span className="font-bold text-gray-900 dark:text-white block mb-1">The Next Step for Brands Ready to Grow.</span>
-                    I craft data-driven digital strategies to scale faster.
-                  </p>
-                </motion.div>
-             </div>
+            </div>
           </div>
 
-          {/* DESKTOP Profile Image */}
-          <div className="absolute inset-0 hidden md:flex justify-center items-center pointer-events-none z-30 translate-x-4 md:translate-x-8">
+          {/* DESKTOP portrait */}
+          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-4 items-center justify-center lg:flex lg:translate-x-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0 }}
-              className="relative w-[450px] h-[550px] lg:w-[500px] lg:h-[600px] pointer-events-auto"
+              transition={springGentle}
+              className="pointer-events-auto relative h-[550px] w-[450px] lg:h-[600px] lg:w-[500px]"
             >
               <Image
                 src="/profile_me_transparent.png"
-                alt="Hset Paing"
+                alt="Hset Paing Htoo"
                 fill
                 className="object-contain drop-shadow-2xl [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
                 priority
                 quality={100}
               />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-tr from-primary/30 via-indigo-500/20 to-purple-500/30 rounded-full blur-[100px] -z-10 animate-pulse pointer-events-none"></div>
+              {/* Single-accent ambient light, off-centre so it doesn't read as a ring */}
+              <div
+                className="pointer-events-none absolute left-1/2 top-[45%] -z-10 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[110px]"
+                aria-hidden="true"
+              />
             </motion.div>
           </div>
 
           {/* MOBILE LAYOUT */}
-          <div className="flex md:hidden flex-col items-center w-full min-h-[90vh] z-10 px-4 pt-20 relative pointer-events-none">
-             {/* Mobile Image & Huge Text */}
-             <div className="relative w-full flex justify-center items-start mb-6">
-                <motion.h1
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className={`${anton.className} absolute top-10 text-[18vw] text-gray-200/80 dark:text-white/10 tracking-wider leading-none whitespace-nowrap select-none uppercase z-10`}
-                >
-                  Hset Paing
-                </motion.h1>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 50 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 1, delay: 0 }}
-                  className="relative w-[300px] h-[380px] z-20 pointer-events-auto"
-                >
-                  <Image
-                    src="/profile_me_transparent.png"
-                    alt="Hset Paing"
-                    fill
-                    className="object-contain drop-shadow-2xl [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
-                    priority
-                    quality={100}
-                  />
-                </motion.div>
-             </div>
+          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center px-4 pt-6 lg:hidden">
+            <div className="relative mb-6 flex w-full items-start justify-center">
+              <motion.p
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ ...springGentle, delay: reduced ? 0 : 0.04 }}
+                aria-hidden="true"
+                className="absolute top-10 z-10 select-none whitespace-nowrap font-display text-[18vw] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] dark:text-foreground/[0.09]"
+              >
+                Hset Paing
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 50 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={springGentle}
+                className="pointer-events-auto relative z-20 h-[380px] w-[300px]"
+              >
+                <Image
+                  src="/profile_me_transparent.png"
+                  alt="Hset Paing Htoo"
+                  fill
+                  className="object-contain drop-shadow-2xl [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
+                  priority
+                  quality={100}
+                />
+              </motion.div>
+            </div>
 
-             {/* Mobile Content Block */}
-             <motion.div
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.8, delay: 0.2 }}
-               className="flex flex-col items-center text-center w-full z-30 pointer-events-auto pb-10"
-             >
-                <div className="inline-flex items-center gap-2 mb-4 bg-white/60 dark:bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-gray-200 dark:border-gray-800 shadow-sm">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                  </span>
-                  <span className="text-xs font-medium text-gray-800 dark:text-gray-200">
-                    Available for new projects
-                  </span>
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
+              className="pointer-events-auto z-30 flex w-full flex-col items-center pb-10 text-center"
+            >
+              {/* Visible H1 for mobile - the wordmark above is decorative */}
+              <h1 className="sr-only">
+                Hset Paing Htoo, frontend developer
+              </h1>
 
-                <p className="text-lg font-medium text-gray-800 dark:text-gray-200 leading-snug drop-shadow-sm px-2 mb-8">
-                  <span className="text-primary font-bold block mb-1">Passionate Frontend Developer</span>
-                  creating seamless, engaging digital experiences with modern tools and frameworks.
-                </p>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 shadow-tinted-sm backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                </span>
+                <span className="text-xs font-medium text-muted-foreground">
+                  Available for new projects
+                </span>
+              </div>
 
-                <div className="flex flex-col w-full gap-3 max-w-[320px] mb-8">
-                  <Button asChild size="default" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 shadow-lg shadow-primary/20 border-none group">
-                    <Link href="/projects" className="flex items-center justify-center gap-2 text-base">
-                      View My Work <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                  <Button variant="outline" asChild size="default" className="w-full border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl py-6 bg-white/60 dark:bg-black/60 backdrop-blur-md text-base">
-                    <Link href="/contact">Let's Talk</Link>
-                  </Button>
-                </div>
+              <p className="mb-9 px-2 text-lg leading-snug">
+                <span className="mb-1.5 block text-2xl font-semibold tracking-tight text-primary">
+                  Frontend developer
+                </span>
+                <span className="text-muted-foreground">
+                  I build the interfaces for corporate sites, management
+                  dashboards and industrial monitoring tools.
+                </span>
+              </p>
 
-                <div className="flex items-center justify-center gap-4">
-                  <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">Follow me:</span>
-                  {[
-                    { icon: Github, href: "https://github.com/hsetpainghtoo" },
-                    { icon: Linkedin, href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/" },
-                    { icon: MessageCircle, href: "https://m.me/hset.htoo.35" },
-                  ].map((social, i) => (
-                    <Link key={i} href={social.href} className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
-                      <social.icon className="w-5 h-5" />
-                    </Link>
-                  ))}
-                </div>
-             </motion.div>
+              <div className="mb-9 flex w-full max-w-[320px] flex-col gap-3">
+                <Button asChild size="xl" className="group w-full">
+                  <Link href="/projects">
+                    View my work
+                    <ArrowRight
+                      className="transition-transform duration-200 group-hover:translate-x-0.5"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="xl" className="w-full">
+                  <Link href="/contact">Get in touch</Link>
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-center gap-1">
+                <span className="mr-2 text-sm text-muted-foreground">
+                  Find me on
+                </span>
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={social.label}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg press-feedback text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <social.icon className="h-[1.05rem] w-[1.05rem]" aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* Projects Carousel Section */}
-        <section className="py-20 px-6 bg-muted/50 max-md:mt-10 overflow-hidden">
-          <div className="max-w-6xl mx-auto">
+        {/* Selected work */}
+        <section className="overflow-hidden bg-surface px-6 pt-20 pb-24 max-md:mt-10">
+          <div className="mx-auto max-w-6xl">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={springGentle}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="mb-14 max-w-xl"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                My Projects
+              <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
+                Things I have built
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                A showcase of my latest and most impactful work
+              <p className="measure text-lg text-muted-foreground">
+                Corporate sites, internal tools and a couple of side builds.
+                Open one to see the stack behind it.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.06 }}
               viewport={{ once: true }}
               className="relative w-full"
             >
@@ -265,11 +291,11 @@ export default function HomePage() {
                 slidesPerView="auto"
                 loop={projects.length > 2}
                 coverflowEffect={{
-                  rotate: 20,
+                  rotate: 16,
                   stretch: 0,
-                  depth: 250,
+                  depth: 220,
                   modifier: 1,
-                  slideShadows: true,
+                  slideShadows: false,
                 }}
                 pagination={{ clickable: true }}
                 navigation={{
@@ -277,236 +303,173 @@ export default function HomePage() {
                   prevEl: ".projects-swiper-prev",
                 }}
                 modules={[EffectCoverflow, Pagination, Navigation]}
-                onRealIndexChange={(swiper) =>
-                  setCurrentSlide(swiper.realIndex)
-                }
                 className="projects-swiper !overflow-visible py-12"
               >
                 {projects.map((project, index) => (
                   <SwiperSlide
-                    key={index}
-                    className="!w-[320px] sm:!w-[420px] lg:!w-[520px] aspect-[4/5] mb-12"
+                    key={project.title}
+                    className="mb-12 aspect-[4/5] !w-[320px] sm:!w-[420px] lg:!w-[520px]"
                   >
                     {({ isActive }) => (
-                      <div
-                        className={`relative w-full h-full rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 cursor-pointer border-2 bg-gray-100 dark:bg-gray-900 ${
+                      <button
+                        type="button"
+                        aria-label={`Open details for ${project.title}`}
+                        tabIndex={isActive ? 0 : -1}
+                        className={`relative block h-full w-full overflow-hidden rounded-2xl border bg-card text-left shadow-tinted-lg transition-[transform,opacity,border-color] duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)] ${
                           isActive
-                            ? "border-primary scale-100 opacity-100"
-                            : "border-transparent scale-95 opacity-70 dark:opacity-50"
+                            ? "scale-100 border-primary/60 opacity-100"
+                            : "scale-95 border-border opacity-60"
                         }`}
-                        onClick={() => isActive && setSelectedProject(project)}
+                        onClick={(e) => isActive && openProject(project, e)}
                       >
-                        {/* Background Image */}
                         <Image
                           src={project.image || "/placeholder.svg"}
-                          alt={project.title}
+                          alt={`${project.title} screenshot`}
                           fill
-                          className="object-contain p-10 scale-90 brightness-95 dark:brightness-75 contrast-95 dark:contrast-90"
+                          className="scale-90 object-contain p-10"
                           sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 520px"
+                          priority={index === 0}
                         />
 
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/20 to-gray-100/10 dark:from-black/85 dark:via-black/35 dark:to-transparent pointer-events-none" />
+                        {/* Legibility scrim, tinted with the page ink */}
+                        <div
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/25 to-transparent"
+                          aria-hidden="true"
+                        />
 
-                        {/* Badge */}
-                        <div className="absolute top-6 left-6 z-20">
-                          <Badge className="bg-primary/90 hover:bg-primary text-white border-0 shadow-lg px-3 py-1 text-xs tracking-wider uppercase backdrop-blur-md">
-                            Project
-                          </Badge>
-                        </div>
-
-                        {/* Bottom Content */}
-                        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 z-10">
-                          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
+                        <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8">
+                          <h3 className="mb-2 text-2xl font-semibold leading-tight text-white sm:text-3xl">
                             {project.title}
                           </h3>
-                          <p className="text-white/70 text-xs sm:text-sm mb-5 line-clamp-1">
-                            {project.technologies.join(" • ")}
+                          <p className="mb-5 line-clamp-1 text-xs text-white/65 sm:text-sm">
+                            {project.technologies.join(", ")}
                           </p>
 
                           {isActive && (
-                            <div
-                              className="flex items-center text-white font-semibold w-max group/btn"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedProject(project);
-                              }}
-                            >
-                              <div className="w-10 h-10 rounded-full border border-white/50 flex flex-shrink-0 items-center justify-center mr-4 group-hover/btn:bg-white group-hover/btn:text-black transition-colors duration-300">
-                                <ArrowRight className="w-4 h-4" />
-                              </div>
-                              <span className="group-hover/btn:underline underline-offset-4">
+                            <span className="group/btn inline-flex w-max items-center font-medium text-white">
+                              <span className="mr-3.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-white/40 transition-colors duration-300 group-hover/btn:bg-white group-hover/btn:text-navy-950">
+                                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                              </span>
+                              <span className="underline-offset-4 group-hover/btn:underline">
                                 Read more
                               </span>
-                            </div>
+                            </span>
                           )}
                         </div>
-                      </div>
+                      </button>
                     )}
                   </SwiperSlide>
                 ))}
 
-                {/* Navigation Arrows */}
                 <div className="projects-swiper-prev !hidden md:!flex" />
                 <div className="projects-swiper-next !hidden md:!flex" />
               </Swiper>
-
-              {/* Swiper custom styles */}
-              <style>{`
-                .projects-swiper .swiper-button-next,
-                .projects-swiper .swiper-button-prev,
-                .projects-swiper-next,
-                .projects-swiper-prev {
-                  color: #2563eb;
-                }
-                .projects-swiper .swiper-button-next:after,
-                .projects-swiper .swiper-button-prev:after {
-                  font-size: 1.5rem;
-                }
-                .projects-swiper .swiper-pagination-bullet {
-                  background: #2563eb;
-                  opacity: 0.4;
-                  width: 8px;
-                  height: 8px;
-                }
-                .projects-swiper .swiper-pagination-bullet-active {
-                  opacity: 1;
-                  background: #2563eb;
-                  box-shadow: 0 0 6px #2563eb;
-                }
-              `}</style>
             </motion.div>
 
-            {/* View All Projects Link */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ ...springGentle, delay: reduced ? 0 : 0.12 }}
               viewport={{ once: true }}
-              className="text-center mt-4"
+              className="mt-6 text-center"
             >
-              <Button
-                asChild
-                variant="ghost"
-                className="text-primary hover:bg-primary/10 text-base"
-              >
+              <Button asChild variant="quiet" className="group">
                 <Link href="/projects">
-                  View All Projects <ArrowRight className="ml-2 w-4 h-4" />
+                  View my work
+                  <ArrowRight
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
                 </Link>
               </Button>
             </motion.div>
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section className="py-20 px-6">
-          <div className="max-w-6xl mx-auto">
+        {/* Toolkit */}
+        <section className="px-6 pt-20 pb-24">
+          <div className="mx-auto max-w-6xl">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={springGentle}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="mb-12 max-w-xl"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                Skills
+              <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
+                What I reach for
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                Technologies and tools I work with
+              <p className="measure text-lg text-muted-foreground">
+                The stack I use daily, plus the pieces I lean on when the work
+                runs into data and device monitoring.
               </p>
             </motion.div>
 
-            {/* Technical Skills */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="mb-16"
+            <motion.ul
+              className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4"
+              variants={listVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
             >
-              <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border border-primary/20 backdrop-blur-sm">
-                {/* Decorative glow */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-[80px]" />
-                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-violet-300/20 dark:bg-violet-600/10 rounded-full blur-[80px]" />
-
-                <motion.div
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 relative z-10 items-center"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ staggerChildren: 0.08 }}
+              {technicalSkills.map((skill) => (
+                <motion.li
+                  key={skill.name}
+                  variants={skillCardVariants}
+                  className="hover-lift [--lift:-3px] flex items-center gap-3.5 rounded-xl border border-border/70 bg-card p-4 shadow-tinted-sm hover:shadow-tinted-md"
                 >
-                  {technicalSkills.map((skill) => (
-                    <motion.div
-                      key={skill.name}
-                      variants={skillCardVariants}
-                      whileHover={{ scale: 1.08, y: -4 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 15,
-                      }}
-                      className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/80 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-shadow duration-300 cursor-default"
-                    >
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                        <Image
-                          src={skill.icon}
-                          alt={skill.name}
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-                        {skill.name}
-                      </span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </motion.div>
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
+                    <Image
+                      src={skill.icon}
+                      alt=""
+                      width={26}
+                      height={26}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span className="text-sm font-medium leading-tight text-foreground">
+                    {skill.name}
+                  </span>
+                </motion.li>
+              ))}
+            </motion.ul>
           </div>
         </section>
 
-        {/* Quick Stats */}
-        <section className="py-20 px-6 bg-muted/50">
-          <div className="max-w-4xl mx-auto">
-            <motion.div
+        {/* By the numbers - asymmetric, left-aligned, tabular figures */}
+        <section className="border-t border-border bg-surface px-6 pt-16 pb-20">
+          <div className="mx-auto max-w-6xl">
+            <motion.dl
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
+              transition={springGentle}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
+              className="flex flex-col gap-10 sm:flex-row sm:items-end sm:gap-16"
             >
-              {[
-                { number: "7+", label: "Projects Completed" },
-                { number: "2+", label: "Years Experience" },
-                { number: "100%", label: "Client Satisfaction" },
-              ].map((stat, index) => (
+              {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  transition={{ ...springGentle, delay: reduced ? 0 : index * 0.08 }}
                   viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
+                  className={index === 0 ? "" : "sm:border-l sm:border-border sm:pl-16"}
                 >
-                  <h3 className="text-4xl font-bold text-primary mb-2">
-                    {stat.number}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {stat.label}
-                  </p>
+                  <dd className="tabular mb-1.5 text-5xl font-semibold leading-none text-foreground md:text-6xl">
+                    {stat.value}
+                  </dd>
+                  <dt className="text-sm text-muted-foreground">{stat.label}</dt>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.dl>
           </div>
         </section>
       </div>
 
-      {/* Project Modal */}
       <ProjectModal
         project={selectedProject}
         isOpen={!!selectedProject}
+        originRect={originRect}
         onClose={() => setSelectedProject(null)}
       />
     </PageTransition>

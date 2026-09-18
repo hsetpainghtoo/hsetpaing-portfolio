@@ -15,6 +15,8 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        /* Squared-off technology tag - reads as a label, not a pill. */
+        tag: "rounded-md border-border bg-surface px-2 py-0.5 font-mono text-[0.6875rem] font-medium tracking-tight text-muted-foreground",
       },
     },
     defaultVariants: {
