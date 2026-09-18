@@ -14,6 +14,8 @@ import {
   Blocks,
   Milestone,
   PenTool,
+  Globe,
+  Cpu,
 } from "lucide-react";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 
@@ -45,7 +47,7 @@ export default function AboutPage() {
     {
       year: "May 2024",
       title: "Started programming",
-      org: "Self-taught, then company project",
+      org: "Self-taught, then Digital Engineering Tech",
       description:
         "HTML, CSS and JavaScript from scratch. Three months in I moved to React and built my company's first static site over the following month.",
       icon: GraduationCap,
@@ -53,7 +55,7 @@ export default function AboutPage() {
     {
       year: "Late 2024",
       title: "Frontend developer, React",
-      org: "Company project",
+      org: "Digital Engineering Tech",
       description:
         "Joined the Fuel Station Management System team. Fixed bugs, tightened up existing code and shipped new features in React through to mid-2025.",
       icon: Briefcase,
@@ -61,7 +63,7 @@ export default function AboutPage() {
     {
       year: "Mid 2025",
       title: "Next.js and the FMS rebuild",
-      org: "Company project",
+      org: "Digital Engineering Tech",
       description:
         "Moved onto the Next.js rewrite of FMS. Picked up TypeScript and TanStack Query, built the Cloud Reports module and CRUD flows, and made the local UI responsive.",
       icon: Blocks,
@@ -76,11 +78,27 @@ export default function AboutPage() {
     },
     {
       year: "Mar 2026",
-      title: "Roots to Rooms frontend",
-      org: "Company project",
+      title: "Joined Transtak Pte Ltd",
+      org: "Transtak Pte Ltd, Singapore",
       description:
-        "Reworked the frontend to smooth out the user experience and bring in new interface designs.",
+        "Moved to Transtak as a frontend developer. First job in was the Roots to Rooms frontend, smoothing out the user experience and bringing in new interface designs.",
       icon: PenTool,
+    },
+    {
+      year: "Mid 2026",
+      title: "Corporate sites for Transtak and Mahar",
+      org: "Transtak Pte Ltd",
+      description:
+        "Built both company sites in Next.js and TypeScript, with Framer Motion for the page transitions and the enquiry forms wired through Nodemailer.",
+      icon: Globe,
+    },
+    {
+      year: "Sep 2026",
+      title: "ShouXingCare",
+      org: "Transtak Pte Ltd",
+      description:
+        "Marketing site for Transtak's voice-first AI companion device for elderly care, covering the product pages, the feature breakdowns and the waitlist form.",
+      icon: Cpu,
     },
   ];
 
@@ -176,12 +194,13 @@ export default function AboutPage() {
                   the start rather than bolting them on later.
                 </p>
                 <p>
-                  Most of my work is React, Next.js, TypeScript and Tailwind CSS.
-                  I worked on the frontend of the Fuel Station Management System
-                  through its move to Next.js, building the Cloud Reports module,
-                  CRUD operations and the responsive layouts. I also delivered
-                  Myanmar Express Hub, which included wiring up an AI assistant
-                  for customer questions.
+                  I am a frontend developer at Transtak Pte Ltd in Singapore,
+                  where I build the company's own sites and product work like
+                  ShouXingCare. Before that I worked on the Fuel Station
+                  Management System through its move to Next.js, building the
+                  Cloud Reports module, CRUD operations and the responsive
+                  layouts, and delivered Myanmar Express Hub with an AI
+                  assistant wired in for customer questions.
                 </p>
                 <p>
                   Outside of client work I spend time on industrial
