@@ -37,6 +37,31 @@ function buildBoxShadow(glowColor: string, intensity: number): string {
   }).join(', ');
 }
 
+/* Three layers are steered by the cursor angle. Each mask is defined once
+   here and used by both the initial render and the rAF paint, because when
+   they were written out twice they drifted: paint updated the border and left
+   the fill and glow frozen at their mount angle, so only the hairline tracked
+   the pointer. */
+function borderMask(angle: string, coneSpread: number) {
+  return `conic-gradient(from ${angle} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`;
+}
+
+function fillMask(angle: string) {
+  return [
+    'linear-gradient(to bottom, black, black)',
+    'radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%)',
+    'radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%)',
+    'radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%)',
+    'radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%)',
+    'radial-gradient(ellipse at 33% 66%, black 5%, transparent 40%)',
+    `conic-gradient(from ${angle} at center, transparent 5%, black 15%, black 85%, transparent 95%)`,
+  ].join(', ');
+}
+
+function glowMask(angle: string) {
+  return `conic-gradient(from ${angle} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`;
+}
+
 function prefersReducedMotion() {
   return typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -144,20 +169,17 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
       ? Math.max(0, (proximity * 100 - edgeSensitivity) / (100 - edgeSensitivity))
       : 0;
     const angle = `${cursorAngleRef.current.toFixed(2)}deg`;
-    const mask = `conic-gradient(from ${angle} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`;
 
-    const border = borderLayerRef.current;
-    if (border) {
-      border.style.opacity = String(borderOpacity);
-      border.style.maskImage = mask;
-      border.style.webkitMaskImage = mask;
-    }
-    if (fillLayerRef.current) {
-      fillLayerRef.current.style.opacity = String(borderOpacity * fillOpacity);
-    }
-    if (glowLayerRef.current) {
-      glowLayerRef.current.style.opacity = String(glowOpacity);
-    }
+    const setMask = (el: HTMLElement | null, mask: string, opacity: number) => {
+      if (!el) return;
+      el.style.opacity = String(opacity);
+      el.style.maskImage = mask;
+      el.style.setProperty('-webkit-mask-image', mask);
+    };
+
+    setMask(borderLayerRef.current, borderMask(angle, coneSpread), borderOpacity);
+    setMask(fillLayerRef.current, fillMask(angle), borderOpacity * fillOpacity);
+    setMask(glowLayerRef.current, glowMask(angle), glowOpacity);
   }, [edgeSensitivity, coneSpread, fillOpacity]);
 
   const schedulePaint = useCallback(() => {
@@ -189,7 +211,17 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
   }, [isHovered, sweepActive, schedulePaint]);
 
   useEffect(() => () => {
-    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    /* Clearing the id matters as much as cancelling the frame. Strict Mode
+       double-invokes effects on mount, reusing the same refs: schedule,
+       clean up, schedule again. If the cancel left a stale id behind, the
+       re-entrancy guard in schedulePaint saw a frame still pending and bailed
+       forever, because only paint() resets it and paint never ran. That is a
+       race with the first real frame, which is why a hard refresh appeared to
+       fix it and a client-side navigation did not. */
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
@@ -254,8 +286,8 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
             ...borderBg,
           ].join(', '),
           opacity: borderOpacity,
-          maskImage: `conic-gradient(from ${angleDeg} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`,
-          WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black ${coneSpread}%, transparent ${coneSpread + 15}%, transparent ${100 - coneSpread - 15}%, black ${100 - coneSpread}%)`,
+          maskImage: borderMask(angleDeg, coneSpread),
+          WebkitMaskImage: borderMask(angleDeg, coneSpread),
           transition: isVisible
             ? 'opacity 250ms cubic-bezier(0.23, 1, 0.32, 1)'
             : 'opacity 180ms cubic-bezier(0.23, 1, 0.32, 1)',
@@ -269,24 +301,8 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
         style={{
           border: '1px solid transparent',
           background: fillBg.join(', '),
-          maskImage: [
-            'linear-gradient(to bottom, black, black)',
-            'radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%)',
-            'radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 33% 66%, black 5%, transparent 40%)',
-            `conic-gradient(from ${angleDeg} at center, transparent 5%, black 15%, black 85%, transparent 95%)`,
-          ].join(', '),
-          WebkitMaskImage: [
-            'linear-gradient(to bottom, black, black)',
-            'radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%)',
-            'radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%)',
-            'radial-gradient(ellipse at 33% 66%, black 5%, transparent 40%)',
-            `conic-gradient(from ${angleDeg} at center, transparent 5%, black 15%, black 85%, transparent 95%)`,
-          ].join(', '),
+          maskImage: fillMask(angleDeg),
+          WebkitMaskImage: fillMask(angleDeg),
           maskComposite: 'subtract, add, add, add, add, add',
           WebkitMaskComposite: 'source-out, source-over, source-over, source-over, source-over, source-over',
           opacity: borderOpacity * fillOpacity,
@@ -303,8 +319,8 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
         className="absolute pointer-events-none z-[1] rounded-[inherit]"
         style={{
           inset: `${-glowRadius}px`,
-          maskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
-          WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
+          maskImage: glowMask(angleDeg),
+          WebkitMaskImage: glowMask(angleDeg),
           opacity: glowOpacity,
           mixBlendMode: 'plus-lighter',
           transition: isVisible
