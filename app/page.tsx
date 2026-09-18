@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github, Linkedin, MessageCircle } from "lucide-react";
+import { NestedArrow } from "@/components/nested-arrow";
 import Image from "next/image";
 import Link from "next/link";
 import { PageTransition } from "@/components/page-transition";
@@ -82,7 +83,7 @@ export default function HomePage() {
                 transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
                 className="pointer-events-auto absolute bottom-full left-0 mb-4 w-full max-w-2xl md:mb-8"
               >
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 shadow-tinted-sm backdrop-blur-md">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-tinted-sm">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
@@ -120,16 +121,13 @@ export default function HomePage() {
                 className="pointer-events-auto absolute top-full left-0 mt-4 md:mt-8"
               >
                 <div className="flex items-center gap-3">
-                  <Button asChild size="xl" className="group">
+                  <Button asChild size="cta" className="group">
                     <Link href="/projects">
                       View my work
-                      <ArrowRight
-                        className="transition-transform duration-200 group-hover:translate-x-0.5"
-                        aria-hidden="true"
-                      />
+                      <NestedArrow className="bg-primary-foreground/20" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="xl">
+                  <Button asChild variant="outline" size="cta" className="px-8">
                     <Link href="/contact">Get in touch</Link>
                   </Button>
                 </div>
@@ -197,7 +195,7 @@ export default function HomePage() {
                 Hset Paing Htoo, frontend developer
               </h1>
 
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 shadow-tinted-sm backdrop-blur-md">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-tinted-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
@@ -218,16 +216,13 @@ export default function HomePage() {
               </p>
 
               <div className="mb-7 flex w-full max-w-[320px] flex-col gap-3">
-                <Button asChild size="xl" className="group w-full">
+                <Button asChild size="cta" className="group w-full">
                   <Link href="/projects">
                     View my work
-                    <ArrowRight
-                      className="transition-transform duration-200 group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
+                    <NestedArrow className="bg-primary-foreground/20" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="xl" className="w-full">
+                <Button asChild variant="outline" size="cta" className="w-full px-8">
                   <Link href="/contact">Get in touch</Link>
                 </Button>
               </div>
@@ -254,7 +249,7 @@ export default function HomePage() {
         </section>
 
         {/* Selected work */}
-        <section className="overflow-hidden bg-surface px-6 pt-20 pb-24 max-md:mt-10">
+        <section className="overflow-hidden bg-surface px-6 pt-20 pb-24 max-md:mt-10 md:pt-32 md:pb-36">
           <div className="mx-auto max-w-6xl">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -368,13 +363,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="mt-6 text-center"
             >
-              <Button asChild variant="quiet" className="group">
+              <Button asChild variant="quiet" size="cta" className="group">
                 <Link href="/projects">
                   View my work
-                  <ArrowRight
-                    className="transition-transform duration-200 group-hover:translate-x-0.5"
-                    aria-hidden="true"
-                  />
+                  <NestedArrow className="bg-foreground/10" />
                 </Link>
               </Button>
             </motion.div>
@@ -382,7 +374,7 @@ export default function HomePage() {
         </section>
 
         {/* Toolkit */}
-        <section className="px-6 pt-20 pb-24">
+        <section className="px-6 pt-20 pb-24 md:pt-32 md:pb-36">
           <div className="mx-auto max-w-6xl">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -411,20 +403,22 @@ export default function HomePage() {
                 <motion.li
                   key={skill.name}
                   variants={skillCardVariants}
-                  className="hover-lift [--lift:-3px] flex items-center gap-3.5 rounded-xl border border-border/70 bg-card p-4 shadow-tinted-sm hover:shadow-tinted-md"
+                  className="hover-lift [--lift:-3px] bezel"
                 >
-                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
-                    <Image
-                      src={skill.icon}
-                      alt=""
-                      width={26}
-                      height={26}
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="text-sm font-medium leading-tight text-foreground">
-                    {skill.name}
-                  </span>
+                  <div className="bezel-core flex items-center gap-3.5 p-4">
+                    <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
+                      <Image
+                        src={skill.icon}
+                        alt=""
+                        width={26}
+                        height={26}
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="text-sm font-medium leading-tight text-foreground">
+                      {skill.name}
+                    </span>
+                  </div>
                 </motion.li>
               ))}
             </motion.ul>
@@ -432,7 +426,7 @@ export default function HomePage() {
         </section>
 
         {/* By the numbers - asymmetric, left-aligned, tabular figures */}
-        <section className="border-t border-border bg-surface px-6 pt-16 pb-20">
+        <section className="border-t border-border bg-surface px-6 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="mx-auto max-w-6xl">
             <motion.dl
               initial={{ opacity: 0 }}

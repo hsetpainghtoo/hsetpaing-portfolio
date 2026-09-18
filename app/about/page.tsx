@@ -18,6 +18,8 @@ import {
   Cpu,
 } from "lucide-react";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
+import { Button } from "@/components/ui/button";
+import { NestedArrow } from "@/components/nested-arrow";
 
 export default function AboutPage() {
   const values = [
@@ -135,7 +137,7 @@ export default function AboutPage() {
 
   return (
     <PageTransition>
-      <div className="relative z-10 bg-background px-6 py-20 text-foreground">
+      <div className="relative z-10 bg-background px-6 py-20 text-foreground md:py-32">
         <div className="mx-auto max-w-4xl">
           <motion.header
             initial={{ opacity: 0, y: 24 }}
@@ -246,7 +248,6 @@ export default function AboutPage() {
                     <span className="relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card shadow-tinted-sm">
                       <item.icon
                         className="h-5 w-5 text-primary"
-                        strokeWidth={1.75}
                         aria-hidden="true"
                       />
                     </span>
@@ -293,7 +294,6 @@ export default function AboutPage() {
                   <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-accent">
                     <item.icon
                       className="h-5 w-5 text-accent-foreground"
-                      strokeWidth={1.75}
                       aria-hidden="true"
                     />
                   </span>
@@ -333,12 +333,12 @@ export default function AboutPage() {
             </motion.ol>
 
             <div className="mt-14">
-              <Link
-                href="/contact"
-                className="text-base font-medium text-primary underline-offset-4 transition-colors hover:underline"
-              >
-                Get in touch
-              </Link>
+              <Button asChild size="cta" className="group">
+                <Link href="/contact">
+                  Get in touch
+                  <NestedArrow className="bg-primary-foreground/20" />
+                </Link>
+              </Button>
             </div>
           </motion.section>
         </div>

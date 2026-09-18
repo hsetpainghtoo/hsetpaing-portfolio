@@ -77,7 +77,7 @@ export default function ContactPage() {
 
   return (
     <PageTransition>
-      <div className="relative z-10 bg-background px-6 py-20 text-foreground">
+      <div className="relative z-10 bg-background px-6 py-20 text-foreground md:py-32">
         <div className="mx-auto max-w-5xl">
           <motion.header
             initial={{ opacity: 0, y: 24 }}
@@ -213,21 +213,19 @@ export default function ContactPage() {
 
               <a
                 href="mailto:hsetpainghtoo218@gmail.com"
-                className="group mb-8 flex items-start gap-3.5 rounded-xl border border-border/70 bg-card p-5 press-feedback shadow-tinted-sm hover:border-primary/40 hover:shadow-tinted-md"
+                className="press-feedback group mb-8 block bezel hover:bg-primary/[0.06]"
               >
-                <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent">
-                  <Mail
-                    className="h-4 w-4 text-accent-foreground"
-                    strokeWidth={1.75}
-                    aria-hidden="true"
-                  />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium text-foreground">
-                    Email
+                <span className="bezel-core flex items-start gap-3.5 p-5">
+                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent">
+                    <Mail className="h-4 w-4 text-accent-foreground" aria-hidden="true" />
                   </span>
-                  <span className="block truncate text-sm text-muted-foreground group-hover:text-primary">
-                    hsetpainghtoo218@gmail.com
+                  <span className="min-w-0">
+                    <span className="block text-sm font-medium text-foreground">
+                      Email
+                    </span>
+                    <span className="block truncate text-sm text-muted-foreground group-hover:text-primary">
+                      hsetpainghtoo218@gmail.com
+                    </span>
                   </span>
                 </span>
               </a>
@@ -244,7 +242,6 @@ export default function ContactPage() {
                     >
                       <social.icon
                         className="h-4 w-4"
-                        strokeWidth={1.75}
                         aria-hidden="true"
                       />
                       {social.label}

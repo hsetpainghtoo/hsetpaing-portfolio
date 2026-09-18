@@ -29,6 +29,13 @@ const buttonVariants = cva(
         sm: "h-9 rounded-xl px-3",
         lg: "h-11 rounded-xl px-8",
         xl: "h-12 rounded-xl px-7 text-base",
+        /* Sized by its label, never by a fixed floor. The label and its arrow
+           stay together as one group, because the arrow belongs to the label.
+           Padding is asymmetric on purpose: a filled 32px circle reaches its
+           own edge and needs ~8px of air, while text has natural sidebearing
+           and wants ~20px. That reads as optically even, and it holds whether
+           the button hugs its content or is stretched full width. */
+        cta: "h-12 gap-3 rounded-xl pl-5 pr-2 text-base",
         icon: "h-10 w-10 rounded-full",
       },
     },

@@ -45,7 +45,7 @@ export function ThemeToggle({ theme, setTheme }: ThemeProps) {
         aria-hidden="true"
         tabIndex={-1}
       >
-        <Monitor className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.75} />
+        <Monitor className="h-[1.1rem] w-[1.1rem]" />
         <span className="sr-only">Toggle theme</span>
       </Button>
     );
@@ -76,7 +76,6 @@ export function ThemeToggle({ theme, setTheme }: ThemeProps) {
         >
           <Icon
             className="h-[1.1rem] w-[1.1rem] text-foreground"
-            strokeWidth={1.75}
             aria-hidden="true"
           />
         </motion.span>

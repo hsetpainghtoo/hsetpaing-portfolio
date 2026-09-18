@@ -9,6 +9,7 @@ import { PageTransition } from "@/components/page-transition";
 import { motion, useReducedMotion } from "framer-motion";
 import { projects } from "@/lib/projects";
 import BorderGlow from "@/components/BorderGlow";
+import { NestedArrow } from "@/components/nested-arrow";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 
 /* A deliberately uneven grid: wide, narrow, narrow, wide - repeating.
@@ -22,7 +23,7 @@ export default function ProjectsPage() {
 
   return (
     <PageTransition>
-      <div className="relative z-10 overflow-x-clip bg-background px-6 py-20 text-foreground">
+      <div className="relative z-10 overflow-x-clip bg-background px-6 py-20 text-foreground md:py-32">
         <div className="mx-auto max-w-6xl">
           <motion.header
             initial={{ opacity: 0, y: 24 }}
@@ -157,8 +158,11 @@ export default function ProjectsPage() {
             <p className="mb-4 text-xl font-medium tracking-tight">
               Something you want built next?
             </p>
-            <Button asChild size="xl">
-              <Link href="/contact">Get in touch</Link>
+            <Button asChild size="cta" className="group">
+              <Link href="/contact">
+                Get in touch
+                <NestedArrow className="bg-primary-foreground/20" />
+              </Link>
             </Button>
           </motion.div>
         </div>
