@@ -163,22 +163,17 @@ export default function HomePage() {
           </div>
 
           {/* MOBILE LAYOUT */}
-          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center px-4 pt-6 lg:hidden">
-            <div className="relative mb-6 flex w-full items-start justify-center">
-              <motion.p
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ ...springGentle, delay: reduced ? 0 : 0.04 }}
+          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center px-4 pt-3 lg:hidden">
+            <div className="relative mb-4 flex w-full items-start justify-center">
+              <div
+                className="pointer-events-none absolute left-1/2 top-[46%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[90px]"
                 aria-hidden="true"
-                className="absolute top-10 z-10 select-none whitespace-nowrap font-display text-[18vw] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] dark:text-foreground/[0.09]"
-              >
-                Hset Paing
-              </motion.p>
+              />
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={springGentle}
-                className="pointer-events-auto relative z-20 h-[380px] w-[300px]"
+                className="pointer-events-auto relative z-20 h-[312px] w-[250px]"
               >
                 <Image
                   src="/profile_me_transparent.png"
@@ -212,7 +207,7 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <p className="mb-9 px-2 text-lg leading-snug">
+              <p className="mb-7 px-2 text-lg leading-snug">
                 <span className="mb-1.5 block text-2xl font-semibold tracking-tight text-primary">
                   Frontend developer
                 </span>
@@ -222,7 +217,7 @@ export default function HomePage() {
                 </span>
               </p>
 
-              <div className="mb-9 flex w-full max-w-[320px] flex-col gap-3">
+              <div className="mb-7 flex w-full max-w-[320px] flex-col gap-3">
                 <Button asChild size="xl" className="group w-full">
                   <Link href="/projects">
                     View my work
