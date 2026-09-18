@@ -16,6 +16,7 @@ import {
   PenTool,
   Globe,
   Cpu,
+  Building2,
 } from "lucide-react";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ export default function AboutPage() {
     {
       year: "May 2024",
       title: "Started programming",
-      org: "Self-taught, then Digital Engineering Tech",
+      org: "Self-taught, then Digital Engineering Tech Ltd.",
       description:
         "HTML, CSS and JavaScript from scratch. Three months in I moved to React and built my company's first static site over the following month.",
       icon: GraduationCap,
@@ -57,7 +58,7 @@ export default function AboutPage() {
     {
       year: "Late 2024",
       title: "Frontend developer, React",
-      org: "Digital Engineering Tech",
+      org: "Digital Engineering Tech Ltd.",
       description:
         "Joined the Fuel Station Management System team. Fixed bugs, tightened up existing code and shipped new features in React through to mid-2025.",
       icon: Briefcase,
@@ -65,7 +66,7 @@ export default function AboutPage() {
     {
       year: "Mid 2025",
       title: "Next.js and the FMS rebuild",
-      org: "Digital Engineering Tech",
+      org: "Digital Engineering Tech Ltd.",
       description:
         "Moved onto the Next.js rewrite of FMS. Picked up TypeScript and TanStack Query, built the Cloud Reports module and CRUD flows, and made the local UI responsive.",
       icon: Blocks,
@@ -80,11 +81,19 @@ export default function AboutPage() {
     },
     {
       year: "Mar 2026",
+      title: "Roots to Rooms frontend",
+      org: "Digital Engineering Tech Ltd.",
+      description:
+        "Reworked the frontend to smooth out the user experience and bring in new interface designs.",
+      icon: PenTool,
+    },
+    {
+      year: "Apr 2026",
       title: "Joined Transtak Pte Ltd",
       org: "Transtak Pte Ltd, Singapore",
       description:
-        "Moved to Transtak as a frontend developer. First job in was the Roots to Rooms frontend, smoothing out the user experience and bringing in new interface designs.",
-      icon: PenTool,
+        "Moved to Transtak as a frontend developer, working on the company's own sites and its product work.",
+      icon: Building2,
     },
     {
       year: "Mid 2026",

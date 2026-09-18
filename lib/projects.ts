@@ -28,7 +28,7 @@ export const projects: Project[] = [
   },
   {
     title: "DET Static Website",
-    description: "My first static website for my company, Ditital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
+    description: "My first static website for my company, Digital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
     image: "/det_project_new.png",
     technologies: ["React.js", "i18n", "Tailwind CSS"],
     liveUrl: "https://det-static-website.vercel.app",
