@@ -16,6 +16,7 @@ import {
   PenTool,
   Globe,
   Cpu,
+  Building2,
 } from "lucide-react";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
@@ -80,11 +81,19 @@ export default function AboutPage() {
     },
     {
       year: "Mar 2026",
+      title: "Roots to Rooms frontend",
+      org: "Digital Engineering Tech",
+      description:
+        "Reworked the frontend to smooth out the user experience and bring in new interface designs.",
+      icon: PenTool,
+    },
+    {
+      year: "Apr 2026",
       title: "Joined Transtak Pte Ltd",
       org: "Transtak Pte Ltd, Singapore",
       description:
-        "Moved to Transtak as a frontend developer. First job in was the Roots to Rooms frontend, smoothing out the user experience and bringing in new interface designs.",
-      icon: PenTool,
+        "Moved to Transtak as a frontend developer, working on the company's own sites and its product work.",
+      icon: Building2,
     },
     {
       year: "Mid 2026",
