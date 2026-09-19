@@ -510,12 +510,16 @@
   opacity: 0.35;
   width: 7px;
   height: 7px;
-  transition: opacity 0.2s var(--ease-out), width 0.25s var(--ease-out);
+  /* Transform and opacity only. This previously widened the active bullet
+     from 7px to 22px, which reflowed the whole pagination row on every slide
+     change. A uniform scale reads just as clearly and stays on the GPU. */
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 250ms var(--ease-out);
 }
 
 .projects-swiper .swiper-pagination-bullet-active {
   opacity: 1;
-  width: 22px;
-  border-radius: 4px;
+  transform: scale(1.45);
   background: var(--primary);
 }
