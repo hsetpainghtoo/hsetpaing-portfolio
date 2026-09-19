@@ -220,9 +220,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     checkSupport();
   }, [filterId]);
 
-  const supportsSVGFilters = () => svgSupported;
-  const supportsBackdropFilter = () => backdropSupported;
-
   const getContainerStyles = (): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
       ...style,

@@ -203,10 +203,13 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
 
   const isHoveredRef = useRef(false);
   const sweepActiveRef = useRef(false);
-  isHoveredRef.current = isHovered;
-  sweepActiveRef.current = sweepActive;
 
+  /* Mirrored in an effect rather than during render: writing a ref while
+     rendering is unsafe under concurrent rendering, and this runs before the
+     repaint below so paint() always reads the current values. */
   useEffect(() => {
+    isHoveredRef.current = isHovered;
+    sweepActiveRef.current = sweepActive;
     schedulePaint();
   }, [isHovered, sweepActive, schedulePaint]);
 
@@ -258,7 +261,9 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
   const meshGradients = useMemo(() => buildMeshGradients(colors), [colors]);
   const borderBg = meshGradients.map(g => `${g} border-box`);
   const fillBg = meshGradients.map(g => `${g} padding-box`);
-  const angleDeg = `${cursorAngleRef.current.toFixed(2)}deg`;
+  /* Initial paint only, and invisible at opacity 0. paint() owns the
+     real angle from the first frame onward. */
+  const angleDeg = '45deg';
 
   return (
     <div

@@ -255,7 +255,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   I am a frontend developer at Transtak Pte Ltd in Singapore,
-                  working on the company's own sites alongside product builds
+                  working on the company&apos;s own sites alongside product builds
                   like ShouXingCare, a terminal monitoring stack, and a
                   wholesale management system. Before that, at Digital
                   Engineering Tech Ltd., I worked on the Fuel Station
