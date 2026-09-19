@@ -70,8 +70,8 @@ export default function ProjectsPage() {
                   >
                     <article className="relative z-10 flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-card">
                       <div
-                        className={`relative overflow-hidden bg-surface ${
-                          isWide ? "aspect-[16/8]" : "aspect-[4/3]"
+                        className={`relative aspect-[16/10] overflow-hidden bg-surface ${
+                          isWide ? "md:aspect-[16/8]" : "md:aspect-[4/3]"
                         }`}
                       >
                         <Image
@@ -85,8 +85,8 @@ export default function ProjectsPage() {
 
                       <div className="flex flex-1 flex-col p-6">
                         <h2
-                          className={`mb-2.5 font-semibold text-foreground ${
-                            isWide ? "text-2xl" : "text-lg"
+                          className={`mb-2.5 text-lg font-semibold text-foreground ${
+                            isWide ? "md:text-2xl" : ""
                           }`}
                         >
                           {project.title}

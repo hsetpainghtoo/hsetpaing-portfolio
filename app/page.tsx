@@ -110,7 +110,7 @@ export default function HomePage() {
         {/* Hero */}
         <section className="relative flex min-h-[95dvh] flex-col items-center justify-center overflow-hidden pt-10">
           {/* DESKTOP LAYOUT */}
-          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[90dvh] w-full max-w-7xl items-center justify-center px-4 lg:flex">
+          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[90dvh] w-full max-w-7xl items-center justify-center px-4 min-[1400px]:flex">
             <div className="pointer-events-none relative flex flex-col">
               {/* Above the wordmark */}
               <motion.div
@@ -128,7 +128,7 @@ export default function HomePage() {
                     Available for new projects
                   </span>
                 </div>
-                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground xl:max-w-[460px] xl:text-lg">
+                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground 2xl:max-w-[460px] 2xl:text-lg">
                   <span className="mb-1 block text-xl font-semibold tracking-tight text-primary md:text-2xl">
                     Frontend developer
                   </span>
@@ -173,7 +173,7 @@ export default function HomePage() {
           </div>
 
           {/* DESKTOP portrait */}
-          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-4 items-center justify-center lg:flex lg:translate-x-8">
+          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-4 items-center justify-center min-[1400px]:flex min-[1400px]:translate-x-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -197,17 +197,17 @@ export default function HomePage() {
           </div>
 
           {/* MOBILE LAYOUT */}
-          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center px-4 pt-3 lg:hidden">
+          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center justify-center px-4 pt-3 sm:pt-8 min-[1400px]:hidden">
             <div className="relative mb-4 flex w-full items-start justify-center">
               <div
-                className="pointer-events-none absolute left-1/2 top-[46%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[90px]"
+                className="pointer-events-none absolute left-1/2 top-[46%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[90px] sm:h-[300px] sm:w-[300px] md:h-[360px] md:w-[360px]"
                 aria-hidden="true"
               />
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={springGentle}
-                className="pointer-events-auto relative z-20 h-[312px] w-[250px]"
+                className="pointer-events-auto relative z-20 h-[312px] max-h-[42dvh] w-[250px] sm:h-[400px] sm:max-h-[38dvh] sm:w-[320px] md:h-[480px] md:w-[384px]"
               >
                 <Image
                   src="/profile_me_transparent.png"
@@ -241,8 +241,8 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <p className="mb-7 px-2 text-lg leading-snug">
-                <span className="mb-1.5 block text-2xl font-semibold tracking-tight text-primary">
+              <p className="mb-7 max-w-[34rem] px-2 text-lg leading-snug md:text-xl">
+                <span className="mb-1.5 block text-2xl font-semibold tracking-tight text-primary md:text-3xl">
                   Frontend developer
                 </span>
                 <span className="text-muted-foreground">
@@ -251,14 +251,14 @@ export default function HomePage() {
                 </span>
               </p>
 
-              <div className="mb-7 flex w-full max-w-[320px] flex-col gap-3">
-                <Button asChild size="cta" className="group w-full">
+              <div className="mb-7 flex w-full max-w-[320px] flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
+                <Button asChild size="cta" className="group w-full sm:w-auto">
                   <Link href="/projects">
                     View my work
                     <NestedArrow className="bg-primary-foreground/20" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="cta" className="w-full px-8">
+                <Button asChild variant="outline" size="cta" className="w-full px-8 sm:w-auto">
                   <Link href="/contact">Get in touch</Link>
                 </Button>
               </div>
