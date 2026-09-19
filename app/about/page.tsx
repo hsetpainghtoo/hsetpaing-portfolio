@@ -10,13 +10,10 @@ import {
   Layers,
   Gauge,
   Briefcase,
-  GraduationCap,
-  Blocks,
-  Milestone,
-  PenTool,
-  Globe,
-  Cpu,
   Building2,
+  BookOpen,
+  GraduationCap,
+  BadgeCheck,
 } from "lucide-react";
 import { entryContainer, entryItem, springGentle } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
@@ -46,70 +43,122 @@ export default function AboutPage() {
     },
   ];
 
+  /* Grouped by tenure rather than one node per project. A timeline answers
+     "where has this person been"; the projects are evidence inside that, and
+     the Projects page already lists each one in full. Adding a project is a
+     bullet here, not another node, so the page stops growing with the work. */
   const journey = [
     {
-      year: "May 2024",
-      title: "Started programming",
-      org: "Self-taught, then Digital Engineering Tech Ltd.",
-      description:
-        "HTML, CSS and JavaScript from scratch. Three months in I moved to React and built my company's first static site over the following month.",
+      period: "May 2024 to Late 2024",
+      org: "Self-taught",
+      role: "Learning to build",
+      summary:
+        "HTML, CSS and JavaScript from scratch, then React about three months in. No employer and no brief, just building until the pieces held together well enough to be useful to someone.",
+      icon: BookOpen,
+    },
+    {
+      period: "Late 2024 to Mar 2026",
+      org: "Digital Engineering Tech Ltd.",
+      role: "Frontend developer",
+      summary:
+        "My first developer role, and the one that turned self-study into shipping. Most of it went into an internal management system that grew from a React app into a Next.js rewrite.",
+      icon: Briefcase,
+      work: [
+        {
+          name: "Fuel Station Management System",
+          note: "Bug fixes and new React features, then the Next.js rewrite. Picked up TypeScript and TanStack Query, built the Cloud Reports module and CRUD flows, and made the local UI responsive.",
+        },
+        {
+          name: "DET corporate site",
+          note: "The company's first static site, built in React with i18n.",
+        },
+        {
+          name: "Roots to Rooms",
+          note: "Reworked the frontend to smooth out the user experience and bring in new interface designs.",
+        },
+      ],
+    },
+    {
+      period: "Apr 2026 to now",
+      org: "Transtak Pte Ltd, Singapore",
+      role: "Frontend developer",
+      summary:
+        "The company's own web presence, plus product work that reaches past the browser into hardware and operations.",
+      icon: Building2,
+      work: [
+        {
+          name: "Terminal Monitoring System",
+          note: "TIG stack monitoring for a fuel terminal, with certified volume and weight calculations and alerting over Telegram and email.",
+        },
+        {
+          name: "Wholesale Management System",
+          note: "WhatsApp order intake, an append-only stock ledger, and optimised multi-stop delivery routing.",
+        },
+        {
+          name: "ShouXingCare",
+          note: "Marketing site for the voice-first AI companion device built for elderly care.",
+        },
+        {
+          name: "Transtak and Mahar Engineering sites",
+          note: "Both corporate sites in Next.js and TypeScript, with the enquiry forms wired through Nodemailer.",
+        },
+        {
+          name: "Myanmar Express Hub",
+          note: "Multilingual shopping and shipping platform with an AI assistant wired through the Groq API and content managed in Sanity.",
+        },
+      ],
+    },
+  ];
+
+  /* Newest first, so React and Node/Express lead. The foundational courses are
+     honest to list but should not be the first thing read next to the work on
+     the projects page. Each row links to its public Coursera verification. */
+  const study = [
+    {
+      status: "In progress",
+      issuer: "University of the People",
+      title: "Bachelor's degree in Computer Science",
+      note: "Studying part time while working. Currently on Programming 2, Digital Electronics and Computer Architecture, and College Algebra.",
       icon: GraduationCap,
     },
     {
-      year: "Late 2024",
-      title: "Frontend developer, React",
-      org: "Digital Engineering Tech Ltd.",
-      description:
-        "Joined the Fuel Station Management System team. Fixed bugs, tightened up existing code and shipped new features in React through to mid-2025.",
-      icon: Briefcase,
-    },
-    {
-      year: "Mid 2025",
-      title: "Next.js and the FMS rebuild",
-      org: "Digital Engineering Tech Ltd.",
-      description:
-        "Moved onto the Next.js rewrite of FMS. Picked up TypeScript and TanStack Query, built the Cloud Reports module and CRUD flows, and made the local UI responsive.",
-      icon: Blocks,
-    },
-    {
-      year: "2025",
-      title: "Myanmar Express Hub went live",
-      org: "Freelance",
-      description:
-        "A multilingual shopping and shipping platform with an AI assistant wired through the Groq API and content managed in Sanity.",
-      icon: Milestone,
-    },
-    {
-      year: "Mar 2026",
-      title: "Roots to Rooms frontend",
-      org: "Digital Engineering Tech Ltd.",
-      description:
-        "Reworked the frontend to smooth out the user experience and bring in new interface designs.",
-      icon: PenTool,
-    },
-    {
-      year: "Apr 2026",
-      title: "Joined Transtak Pte Ltd",
-      org: "Transtak Pte Ltd, Singapore",
-      description:
-        "Moved to Transtak as a frontend developer, working on the company's own sites and its product work.",
-      icon: Building2,
-    },
-    {
-      year: "Mid 2026",
-      title: "Corporate sites for Transtak and Mahar",
-      org: "Transtak Pte Ltd",
-      description:
-        "Built both company sites in Next.js and TypeScript, with Framer Motion for the page transitions and the enquiry forms wired through Nodemailer.",
-      icon: Globe,
-    },
-    {
-      year: "Sep 2026",
-      title: "ShouXingCare",
-      org: "Transtak Pte Ltd",
-      description:
-        "Marketing site for Transtak's voice-first AI companion device for elderly care, covering the product pages, the feature breakdowns and the waitlist form.",
-      icon: Cpu,
+      status: "In progress",
+      issuer: "IBM on Coursera",
+      title: "IBM Full Stack Software Developer Professional Certificate",
+      note: "A 15-course track covering full stack development, containers and cloud. Six completed so far, each independently verifiable.",
+      icon: BadgeCheck,
+      courses: [
+        {
+          name: "Developing Back-End Apps with Node.js and Express",
+          code: "SJ22O1OWL2QP",
+          date: "Apr 2026",
+        },
+        {
+          name: "Developing Front-End Apps with React",
+          code: "YLN0G1NZYK3O",
+          date: "Apr 2026",
+        },
+        {
+          name: "JavaScript Programming Essentials",
+          code: "98C33D17K09G",
+          date: "Mar 2026",
+        },
+        {
+          name: "Getting Started with Git and GitHub",
+          code: "HUNNVRNVOD6V",
+          date: "Mar 2026",
+        },
+        {
+          name: "Introduction to HTML, CSS, and JavaScript",
+          code: "QIWPOM4QWQBS",
+          date: "Mar 2026",
+        },
+        {
+          name: "Introduction to Software Engineering",
+          code: "AOFL2SZT18CW",
+          date: "Feb 2026",
+        },
+      ],
     },
   ];
 
@@ -206,12 +255,13 @@ export default function AboutPage() {
                 </p>
                 <p>
                   I am a frontend developer at Transtak Pte Ltd in Singapore,
-                  where I build the company's own sites and product work like
-                  ShouXingCare. Before that I worked on the Fuel Station
+                  working on the company's own sites alongside product builds
+                  like ShouXingCare, a terminal monitoring stack, and a
+                  wholesale management system. Before that, at Digital
+                  Engineering Tech Ltd., I worked on the Fuel Station
                   Management System through its move to Next.js, building the
                   Cloud Reports module, CRUD operations and the responsive
-                  layouts, and delivered Myanmar Express Hub with an AI
-                  assistant wired in for customer questions.
+                  layouts.
                 </p>
                 <p>
                   Outside of client work I spend time on industrial
@@ -237,7 +287,10 @@ export default function AboutPage() {
             <div className="relative">
               {/* Single-accent rail, fading out at the end */}
               <div
-                className="absolute bottom-0 left-[1.4375rem] top-2 w-px bg-gradient-to-b from-primary/60 via-primary/25 to-transparent"
+                /* Centred on the 48px marker: a 1px line needs its left edge at
+                   23.5px, not 23px, or it sits half a pixel off the icons it
+                   is meant to thread through. */
+                className="absolute bottom-0 left-[23.5px] top-2 w-px bg-gradient-to-b from-primary/60 via-primary/25 to-transparent"
                 aria-hidden="true"
               />
 
@@ -250,7 +303,7 @@ export default function AboutPage() {
               >
                 {journey.map((item) => (
                   <motion.li
-                    key={item.title}
+                    key={item.org}
                     variants={itemVariants}
                     className="relative flex gap-6"
                   >
@@ -261,24 +314,139 @@ export default function AboutPage() {
                       />
                     </span>
 
-                    <div className="pt-1">
-                      <div className="mb-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <span className="tabular text-xs font-semibold text-primary">
-                          {item.year}
+                    <div className="pb-4 pt-1">
+                      {/* When and what, separated by a hairline rather than a
+                          gap: at this size two muted runs of text sitting side
+                          by side read as one string. */}
+                      <div className="mb-2 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                        <span className="tabular text-xs font-semibold tracking-normal text-primary">
+                          {item.period}
                         </span>
+                        <span
+                          className="h-3 w-px bg-border"
+                          aria-hidden="true"
+                        />
                         <span className="text-xs text-muted-foreground">
-                          {item.org}
+                          {item.role}
                         </span>
                       </div>
-                      <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
-                      <p className="measure text-sm leading-relaxed text-muted-foreground">
-                        {item.description}
+                      <h3 className="mb-2.5 text-lg font-semibold">
+                        {item.org}
+                      </h3>
+                      <p className="measure mb-6 text-sm leading-relaxed text-muted-foreground">
+                        {item.summary}
                       </p>
+
+                      {/* The self-taught period has no shipped work to list,
+                          so it carries its summary alone. */}
+                      {item.work && item.work.length > 0 && (
+                        <ul className="measure space-y-4 border-l border-border pl-5">
+                          {item.work.map((w) => (
+                            <li key={w.name}>
+                              {/* Name and note were the same size, so the pair
+                                  read flat. Hierarchy now comes from size,
+                                  weight and leading together, which is what
+                                  separates one entry from the next. */}
+                              <span className="mb-0.5 block text-sm font-medium leading-snug text-foreground">
+                                {w.name}
+                              </span>
+                              <span className="block text-[0.8125rem] leading-relaxed text-muted-foreground">
+                                {w.note}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </motion.li>
                 ))}
               </motion.ol>
             </div>
+          </motion.section>
+
+          {/* Study running alongside the job. Framed as two tracks in progress
+              rather than a pile of certificates: the completed courses are
+              foundational and read as junior next to the shipped work, while
+              the tracks themselves signal structured, ongoing study. */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={springGentle}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <h2 className="mb-10 text-3xl font-semibold">
+              Studying alongside the work
+            </h2>
+
+            <motion.ul
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="space-y-10"
+            >
+              {study.map((track) => (
+                <motion.li
+                  key={track.title}
+                  variants={itemVariants}
+                  className="flex gap-6"
+                >
+                  <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card shadow-tinted-sm">
+                    <track.icon
+                      className="h-5 w-5 text-primary"
+                      aria-hidden="true"
+                    />
+                  </span>
+
+                  <div className="pt-1">
+                    {/* Same header rhythm as the timeline above, so the two
+                        sections read as one system rather than two. */}
+                    <div className="mb-2 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                      <span className="text-xs font-semibold text-primary">
+                        {track.status}
+                      </span>
+                      <span className="h-3 w-px bg-border" aria-hidden="true" />
+                      <span className="text-xs text-muted-foreground">
+                        {track.issuer}
+                      </span>
+                    </div>
+                    <h3 className="mb-2.5 text-lg font-semibold">
+                      {track.title}
+                    </h3>
+                    <p className="measure mb-6 text-sm leading-relaxed text-muted-foreground">
+                      {track.note}
+                    </p>
+
+                    {track.courses && (
+                      <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+                        {track.courses.map((c) => (
+                          <li key={c.code}>
+                            <a
+                              href={`https://coursera.org/verify/${c.code}`}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              /* A rule under every one of six rows is visual
+                                 noise. The grid's own spacing separates them;
+                                 the row earns a surface only on hover, which
+                                 also makes it read as clickable. */
+                              className="press-feedback group -mx-2 flex items-baseline justify-between gap-3 rounded-lg px-2 py-1.5 text-sm hover:bg-accent"
+                            >
+                              <span className="text-muted-foreground group-hover:text-foreground">
+                                {c.name}
+                              </span>
+                              <span className="tabular shrink-0 text-xs text-muted-foreground/70">
+                                {c.date}
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </motion.li>
+              ))}
+            </motion.ul>
           </motion.section>
 
           {/* What I do */}
