@@ -18,18 +18,54 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const technicalSkills = [
-  { name: "HTML", icon: "/html-5.png" },
-  { name: "CSS", icon: "/css-3.png" },
-  { name: "JavaScript", icon: "/js.png" },
-  { name: "TypeScript", icon: "/typescript.png" },
-  { name: "React.js", icon: "/reactjs.png" },
-  { name: "Next.js", icon: "/nextjs.svg" },
-  { name: "Tailwind CSS", icon: "/tailwindcss.svg" },
-  { name: "Git", icon: "/github.png" },
-  { name: "Redux Toolkit", icon: "/redux-toolkit.svg" },
-  { name: "InfluxDB", icon: "/influxdb-logo.png" },
-  { name: "Grafana", icon: "/grafana-logo.png" },
+/**
+ * Split so the second group reads as situational rather than claiming equal
+ * fluency across everything. Only tools that appear in shipped work on the
+ * projects page are listed, so the evidence is always one click away.
+ *
+ * `adaptive` flips a near-black brand mark to white on the dark theme, which
+ * is the variant those brands publish for dark backgrounds anyway.
+ *
+ * Only ever set it on a transparent, single-colour SVG. brightness(0) blackens
+ * every opaque pixel and invert(1) then whitens them, so on an image with a
+ * filled background the whole rectangle turns into a white block rather than
+ * the glyph. That is exactly what happened to the old github.png, which was
+ * 99% opaque.
+ */
+const toolkit = [
+  {
+    heading: "Every day",
+    note: "The stack behind almost everything I build.",
+    items: [
+      { name: "TypeScript", icon: "/typescript.png" },
+      { name: "React.js", icon: "/reactjs.png" },
+      { name: "Next.js", icon: "/nextjs.svg" },
+      { name: "Tailwind CSS", icon: "/tailwindcss.svg" },
+      { name: "JavaScript", icon: "/js.png" },
+      { name: "HTML", icon: "/html-5.png" },
+      { name: "CSS", icon: "/css-3.png" },
+      { name: "Git", icon: "/tech-git.svg" },
+      { name: "TanStack Query", icon: "/tech-tanstack-query.svg" },
+      { name: "Redux Toolkit", icon: "/redux-toolkit.svg" },
+      { name: "Zod", icon: "/tech-zod.svg" },
+      { name: "Framer Motion", icon: "/tech-framer-motion.svg" },
+    ],
+  },
+  {
+    heading: "When the work goes further",
+    note: "Reached for when a project needs a backend, a service, or data off a device.",
+    items: [
+      { name: "Node.js", icon: "/tech-nodejs.svg" },
+      { name: "Express", icon: "/tech-express.svg", adaptive: true },
+      { name: "PostgreSQL", icon: "/tech-postgresql.svg" },
+      { name: "Prisma", icon: "/tech-prisma.svg", adaptive: true },
+      { name: "Docker", icon: "/tech-docker.svg" },
+      { name: "Python", icon: "/tech-python.svg" },
+      { name: "FastAPI", icon: "/tech-fastapi.svg" },
+      { name: "InfluxDB", icon: "/influxdb-logo.png" },
+      { name: "Grafana", icon: "/grafana-logo.png" },
+    ],
+  },
 ];
 
 const socialLinks = [
@@ -387,41 +423,62 @@ export default function HomePage() {
                 What I reach for
               </h2>
               <p className="measure text-lg text-muted-foreground">
-                The stack I use daily, plus the pieces I lean on when the work
-                runs into data and device monitoring.
+                What I use every day, and what I pick up when a project needs
+                more than a frontend. Everything here appears in the work on the
+                projects page.
               </p>
             </motion.div>
 
-            <motion.ul
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4"
-              variants={listVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-            >
-              {technicalSkills.map((skill) => (
-                <motion.li
-                  key={skill.name}
-                  variants={skillCardVariants}
-                  className="hover-lift [--lift:-3px] bezel"
-                >
-                  <div className="bezel-core flex items-center gap-3.5 p-4">
-                    <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
-                      <Image
-                        src={skill.icon}
-                        alt=""
-                        width={26}
-                        height={26}
-                        aria-hidden="true"
-                      />
-                    </span>
-                    <span className="text-sm font-medium leading-tight text-foreground">
-                      {skill.name}
-                    </span>
+            <div className="space-y-12">
+              {toolkit.map((group) => (
+                <div key={group.heading}>
+                  <div className="mb-5">
+                    <h3 className="text-base font-semibold text-foreground">
+                      {group.heading}
+                    </h3>
+                    <p className="measure text-sm text-muted-foreground">
+                      {group.note}
+                    </p>
                   </div>
-                </motion.li>
+
+                  <motion.ul
+                    className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4"
+                    variants={listVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                  >
+                    {group.items.map((skill) => (
+                      <motion.li
+                        key={skill.name}
+                        variants={skillCardVariants}
+                        className="hover-lift [--lift:-3px] bezel"
+                      >
+                        <div className="bezel-core flex items-center gap-3.5 p-4">
+                          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
+                            <Image
+                              src={skill.icon}
+                              alt=""
+                              width={26}
+                              height={26}
+                              aria-hidden="true"
+                              className={
+                                "adaptive" in skill && skill.adaptive
+                                  ? "dark:brightness-0 dark:invert"
+                                  : undefined
+                              }
+                            />
+                          </span>
+                          <span className="text-sm font-medium leading-tight text-foreground">
+                            {skill.name}
+                          </span>
+                        </div>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </div>
               ))}
-            </motion.ul>
+            </div>
           </div>
         </section>
 
