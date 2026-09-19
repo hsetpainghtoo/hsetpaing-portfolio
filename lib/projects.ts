@@ -2,6 +2,24 @@ import { type Project } from "@/components/ProjectModal";
 
 export const projects: Project[] = [
   {
+    title: "Terminal Monitoring System",
+    description:
+      "Industrial monitoring stack for a fuel terminal, polling Modbus registers off Rosemount tank hubs into InfluxDB and a white-labelled Grafana dashboard. A calibration service turns raw level readings into certified volume and weight figures against ASTM D1250 tables and SGS strapping certificates, and a reporter service pushes threshold alerts to engineers over Telegram and email. Ships as an offline Docker package for air-gapped sites.",
+    image: "/terminal_monitoring_project.png",
+    technologies: ["Docker", "Telegraf", "InfluxDB", "Grafana", "Modbus", "Python", "FastAPI", "Node.js"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    title: "Wholesale Management System",
+    description:
+      "Order intake, stock control, and delivery routing for a wholesale distributor in Singapore. Customers order over WhatsApp instead of logging in, stock is an append-only ledger so figures stay auditable, and multi-stop routes are waypoint-optimised before dispatch. Picking lists, delivery orders, and invoices print from what actually shipped rather than what was ordered.",
+    image: "/wholesale_management_project.png",
+    technologies: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "TanStack Query", "Zod", "Docker"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
     title: "ShouXingCare",
     description:
       "Marketing site for a voice-first AI companion device built for elderly care. The device holds a conversation on a wake word, keeps medicine reminders that mirror to family on Telegram, and sends one-tap emergency alerts to up to three contacts.",

@@ -35,9 +35,9 @@ export default function ProjectsPage() {
               Everything I have shipped
             </h1>
             <p className="measure text-lg text-muted-foreground">
-              Corporate sites, an internal management system, and side builds
-              where I got to try something new. Each one lists the stack it was
-              actually built on.
+              Industrial monitoring, wholesale operations, corporate sites, and
+              side builds where I got to try something new. Each one lists the
+              stack it was actually built on.
             </p>
           </motion.header>
 
