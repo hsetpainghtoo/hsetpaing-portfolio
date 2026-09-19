@@ -108,16 +108,16 @@ export default function HomePage() {
     <PageTransition>
       <div className="relative z-10 overflow-x-hidden bg-background text-foreground">
         {/* Hero */}
-        <section className="relative flex min-h-[95dvh] flex-col items-center justify-center overflow-hidden pt-10">
+        <section className="relative flex min-h-[95dvh] flex-col items-center justify-center overflow-hidden pt-10 min-[1280px]:min-h-[calc(100dvh-5rem)] min-[1280px]:pt-0">
           {/* DESKTOP LAYOUT */}
-          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[90dvh] w-full max-w-7xl items-center justify-center px-4 min-[1400px]:flex">
+          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[calc(100dvh-5rem)] w-full max-w-7xl items-center justify-center px-4 py-6 min-[1280px]:flex">
             <div className="pointer-events-none relative flex flex-col">
               {/* Above the wordmark */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
-                className="pointer-events-auto absolute bottom-full left-0 mb-4 w-full max-w-2xl md:mb-8"
+                className="pointer-events-auto mb-4 w-full max-w-2xl md:mb-[min(2rem,3.5dvh)]"
               >
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-tinted-sm">
                   <span className="relative flex h-2 w-2">
@@ -128,7 +128,7 @@ export default function HomePage() {
                     Available for new projects
                   </span>
                 </div>
-                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground 2xl:max-w-[460px] 2xl:text-lg">
+                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground 2xl:text-lg">
                   <span className="mb-1 block text-xl font-semibold tracking-tight text-primary md:text-2xl">
                     Frontend developer
                   </span>
@@ -144,7 +144,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ ...springGentle, delay: reduced ? 0 : 0.04 }}
-                className="select-none whitespace-nowrap font-display text-[15vw] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] lg:text-[18vw] dark:text-foreground/[0.09]"
+                className="select-none whitespace-nowrap font-display text-[min(15vw,36dvh)] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] lg:text-[min(18vw,36dvh)] dark:text-foreground/[0.09]"
               >
                 Hset Paing
               </motion.h1>
@@ -154,7 +154,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...springGentle, delay: reduced ? 0 : 0.16 }}
-                className="pointer-events-auto absolute top-full left-0 mt-4 md:mt-8"
+                className="pointer-events-auto mt-4 md:mt-[min(2rem,3.5dvh)]"
               >
                 <div className="flex items-center gap-3">
                   <Button asChild size="cta" className="group">
@@ -173,12 +173,12 @@ export default function HomePage() {
           </div>
 
           {/* DESKTOP portrait */}
-          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-4 items-center justify-center min-[1400px]:flex min-[1400px]:translate-x-8">
+          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-[96px] items-center justify-center min-[1280px]:flex min-[1400px]:translate-x-12 min-[1600px]:translate-x-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={springGentle}
-              className="pointer-events-auto relative h-[550px] w-[450px] lg:h-[600px] lg:w-[500px]"
+              className="pointer-events-auto relative h-[500px] w-[400px] min-[1400px]:h-[560px] min-[1400px]:w-[460px] min-[1600px]:h-[600px] min-[1600px]:w-[500px]"
             >
               <Image
                 src="/profile_me_transparent.png"
@@ -197,7 +197,7 @@ export default function HomePage() {
           </div>
 
           {/* MOBILE LAYOUT */}
-          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center justify-center px-4 pt-3 sm:pt-8 min-[1400px]:hidden">
+          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center justify-center px-4 pt-3 sm:pt-8 min-[1280px]:hidden">
             <div className="relative mb-4 flex w-full items-start justify-center">
               <div
                 className="pointer-events-none absolute left-1/2 top-[46%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[90px] sm:h-[300px] sm:w-[300px] md:h-[360px] md:w-[360px]"
