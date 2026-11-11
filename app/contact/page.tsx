@@ -1,25 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Github,
-  Linkedin,
-  Loader2,
-  Mail,
-  MessageCircle,
-  Send,
-} from "lucide-react";
 import Link from "next/link";
-import { PageTransition } from "@/components/page-transition";
-import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { springGentle } from "@/lib/motion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Line, PageIntro } from "@/components/page-intro";
+import { Reveal } from "@/components/reveal";
+import { VideoStage } from "@/components/video-stage";
+import { site } from "@/lib/projects";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter at least 2 characters"),
@@ -29,18 +22,12 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
-  {
-    icon: Linkedin,
-    href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/",
-    label: "LinkedIn",
-  },
-  { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
-];
+/* Fields are a single rule rather than a box: the form reads as a letter
+   being filled in, and the error state only has one edge to recolour. */
+const fieldClass =
+  "h-auto rounded-none border-0 border-b border-foreground/20 bg-transparent px-0 pb-3 pt-1 text-lg shadow-none ring-offset-0 transition-colors placeholder:text-muted-foreground/60 focus-visible:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0 aria-[invalid=true]:border-destructive md:text-xl";
 
 export default function ContactPage() {
-  const reduced = useReducedMotion();
   const {
     register,
     handleSubmit,
@@ -71,199 +58,174 @@ export default function ContactPage() {
     }
   };
 
-  /* Shared field styling keeps the error treatment identical across inputs. */
-  const fieldClass =
-    "bg-background border-input transition-colors focus-visible:border-primary aria-[invalid=true]:border-destructive";
-
   return (
-    <PageTransition>
-      <div className="relative z-10 bg-background px-6 py-20 text-foreground md:py-32">
-        <div className="mx-auto max-w-5xl">
-          <motion.header
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={springGentle}
-            className="mb-16 max-w-2xl"
-          >
-            <h1 className="mb-5 text-4xl font-semibold md:text-5xl">
-              Let&apos;s talk about your project
-            </h1>
-            <p className="measure text-lg text-muted-foreground">
-              Tell me roughly what you need and when you need it. I answer every
-              message, usually within a day or two.
-            </p>
-          </motion.header>
+    /* One dark sheet: the flower field opens it, and the form sits on the
+       same dark directly underneath, so the two read as a single place. */
+    <div className="theme-dark rounded-b-[2rem] bg-background pb-20 text-foreground md:rounded-b-[3rem] md:pb-28">
+      <VideoStage
+        video="/contact-flowers.mp4"
+        poster="/contact-flowers-poster.webp"
+        className="rounded-b-none md:rounded-b-none"
+        mediaClassName="object-[50%_60%]"
+      >
+        <div className="mx-auto max-w-[1600px] px-5 pb-44 sm:px-8 md:pb-60 lg:px-12 lg:pb-80">
+          <PageIntro
+            eyebrow="Contact"
+            title={
+              <>
+                <Line delay={120}>Let&apos;s talk about</Line>
+                <Line delay={210}>
+                  your{" "}
+                  <span className="serif-accent text-muted-foreground">project</span>
+                </Line>
+              </>
+            }
+            lede="Tell me roughly what you need and when you need it. I answer every message, usually within a day or two."
+          />
+        </div>
+      </VideoStage>
 
-          <div className="grid grid-cols-1 gap-14 lg:grid-cols-5 lg:gap-16">
-            {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...springGentle, delay: reduced ? 0 : 0.06 }}
-              className="lg:col-span-3"
-            >
-              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-7">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    autoComplete="name"
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                    {...register("name")}
-                    className={fieldClass}
-                    placeholder="Your full name"
-                  />
-                  {errors.name && (
-                    <p
-                      id="name-error"
-                      role="alert"
-                      className="text-sm text-destructive"
-                    >
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
+    <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
+      <div className="grid gap-16 pt-4 lg:grid-cols-12 lg:gap-10 lg:pt-6">
+        <Reveal className="lg:col-span-7">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-10">
+            <div>
+              <Label htmlFor="name" className="eyebrow">
+                01 / Name
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                autoComplete="name"
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
+                {...register("name")}
+                className={fieldClass}
+                placeholder="Your full name"
+              />
+              {errors.name && (
+                <p id="name-error" role="alert" className="mt-2 text-sm text-destructive">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                    {...register("email")}
-                    className={fieldClass}
-                    placeholder="you@company.com"
-                  />
-                  {errors.email && (
-                    <p
-                      id="email-error"
-                      role="alert"
-                      className="text-sm text-destructive"
-                    >
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
+            <div>
+              <Label htmlFor="email" className="eyebrow">
+                02 / Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
+                {...register("email")}
+                className={fieldClass}
+                placeholder="you@company.com"
+              />
+              {errors.email && (
+                <p id="email-error" role="alert" className="mt-2 text-sm text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    aria-invalid={!!errors.message}
-                    aria-describedby={errors.message ? "message-error" : undefined}
-                    {...register("message")}
-                    className={`${fieldClass} min-h-[150px] resize-y`}
-                    placeholder="What are you building, and what do you need help with?"
-                  />
-                  {errors.message && (
-                    <p
-                      id="message-error"
-                      role="alert"
-                      className="text-sm text-destructive"
-                    >
-                      {errors.message.message}
-                    </p>
-                  )}
-                </div>
+            <div>
+              <Label htmlFor="message" className="eyebrow">
+                03 / Message
+              </Label>
+              <Textarea
+                id="message"
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
+                {...register("message")}
+                className={`${fieldClass} min-h-[150px] resize-y pt-2`}
+                placeholder="What are you building, and what do you need help with?"
+              />
+              {errors.message && (
+                <p id="message-error" role="alert" className="mt-2 text-sm text-destructive">
+                  {errors.message.message}
+                </p>
+              )}
+            </div>
 
-                <Button
-                  type="submit"
-                  size="xl"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto"
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="press-feedback group inline-flex h-14 items-center justify-between gap-4 rounded-full bg-foreground pl-7 pr-2 text-base font-medium text-background disabled:opacity-60"
+              >
+                {isSubmitting ? "Sending" : "Send message"}
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 items-center justify-center rounded-full bg-background text-foreground"
                 >
                   {isSubmitting ? (
-                    <>
-                      <Loader2 className="animate-spin" aria-hidden="true" />
-                      Sending
-                    </>
+                    <Loader2 className="size-4 animate-spin" />
                   ) : (
-                    <>
-                      <Send aria-hidden="true" />
-                      Send message
-                    </>
+                    <ArrowUpRight className="size-4 transition-transform duration-300 ease-out group-hover:rotate-45" />
                   )}
-                </Button>
-
-                <p className="text-xs text-muted-foreground">
-                  Your details go straight to my inbox and nowhere else. See the{" "}
-                  <Link
-                    href="/privacy"
-                    className="underline underline-offset-4 hover:text-foreground"
-                  >
-                    privacy note
-                  </Link>
-                  .
-                </p>
-              </form>
-            </motion.div>
-
-            {/* Direct channels - plain list, no card stack */}
-            <motion.aside
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...springGentle, delay: reduced ? 0 : 0.12 }}
-              className="lg:col-span-2"
-            >
-              <p className="mb-5 text-sm font-medium text-foreground">Or reach me directly</p>
-
-              <a
-                href="mailto:hsetpainghtoo218@gmail.com"
-                className="press-feedback group mb-8 block bezel hover:bg-primary/[0.06]"
-              >
-                <span className="bezel-core flex items-start gap-3.5 p-5">
-                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent">
-                    <Mail className="h-4 w-4 text-accent-foreground" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-medium text-foreground">
-                      Email
-                    </span>
-                    <span className="block truncate text-sm text-muted-foreground group-hover:text-primary">
-                      hsetpainghtoo218@gmail.com
-                    </span>
-                  </span>
                 </span>
-              </a>
+              </button>
 
-              <p className="mb-4 text-sm font-medium text-foreground">Elsewhere</p>
-              <ul className="space-y-1">
-                {socialLinks.map((social) => (
+              <p className="max-w-xs text-xs text-muted-foreground">
+                Your details go straight to my inbox and nowhere else. See the{" "}
+                <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+                  privacy note
+                </Link>
+                .
+              </p>
+            </div>
+          </form>
+        </Reveal>
+
+        <Reveal as="div" delay={120} className="lg:col-span-4 lg:col-start-9">
+          <aside className="space-y-10">
+            <div>
+              <p className="eyebrow mb-3">Email</p>
+              <a
+                href={`mailto:${site.email}`}
+                className="link-draw break-all text-xl font-medium tracking-[-0.025em]"
+              >
+                {site.email}
+              </a>
+            </div>
+
+            <div>
+              <p className="eyebrow mb-3">Elsewhere</p>
+              <ul className="border-t border-foreground/10">
+                {site.socials.map((social) => (
                   <li key={social.label}>
                     <a
                       href={social.href}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                      className="group flex items-center justify-between border-b border-foreground/10 py-3.5 transition-colors hover:bg-foreground/[0.03] sm:px-2"
                     >
-                      <social.icon
-                        className="h-4 w-4"
+                      {social.label}
+                      <ArrowUpRight
+                        className="size-4 text-muted-foreground transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                         aria-hidden="true"
                       />
-                      {social.label}
                     </a>
                   </li>
                 ))}
               </ul>
+            </div>
 
-              <div className="mt-10 border-t border-border pt-7">
-                <p className="mb-2 font-medium tracking-tight text-foreground">
-                  Response time
-                </p>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  I check messages on weekday evenings, Myanmar time. If
-                  something is urgent, say so in the first line and I will
-                  prioritise it.
-                </p>
-              </div>
-            </motion.aside>
-          </div>
-        </div>
+            <div>
+              <p className="eyebrow mb-3">Response time</p>
+              <p className="text-sm text-muted-foreground">
+                I check messages on weekday evenings, Myanmar time. If
+                something is urgent, say so in the first line and I will
+                prioritise it.
+              </p>
+            </div>
+          </aside>
+        </Reveal>
       </div>
-    </PageTransition>
+    </div>
+    </div>
   );
 }

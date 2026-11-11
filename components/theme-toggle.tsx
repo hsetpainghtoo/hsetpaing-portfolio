@@ -1,25 +1,15 @@
 "use client";
 
-import * as React from "react";
+import { useSyncExternalStore } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
-import { springSnappy } from "@/lib/motion";
+import { useTheme } from "next-themes";
 
-interface ThemeProps {
-  theme: string;
-  setTheme: (theme: string) => void;
-}
-
-/* Three states rather than a binary switch: the system preference is a real
-   choice, not an absence of one. */
+/* Three states rather than a binary switch: following the system is a real
+   choice, not the absence of one. */
 const ORDER = ["system", "light", "dark"] as const;
+type ThemeName = (typeof ORDER)[number];
 
-const ICONS = {
-  system: Monitor,
-  light: Sun,
-  dark: Moon,
-} as const;
+const ICONS = { system: Monitor, light: Sun, dark: Moon } as const;
 
 const LABELS = {
   system: "Theme: following system. Switch to light",
@@ -27,59 +17,29 @@ const LABELS = {
   dark: "Theme: dark. Switch to system",
 } as const;
 
-type ThemeName = (typeof ORDER)[number];
+const noop = () => () => {};
 
-export function ThemeToggle({ theme, setTheme }: ThemeProps) {
-  const [mounted, setMounted] = React.useState(false);
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  /* The stored theme is unknown on the server, so render the neutral icon
+     until hydration instead of guessing and mismatching. */
+  const mounted = useSyncExternalStore(noop, () => true, () => false);
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <Button
-        variant="outline"
-        size="icon"
-        className="bg-transparent"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        <Monitor className="h-[1.1rem] w-[1.1rem]" />
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-    );
-  }
-
-  const current: ThemeName = (ORDER as readonly string[]).includes(theme)
-    ? (theme as ThemeName)
-    : "system";
+  const current: ThemeName =
+    mounted && (ORDER as readonly string[]).includes(theme ?? "")
+      ? (theme as ThemeName)
+      : "system";
   const Icon = ICONS[current];
   const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
+    <button
+      type="button"
       onClick={() => setTheme(next)}
-      aria-label={LABELS[current]}
-      className="border-border bg-transparent hover:border-primary/40 hover:bg-accent"
+      aria-label={mounted ? LABELS[current] : "Toggle theme"}
+      className="press-feedback flex size-10 items-center justify-center rounded-full text-foreground/70 hover:bg-foreground/[0.07] hover:text-foreground"
     >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={current}
-          initial={{ opacity: 0, scale: 0.7, rotate: -35 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          exit={{ opacity: 0, scale: 0.7, rotate: 35 }}
-          transition={springSnappy}
-          className="flex items-center justify-center"
-        >
-          <Icon
-            className="h-[1.1rem] w-[1.1rem] text-foreground"
-            aria-hidden="true"
-          />
-        </motion.span>
-      </AnimatePresence>
-    </Button>
+      <Icon key={current} className="fade-in size-[1.05rem]" aria-hidden="true" />
+    </button>
   );
 }

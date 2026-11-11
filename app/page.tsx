@@ -1,523 +1,359 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Github, Linkedin, MessageCircle } from "lucide-react";
-import { NestedArrow } from "@/components/nested-arrow";
 import Image from "next/image";
-import Link from "next/link";
-import { PageTransition } from "@/components/page-transition";
-import { motion, useReducedMotion } from "framer-motion";
-import { useCallback, useState } from "react";
-import { ProjectModal, type Project } from "@/components/ProjectModal";
-import { projects } from "@/lib/projects";
-import { entryContainer, entryItem, springGentle } from "@/lib/motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import type { CSSProperties } from "react";
+import { ArrowUpRight, Lock } from "lucide-react";
+import { CountUp } from "@/components/count-up";
+import { HeroStage } from "@/components/hero-stage";
+import { LocalTime } from "@/components/local-time";
+import { Magnetic } from "@/components/magnetic";
+import { Marquee } from "@/components/marquee";
+import { Line } from "@/components/page-intro";
+import { PillLink } from "@/components/pill-link";
+import { Portrait } from "@/components/portrait";
+import { Reveal } from "@/components/reveal";
+import { ScrollWords } from "@/components/scroll-words";
+import { StackCards } from "@/components/stack-cards";
+import { projects, type Project } from "@/lib/projects";
 
-/**
- * Split so the second group reads as situational rather than claiming equal
- * fluency across everything. Only tools that appear in shipped work on the
- * projects page are listed, so the evidence is always one click away.
- *
- * `adaptive` flips a near-black brand mark to white on the dark theme, which
- * is the variant those brands publish for dark backgrounds anyway.
- *
- * Only ever set it on a transparent, single-colour SVG. brightness(0) blackens
- * every opaque pixel and invert(1) then whitens them, so on an image with a
- * filled background the whole rectangle turns into a white block rather than
- * the glyph. That is exactly what happened to the old github.png, which was
- * 99% opaque.
- */
+/* The four builds that best show the range: hardware data, operations
+   software, a product launch and a corporate site. The rest are on /projects. */
+const featured = projects.slice(0, 4);
+
+/* Only tools that appear in shipped work on the projects page, split so the
+   second group reads as situational rather than claiming equal fluency. */
 const toolkit = [
   {
     heading: "Every day",
     note: "The stack behind almost everything I build.",
     items: [
-      { name: "TypeScript", icon: "/typescript.png" },
-      { name: "React.js", icon: "/reactjs.png" },
-      { name: "Next.js", icon: "/nextjs.svg" },
-      { name: "Tailwind CSS", icon: "/tailwindcss.svg" },
-      { name: "JavaScript", icon: "/js.png" },
-      { name: "HTML", icon: "/html-5.png" },
-      { name: "CSS", icon: "/css-3.png" },
-      { name: "Git", icon: "/tech-git.svg" },
-      { name: "TanStack Query", icon: "/tech-tanstack-query.svg" },
-      { name: "Redux Toolkit", icon: "/redux-toolkit.svg" },
-      { name: "Zod", icon: "/tech-zod.svg" },
-      { name: "Framer Motion", icon: "/tech-framer-motion.svg" },
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Tailwind CSS",
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Git",
+      "TanStack Query",
+      "Redux Toolkit",
+      "Zod",
+      "Framer Motion",
     ],
   },
   {
     heading: "When the work goes further",
     note: "Reached for when a project needs a backend, a service, or data off a device.",
     items: [
-      { name: "Node.js", icon: "/tech-nodejs.svg" },
-      { name: "Express", icon: "/tech-express.svg", adaptive: true },
-      { name: "PostgreSQL", icon: "/tech-postgresql.svg" },
-      { name: "Prisma", icon: "/tech-prisma.svg", adaptive: true },
-      { name: "Docker", icon: "/tech-docker.svg" },
-      { name: "Python", icon: "/tech-python.svg" },
-      { name: "FastAPI", icon: "/tech-fastapi.svg" },
-      { name: "InfluxDB", icon: "/influxdb-logo.png" },
-      { name: "Grafana", icon: "/grafana-logo.png" },
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Prisma",
+      "Docker",
+      "Python",
+      "FastAPI",
+      "InfluxDB",
+      "Grafana",
     ],
   },
 ];
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/hsetpainghtoo", label: "GitHub" },
-  {
-    icon: Linkedin,
-    href: "https://www.linkedin.com/in/hset-paing-htoo-91b997314/",
-    label: "LinkedIn",
-  },
-  { icon: MessageCircle, href: "https://m.me/hset.htoo.35", label: "Messenger" },
-];
-
-/* Figures derived from the real project list rather than invented. */
+/* Figures derived from the real project list and start date, not invented. */
+const STARTED = new Date("2024-05-01").getTime();
+const years = ((Date.now() - STARTED) / (365.25 * 24 * 3600 * 1000)).toFixed(1);
 const liveCount = projects.filter((p) => p.liveUrl !== "#").length;
 
 const stats = [
   { value: String(projects.length), label: "Projects shipped" },
-  { value: "2.4", label: "Years writing frontend" },
+  { value: years, label: "Years writing frontend" },
   { value: String(liveCount), label: "Live in production" },
 ];
 
+const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+
 export default function HomePage() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  /* The panel emerges from whichever card was tapped, so keep its bounds. */
-  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
-  const reduced = useReducedMotion();
-
-  const openProject = useCallback(
-    (proj: Project, event: React.MouseEvent<HTMLElement>) => {
-      setOriginRect(event.currentTarget.getBoundingClientRect());
-      setSelectedProject(proj);
-    },
-    []
-  );
-
-  const listVariants = entryContainer(reduced);
-  const skillCardVariants = entryItem(reduced, 24);
-
   return (
-    <PageTransition>
-      <div className="relative z-10 overflow-x-hidden bg-background text-foreground">
-        {/* Hero */}
-        <section className="relative flex min-h-[95dvh] flex-col items-center justify-center overflow-hidden pt-10 min-[1280px]:min-h-[calc(100dvh-5rem)] min-[1280px]:pt-0">
-          {/* DESKTOP LAYOUT */}
-          <div className="pointer-events-none relative z-10 mx-auto hidden min-h-[calc(100dvh-5rem)] w-full max-w-7xl items-center justify-center px-4 py-6 min-[1280px]:flex">
-            <div className="pointer-events-none relative flex flex-col">
-              {/* Above the wordmark */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
-                className="pointer-events-auto mb-4 w-full max-w-2xl md:mb-[min(2rem,3.5dvh)]"
-              >
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-tinted-sm">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground">
-                    Available for new projects
-                  </span>
-                </div>
-                <p className="max-w-[340px] text-left text-base font-medium leading-snug text-foreground 2xl:text-lg">
-                  <span className="mb-1 block text-xl font-semibold tracking-tight text-primary md:text-2xl">
-                    Frontend developer
-                  </span>
-                  <span className="text-muted-foreground">
-                    I build the interfaces for corporate sites, management
-                    dashboards and industrial monitoring tools.
-                  </span>
-                </p>
-              </motion.div>
+    <>
+      {/* ------------------------------------------------------------- Hero */}
+      <HeroStage>
+        <div className="grid flex-1 grid-cols-1 gap-x-10 gap-y-10 md:grid-cols-[minmax(0,1fr)_260px] lg:grid-cols-[minmax(0,1fr)_clamp(300px,27vw,420px)] lg:grid-rows-[1fr_auto] lg:gap-y-12">
+          <div className="flex flex-col justify-center md:col-span-2 lg:col-span-1">
+            <p
+              className="rise-in mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-foreground/10 py-1.5 pl-2.5 pr-3.5 text-[0.8125rem] text-muted-foreground"
+              style={d(150)}
+            >
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-signal opacity-60 [animation-duration:2.4s]" />
+                <span className="relative inline-flex size-2 rounded-full bg-signal" />
+              </span>
+              Available for new projects
+            </p>
 
-              {/* Wordmark */}
-              <motion.h1
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ ...springGentle, delay: reduced ? 0 : 0.04 }}
-                className="select-none whitespace-nowrap font-display text-[min(15vw,36dvh)] uppercase leading-none tracking-[0.02em] text-foreground/[0.07] lg:text-[min(18vw,36dvh)] dark:text-foreground/[0.09]"
-              >
-                Hset Paing
-              </motion.h1>
+            <h1 className="display text-[clamp(2.75rem,12.2vw,6rem)] lg:text-[clamp(4.5rem,7.6vw,8.5rem)]">
+              <Line delay={250}>Interfaces</Line>
+              <Line delay={340}>
+                for the{" "}
+                <span className="serif-accent text-muted-foreground">
+                  working
+                </span>
+              </Line>
+              <Line delay={430}>world.</Line>
+            </h1>
+          </div>
 
-              {/* Below, left */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...springGentle, delay: reduced ? 0 : 0.16 }}
-                className="pointer-events-auto mt-4 md:mt-[min(2rem,3.5dvh)]"
-              >
-                <div className="flex items-center gap-3">
-                  <Button asChild size="cta" className="group">
-                    <Link href="/projects">
-                      View my work
-                      <NestedArrow className="bg-primary-foreground/20" />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="cta" className="px-8">
-                    <Link href="/contact">Get in touch</Link>
-                  </Button>
-                </div>
-              </motion.div>
-
+          <div className="self-end lg:row-start-2">
+            <p className="rise-in max-w-[30rem] text-lg text-muted-foreground" style={d(650)}>
+              I&apos;m{" "}
+              <span className="text-foreground">Hset Paing Htoo</span>, a
+              frontend developer. I build corporate sites, management
+              dashboards and industrial monitoring tools in React, Next.js and
+              TypeScript.
+            </p>
+            <div
+              className="rise-in mt-8 flex flex-col gap-3 min-[420px]:flex-row"
+              style={d(780)}
+            >
+              <Magnetic className="flex">
+                <PillLink href="/projects" className="w-full justify-between">
+                  See the work
+                </PillLink>
+              </Magnetic>
+              <PillLink href="/contact" variant="ghost" className="justify-center">
+                Say hello
+              </PillLink>
             </div>
           </div>
 
-          {/* DESKTOP portrait */}
-          <div className="pointer-events-none absolute inset-0 z-30 hidden translate-x-[96px] items-center justify-center min-[1280px]:flex min-[1400px]:translate-x-12 min-[1600px]:translate-x-8">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={springGentle}
-              className="pointer-events-auto relative h-[500px] w-[400px] min-[1400px]:h-[560px] min-[1400px]:w-[460px] min-[1600px]:h-[600px] min-[1600px]:w-[500px]"
-            >
-              <Image
-                src="/profile_me_transparent.png"
-                alt="Hset Paing Htoo"
-                fill
-                className="object-contain drop-shadow-2xl [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
-                priority
-                quality={100}
-              />
-              {/* Single-accent ambient light, off-centre so it doesn't read as a ring */}
-              <div
-                className="pointer-events-none absolute left-1/2 top-[45%] -z-10 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[110px]"
-                aria-hidden="true"
-              />
-            </motion.div>
+          {/* Portrait. The arch holds the figure; the head is allowed to
+              break out of the top of it, which is where the depth comes from. */}
+          <div
+            className="rise-in ml-auto w-[68%] max-w-[300px] self-end md:w-full md:max-w-none lg:col-start-2 lg:row-span-2 lg:row-start-1"
+            style={d(520)}
+          >
+            <Portrait />
           </div>
+        </div>
 
-          {/* MOBILE LAYOUT */}
-          <div className="pointer-events-none relative z-10 flex min-h-[90dvh] w-full flex-col items-center justify-center px-4 pt-3 sm:pt-8 min-[1280px]:hidden">
-            <div className="relative mb-4 flex w-full items-start justify-center">
-              <div
-                className="pointer-events-none absolute left-1/2 top-[46%] h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[90px] sm:h-[300px] sm:w-[300px] md:h-[360px] md:w-[360px]"
-                aria-hidden="true"
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 50 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={springGentle}
-                className="pointer-events-auto relative z-20 h-[312px] max-h-[42dvh] w-[250px] sm:h-[400px] sm:max-h-[38dvh] sm:w-[320px] md:h-[480px] md:w-[384px]"
-              >
-                <Image
-                  src="/profile_me_transparent.png"
-                  alt="Hset Paing Htoo"
-                  fill
-                  className="object-contain drop-shadow-2xl [-webkit-mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]"
-                  priority
-                  quality={100}
-                />
-              </motion.div>
+        <dl
+          className="fade-in mt-10 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-foreground/10 pt-5 text-sm md:grid-cols-4"
+          style={d(1000)}
+        >
+          {[
+            ["Role", "Frontend developer"],
+            ["Currently", "Transtak Pte Ltd, Singapore"],
+            ["Focus", "React, Next.js, TypeScript"],
+          ].map(([term, value]) => (
+            <div key={term}>
+              <dt className="eyebrow mb-1.5">{term}</dt>
+              <dd>{value}</dd>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...springGentle, delay: reduced ? 0 : 0.08 }}
-              className="pointer-events-auto z-30 flex w-full flex-col items-center pb-10 text-center"
-            >
-              {/* Visible H1 for mobile - the wordmark above is decorative */}
-              <h1 className="sr-only">
-                Hset Paing Htoo, frontend developer
-              </h1>
-
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-tinted-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
-                </span>
-                <span className="text-xs font-medium text-muted-foreground">
-                  Available for new projects
-                </span>
-              </div>
-
-              <p className="mb-7 max-w-[34rem] px-2 text-lg leading-snug md:text-xl">
-                <span className="mb-1.5 block text-2xl font-semibold tracking-tight text-primary md:text-3xl">
-                  Frontend developer
-                </span>
-                <span className="text-muted-foreground">
-                  I build the interfaces for corporate sites, management
-                  dashboards and industrial monitoring tools.
-                </span>
-              </p>
-
-              <div className="mb-7 flex w-full max-w-[320px] flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
-                <Button asChild size="cta" className="group w-full sm:w-auto">
-                  <Link href="/projects">
-                    View my work
-                    <NestedArrow className="bg-primary-foreground/20" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="cta" className="w-full px-8 sm:w-auto">
-                  <Link href="/contact">Get in touch</Link>
-                </Button>
-              </div>
-
-              <div className="flex items-center justify-center gap-1">
-                <span className="mr-2 text-sm text-muted-foreground">
-                  Find me on
-                </span>
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    aria-label={social.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg press-feedback text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <social.icon className="h-[1.05rem] w-[1.05rem]" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </motion.div>
+          ))}
+          <div>
+            <dt className="eyebrow mb-1.5">My time</dt>
+            <dd>
+              <LocalTime />
+            </dd>
           </div>
-        </section>
+        </dl>
+      </HeroStage>
 
-        {/* Selected work */}
-        <section className="overflow-hidden bg-surface px-6 pt-20 pb-24 max-md:mt-10 md:pt-32 md:pb-36">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={springGentle}
-              viewport={{ once: true }}
-              className="mb-14 max-w-xl"
-            >
-              <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
-                Things I have built
-              </h2>
-              <p className="measure text-lg text-muted-foreground">
-                Corporate sites, internal tools and a couple of side builds.
-                Open one to see the stack behind it.
-              </p>
-            </motion.div>
+      {/* ---------------------------------------------------------- Ribbons */}
+      <Marquee
+        className="pt-16 md:pt-24"
+        rows={[
+          ["Corporate sites", "Management dashboards", "Industrial monitoring", "Operations software"],
+          ["React", "Next.js", "TypeScript", "Tailwind CSS", "Grafana", "InfluxDB"],
+        ]}
+      />
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ ...springGentle, delay: reduced ? 0 : 0.06 }}
-              viewport={{ once: true }}
-              className="relative w-full"
-            >
-              <Swiper
-                effect="coverflow"
-                grabCursor={true}
-                centeredSlides={true}
-                slidesPerView="auto"
-                loop={projects.length > 2}
-                coverflowEffect={{
-                  rotate: 16,
-                  stretch: 0,
-                  depth: 220,
-                  modifier: 1,
-                  slideShadows: false,
-                }}
-                pagination={{ clickable: true }}
-                navigation={{
-                  nextEl: ".projects-swiper-next",
-                  prevEl: ".projects-swiper-prev",
-                }}
-                modules={[EffectCoverflow, Pagination, Navigation]}
-                className="projects-swiper !overflow-visible py-12"
+      {/* -------------------------------------------------------- Statement */}
+      <section className="mx-auto max-w-[1600px] px-5 py-24 sm:px-8 md:py-40 lg:px-12">
+        <div className="grid gap-8 lg:grid-cols-12">
+          <p className="eyebrow lg:col-span-3 lg:pt-3">01 / Why interfaces</p>
+          <div className="lg:col-span-9">
+            <ScrollWords
+              className="text-[clamp(1.625rem,3.5vw,3.25rem)] font-medium leading-[1.14] tracking-[-0.035em]"
+              text="I came to frontend work in 2024 and have not slowed down since. What pulled me in was how much an interface decides whether people can actually use a product. So I build for responsiveness and accessibility from the start, rather than bolting them on later."
+            />
+            <Reveal className="mt-10">
+              <PillLink href="/about" variant="ghost">
+                More about me
+              </PillLink>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------- Selected work */}
+      <section className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
+        <Reveal className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="eyebrow mb-5">02 / Selected work</p>
+            <h2 className="display text-[clamp(2.5rem,6.4vw,5.5rem)]">
+              Things I have{" "}
+              <span className="serif-accent text-muted-foreground">built</span>
+            </h2>
+          </div>
+          <p className="max-w-sm text-muted-foreground">
+            Four of {projects.length}. Monitoring off real hardware, operations
+            software, a product launch and a corporate site.
+          </p>
+        </Reveal>
+
+        <StackCards className="pb-4">
+          {featured.map((project, i) => {
+            const hasLive = project.liveUrl !== "#";
+            return (
+              <li
+                key={project.title}
+                data-stack-card
+                className="sticky mb-6 last:mb-0 [@media(max-height:700px)]:static"
+                style={{ top: `calc(5.75rem + ${i * 0.875}rem)` }}
               >
-                {projects.map((project, index) => (
-                  <SwiperSlide
-                    key={project.title}
-                    className="mb-12 aspect-[4/5] !w-[320px] sm:!w-[420px] lg:!w-[520px]"
-                  >
-                    {({ isActive }) => (
-                      <button
-                        type="button"
-                        aria-label={`Open details for ${project.title}`}
-                        tabIndex={isActive ? 0 : -1}
-                        className={`relative block h-full w-full overflow-hidden rounded-2xl border bg-card text-left shadow-tinted-lg transition-[transform,opacity,border-color] duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)] ${
-                          isActive
-                            ? "scale-100 border-primary/60 opacity-100"
-                            : "scale-95 border-border opacity-60"
-                        }`}
-                        onClick={(e) => isActive && openProject(project, e)}
-                      >
-                        <Image
-                          src={project.image || "/placeholder.svg"}
-                          alt={`${project.title} screenshot`}
-                          fill
-                          className="scale-90 object-contain p-10"
-                          sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 520px"
-                          priority={index === 0}
-                        />
+                <article className="grid origin-top gap-6 rounded-[1.75rem] border border-foreground/10 bg-card p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
+                  <div className="flex flex-col p-2 sm:p-3 lg:col-span-5 lg:p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="eyebrow">{project.kind}</span>
+                      <span className="font-serif text-2xl italic text-muted-foreground">
+                        0{i + 1}
+                      </span>
+                    </div>
 
-                        {/* Legibility scrim, tinted with the page ink */}
-                        <div
-                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/25 to-transparent"
-                          aria-hidden="true"
-                        />
-
-                        <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8">
-                          <h3 className="mb-2 text-2xl font-semibold leading-tight text-white sm:text-3xl">
-                            {project.title}
-                          </h3>
-                          <p className="mb-5 line-clamp-1 text-xs text-white/65 sm:text-sm">
-                            {project.technologies.join(", ")}
-                          </p>
-
-                          {isActive && (
-                            <span className="group/btn inline-flex w-max items-center font-medium text-white">
-                              <span className="mr-3.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-white/40 transition-colors duration-300 group-hover/btn:bg-white group-hover/btn:text-navy-950">
-                                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                              </span>
-                              <span className="underline-offset-4 group-hover/btn:underline">
-                                Read more
-                              </span>
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    )}
-                  </SwiperSlide>
-                ))}
-
-                <div className="projects-swiper-prev !hidden md:!flex" />
-                <div className="projects-swiper-next !hidden md:!flex" />
-              </Swiper>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ ...springGentle, delay: reduced ? 0 : 0.12 }}
-              viewport={{ once: true }}
-              className="mt-6 text-center"
-            >
-              <Button asChild variant="quiet" size="cta" className="group">
-                <Link href="/projects">
-                  View my work
-                  <NestedArrow className="bg-foreground/10" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Toolkit */}
-        <section className="px-6 pt-20 pb-24 md:pt-32 md:pb-36">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={springGentle}
-              viewport={{ once: true }}
-              className="mb-12 max-w-xl"
-            >
-              <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
-                What I reach for
-              </h2>
-              <p className="measure text-lg text-muted-foreground">
-                What I use every day, and what I pick up when a project needs
-                more than a frontend. Everything here appears in the work on the
-                projects page.
-              </p>
-            </motion.div>
-
-            <div className="space-y-12">
-              {toolkit.map((group) => (
-                <div key={group.heading}>
-                  <div className="mb-5">
-                    <h3 className="text-base font-semibold text-foreground">
-                      {group.heading}
+                    <h3 className="mt-6 text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-[1.02] tracking-[-0.04em] lg:mt-10">
+                      {project.title}
                     </h3>
-                    <p className="measure text-sm text-muted-foreground">
-                      {group.note}
+                    <p className="mt-4 max-w-md text-muted-foreground">
+                      {project.tagline}
                     </p>
+
+                    <ul className="mt-6 flex flex-wrap gap-1.5">
+                      {project.technologies.slice(0, 5).map((tech) => (
+                        <li
+                          key={tech}
+                          className="tabular rounded-full border border-foreground/10 px-2.5 py-1 text-[0.6875rem] text-muted-foreground"
+                        >
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-8 lg:mt-auto lg:pt-10">
+                      {hasLive ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="group inline-flex items-center gap-2 text-sm font-medium"
+                        >
+                          <span className="link-draw">Visit live site</span>
+                          <ArrowUpRight
+                            className="size-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                            aria-hidden="true"
+                          />
+                        </a>
+                      ) : (
+                        <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                          <Lock className="size-3.5" aria-hidden="true" />
+                          Internal tool, not public
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  <motion.ul
-                    className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4"
-                    variants={listVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-60px" }}
-                  >
-                    {group.items.map((skill) => (
-                      <motion.li
-                        key={skill.name}
-                        variants={skillCardVariants}
-                        className="hover-lift [--lift:-3px] bezel"
-                      >
-                        <div className="bezel-core flex items-center gap-3.5 p-4">
-                          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-surface">
-                            <Image
-                              src={skill.icon}
-                              alt=""
-                              width={26}
-                              height={26}
-                              aria-hidden="true"
-                              className={
-                                "adaptive" in skill && skill.adaptive
-                                  ? "dark:brightness-0 dark:invert"
-                                  : undefined
-                              }
-                            />
-                          </span>
-                          <span className="text-sm font-medium leading-tight text-foreground">
-                            {skill.name}
-                          </span>
-                        </div>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </div>
-              ))}
+                  <ProjectShot project={project} live={hasLive} />
+                </article>
+              </li>
+            );
+          })}
+        </StackCards>
+
+        <Reveal className="mt-12 flex justify-center">
+          <PillLink href="/projects">All {projects.length} projects</PillLink>
+        </Reveal>
+      </section>
+
+      {/* ---------------------------------------------------------- Toolkit */}
+      <section className="mx-auto max-w-[1600px] px-5 pt-28 sm:px-8 md:pt-44 lg:px-12">
+        <Reveal className="mb-12 md:mb-16">
+          <p className="eyebrow mb-5">03 / Toolkit</p>
+          <h2 className="display text-[clamp(2.5rem,6.4vw,5.5rem)]">
+            What I{" "}
+            <span className="serif-accent text-muted-foreground">reach</span>{" "}
+            for
+          </h2>
+        </Reveal>
+
+        {toolkit.map((group) => (
+          <Reveal
+            key={group.heading}
+            className="grid gap-6 border-t border-foreground/10 py-10 lg:grid-cols-12 lg:gap-10 lg:py-14"
+          >
+            <div className="lg:col-span-3">
+              <h3 className="font-medium tracking-[-0.02em]">{group.heading}</h3>
+              <p className="mt-2 max-w-[16rem] text-sm text-muted-foreground">
+                {group.note}
+              </p>
             </div>
-          </div>
-        </section>
-
-        {/* By the numbers - asymmetric, left-aligned, tabular figures */}
-        <section className="border-t border-border bg-surface px-6 pt-16 pb-20 md:pt-24 md:pb-28">
-          <div className="mx-auto max-w-6xl">
-            <motion.dl
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={springGentle}
-              viewport={{ once: true }}
-              className="flex flex-col gap-10 sm:flex-row sm:items-end sm:gap-16"
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ ...springGentle, delay: reduced ? 0 : index * 0.08 }}
-                  viewport={{ once: true }}
-                  className={index === 0 ? "" : "sm:border-l sm:border-border sm:pl-16"}
-                >
-                  <dd className="tabular mb-1.5 text-5xl font-semibold leading-none text-foreground md:text-6xl">
-                    {stat.value}
-                  </dd>
-                  <dt className="text-sm text-muted-foreground">{stat.label}</dt>
-                </motion.div>
+            <ul className="flex flex-wrap gap-x-[0.45em] gap-y-1 text-[clamp(1.5rem,3.2vw,2.75rem)] font-medium leading-[1.2] tracking-[-0.04em] lg:col-span-9">
+              {group.items.map((item, i) => (
+                <li key={item} className="flex gap-x-[0.45em]">
+                  {item}
+                  {i < group.items.length - 1 && (
+                    <span className="font-normal text-foreground/20" aria-hidden="true">
+                      /
+                    </span>
+                  )}
+                </li>
               ))}
-            </motion.dl>
-          </div>
-        </section>
-      </div>
+            </ul>
+          </Reveal>
+        ))}
 
-      <ProjectModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        originRect={originRect}
-        onClose={() => setSelectedProject(null)}
-      />
-    </PageTransition>
+        <dl className="grid grid-cols-1 border-t border-foreground/10 sm:grid-cols-3">
+          {stats.map((stat, i) => (
+            <Reveal
+              key={stat.label}
+              delay={i * 110}
+              className="flex flex-col-reverse border-b border-foreground/10 py-8 sm:border-b-0 sm:py-12 sm:[&:not(:first-child)]:border-l sm:[&:not(:first-child)]:pl-8 lg:[&:not(:first-child)]:pl-12"
+            >
+              <dt className="eyebrow mt-3">{stat.label}</dt>
+              <dd className="font-serif text-[clamp(4rem,9vw,8rem)] italic leading-[0.85] tracking-[-0.03em]">
+                <CountUp value={stat.value} />
+              </dd>
+            </Reveal>
+          ))}
+        </dl>
+      </section>
+    </>
+  );
+}
+
+/* The screenshot is the link when there is somewhere public to go, and the
+   cursor picks up a "Visit" label over it. Internal tools stay a plain image. */
+function ProjectShot({ project, live }: { project: Project; live: boolean }) {
+  const frame =
+    "group/shot relative block aspect-[16/10] overflow-hidden rounded-[1.25rem] bg-surface md:rounded-[1.75rem] lg:col-span-7";
+  const image = (
+    <Image
+      src={project.image}
+      alt={`${project.title} interface`}
+      fill
+      sizes="(min-width: 1024px) 56vw, 92vw"
+      quality={70}
+      className="object-cover object-left-top transition-transform duration-700 ease-out group-hover/shot:scale-[1.035]"
+    />
+  );
+
+  if (!live) return <div className={frame}>{image}</div>;
+
+  return (
+    <a
+      href={project.liveUrl}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={`Visit ${project.title}`}
+      data-cursor="Visit"
+      className={frame}
+    >
+      {image}
+    </a>
   );
 }

@@ -1,10 +1,11 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono, Anton } from "next/font/google"
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { CursorLabel } from "@/components/cursor-label"
 import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
@@ -19,10 +20,13 @@ const geistMono = Geist_Mono({
   display: "swap",
 })
 
-const anton = Anton({
+/* Italic for accent words and large numerals; upright for the one giant
+   word on the About hero. Each cut is only downloaded by a page that uses it. */
+const instrumentSerif = Instrument_Serif({
   weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-anton",
+  variable: "--font-instrument",
   display: "swap",
 })
 
@@ -79,8 +83,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8f9fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#10131a" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f1ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0a" },
   ],
 }
 
@@ -92,26 +96,24 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${anton.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
       suppressHydrationWarning
     >
-      <body className="font-sans antialiased" suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
+      <body className="font-sans" suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-full focus:bg-foreground focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-background"
           >
             Skip to content
           </a>
-          {/* Scroll edge effect: content fades as it passes under the floating
-              bar, instead of meeting a hard rule. */}
-          <div className="scroll-edge" aria-hidden="true" />
           <Navbar />
-          <main id="main-content" className="min-h-[60dvh] overflow-x-clip pt-20">
+          <main id="main-content" className="relative min-h-[70dvh]">
             {children}
           </main>
           <Footer />
-          <div className="grain-overlay z-grain" aria-hidden="true" />
+          <div className="grain-overlay" aria-hidden="true" />
+          <CursorLabel />
           <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
