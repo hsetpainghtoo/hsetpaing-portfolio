@@ -4,12 +4,21 @@ interface PageIntroProps {
   eyebrow: string;
   title: ReactNode;
   lede: string;
+  /** Keep the lede under the title instead of in a right-hand column, for
+      stages whose artwork occupies the right side. */
+  stacked?: boolean;
 }
 
 /** Shared opening for the inner pages: label, large title, one-line lede. */
-export function PageIntro({ eyebrow, title, lede }: PageIntroProps) {
+export function PageIntro({ eyebrow, title, lede, stacked }: PageIntroProps) {
   return (
-    <header className="grid gap-8 pb-14 pt-36 md:pb-20 md:pt-44 lg:grid-cols-12 lg:items-end lg:gap-10">
+    <header
+      className={
+        stacked
+          ? "grid gap-8 pb-14 pt-36 md:pb-20 md:pt-44"
+          : "grid gap-8 pb-14 pt-36 md:pb-20 md:pt-44 lg:grid-cols-12 lg:items-end lg:gap-10"
+      }
+    >
       <div className="lg:col-span-8">
         <p className="eyebrow rise-in mb-6 flex items-center gap-3">
           <span className="h-px w-8 bg-foreground/30" aria-hidden="true" />

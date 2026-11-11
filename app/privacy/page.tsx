@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Line, PageIntro } from "@/components/page-intro";
+import { VideoStage } from "@/components/video-stage";
 import { site } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -25,18 +26,32 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-      <PageIntro
-        eyebrow="Privacy / Updated 19 September 2026"
-        title={
-          <Line delay={120}>
-            <span className="serif-accent text-muted-foreground">Privacy</span>
-          </Line>
-        }
-        lede="What this site collects, what happens to a message you send, and how to have it removed."
-      />
+    <>
+      {/* A shaft of light in deep water, on the right; the copy keeps to the
+          dark on the left. */}
+      <VideoStage
+        video="/privacy-fish.mp4"
+        videoHd="/privacy-fish-hd.mp4"
+        poster="/privacy-fish-poster.webp"
+        mediaClassName="object-[70%_50%]"
+        scrim="left"
+      >
+        <div className="mx-auto max-w-[1600px] px-5 pb-28 sm:px-8 md:pb-44 lg:px-12 lg:pb-56">
+          <PageIntro
+            eyebrow="Privacy / Updated 19 September 2026"
+            title={
+              <Line delay={120}>
+                <span className="serif-accent accent-ink">Privacy</span>
+              </Line>
+            }
+            lede="What this site collects, what happens to a message you send, and how to have it removed."
+            stacked
+          />
+        </div>
+      </VideoStage>
 
-      <dl className="border-t border-foreground/10">
+    <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
+      <dl className="mt-6 md:mt-10">
         {sections.map((section) => (
           <div
             key={section.title}
@@ -63,5 +78,6 @@ export default function PrivacyPage() {
         </div>
       </dl>
     </div>
+    </>
   );
 }

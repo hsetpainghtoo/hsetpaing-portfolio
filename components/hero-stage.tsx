@@ -119,7 +119,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
           fill
           priority
           sizes="100vw"
-          quality={70}
+          quality={80}
           className={`${PLATE_CLASS} hero-settle`}
         />
         {armed && (
@@ -128,7 +128,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
             alt=""
             fill
             sizes="100vw"
-            quality={70}
+            quality={80}
             className={`${PLATE_CLASS} spot-reveal`}
           />
         )}

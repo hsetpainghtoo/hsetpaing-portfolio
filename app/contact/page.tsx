@@ -64,6 +64,7 @@ export default function ContactPage() {
     <div className="theme-dark rounded-b-[2rem] bg-background pb-20 text-foreground md:rounded-b-[3rem] md:pb-28">
       <VideoStage
         video="/contact-flowers.mp4"
+        videoHd="/contact-flowers-hd.mp4"
         poster="/contact-flowers-poster.webp"
         className="rounded-b-none md:rounded-b-none"
         mediaClassName="object-[50%_60%]"
@@ -76,7 +77,7 @@ export default function ContactPage() {
                 <Line delay={120}>Let&apos;s talk about</Line>
                 <Line delay={210}>
                   your{" "}
-                  <span className="serif-accent text-muted-foreground">project</span>
+                  <span className="serif-accent accent-ink">project</span>
                 </Line>
               </>
             }

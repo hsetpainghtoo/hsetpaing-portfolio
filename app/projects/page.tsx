@@ -14,7 +14,11 @@ export default function ProjectsPage() {
     <>
       {/* The page opens on a night garden. The first row of work is pulled up
           so the screenshots stand in it rather than below it. */}
-      <VideoStage video="/work-plants.mp4" poster="/work-plants-poster.webp">
+      <VideoStage
+        video="/work-plants.mp4"
+        videoHd="/work-plants-hd.mp4"
+        poster="/work-plants-poster.webp"
+      >
         <div className="mx-auto max-w-[1600px] px-5 pb-40 sm:px-8 md:pb-52 lg:px-12 lg:pb-72">
           <PageIntro
             eyebrow={`Work / ${projects.length} projects`}
@@ -23,7 +27,7 @@ export default function ProjectsPage() {
                 <Line delay={120}>Everything</Line>
                 <Line delay={210}>
                   I have{" "}
-                  <span className="serif-accent text-muted-foreground">shipped</span>
+                  <span className="serif-accent accent-ink">shipped</span>
                 </Line>
               </>
             }
@@ -65,7 +69,7 @@ export default function ProjectsPage() {
                     /* Animated GIFs cannot be re-encoded by the optimiser, so
                        the one that exists is passed through and lazy-loaded. */
                     unoptimized={animated}
-                    className="object-cover object-left-top transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.035]"
                   />
                 </div>
 

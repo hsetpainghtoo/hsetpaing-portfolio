@@ -131,6 +131,12 @@
   --input: #c9c4b6;
   --ring: #12120f;
   --signal: #d4431a;
+  /* The colour family. Ember is the accent proper; amber and dusk are its
+     neighbours, taken from the site's own footage (lava, fireflies, blue
+     hour). Used together as one gradient, never as three separate accents. */
+  --ember: #d4431a;
+  --amber: #b9700c;
+  --dusk: #5a48d6;
 
   --chart-1: #d4431a;
   --chart-2: #5d5a51;
@@ -142,32 +148,37 @@
 .dark,
 .theme-invert,
 .theme-dark {
-  --background: #0b0b0a;
-  --foreground: #eceae3;
-  --card: #121211;
-  --card-foreground: #eceae3;
-  --surface: #181816;
-  --popover: #121211;
-  --popover-foreground: #eceae3;
-  --primary: #eceae3;
-  --primary-foreground: #0b0b0a;
-  --secondary: #181816;
-  --secondary-foreground: #eceae3;
-  --muted: #1a1a18;
-  --muted-foreground: #9a978d;
-  --accent: #1f1f1c;
-  --accent-foreground: #eceae3;
+  /* Ink with a breath of violet in it, so the warm accents have something
+     cool to glow against. Still near-black; never #000. */
+  --background: #0a0a0e;
+  --foreground: #eeece6;
+  --card: #111117;
+  --card-foreground: #eeece6;
+  --surface: #17161e;
+  --popover: #111117;
+  --popover-foreground: #eeece6;
+  --primary: #eeece6;
+  --primary-foreground: #0a0a0e;
+  --secondary: #17161e;
+  --secondary-foreground: #eeece6;
+  --muted: #1a1922;
+  --muted-foreground: #a09dab;
+  --accent: #201f2a;
+  --accent-foreground: #eeece6;
   --destructive: #ef6a5e;
-  --border: #272724;
-  --input: #35352f;
-  --ring: #eceae3;
+  --border: #292733;
+  --input: #383544;
+  --ring: #eeece6;
   --signal: #ff6a3d;
+  --ember: #ff6a3d;
+  --amber: #ffb561;
+  --dusk: #9f8fff;
 
   --chart-1: #ff6a3d;
-  --chart-2: #9a978d;
-  --chart-3: #6b6960;
-  --chart-4: #eceae3;
-  --chart-5: #35352f;
+  --chart-2: #ffb561;
+  --chart-3: #9f8fff;
+  --chart-4: #eeece6;
+  --chart-5: #383544;
 }
 
 @layer base {
@@ -413,7 +424,7 @@
 
 @media (prefers-contrast: more) {
   :root { --muted-foreground: #3f3d36; --border: #8f8b7e; }
-  .dark { --muted-foreground: #c4c1b6; --border: #6b6960; }
+  .dark { --muted-foreground: #c9c6d2; --border: #6d6a7a; }
 }
 
 /* Film grain. A fixed full-viewport layer costs a composite on every scroll
@@ -523,7 +534,7 @@
 
 .marquee-outline {
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 42%, transparent);
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--dusk) 70%, var(--foreground));
 }
 
 /* Cursor label. */
@@ -595,5 +606,75 @@
   .footer-wordmark {
     filter: drop-shadow(0 -1px 0 rgb(255 255 255 / 0.55))
       drop-shadow(0 0 18px rgb(190 200 255 / 0.45));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Colour. One gradient, ember through amber to dusk, carried by a handful
+   of elements: accent words, big numerals, the arrow in a primary button,
+   and a wash of light behind a section. Everything else stays ink and paper.
+   --------------------------------------------------------------------------- */
+.accent-ink {
+  background: linear-gradient(100deg, var(--ember) 0%, var(--amber) 48%, var(--dusk) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--ember);
+}
+
+/* Ambient light at the head of a section. Light, never the subject. */
+.ambient {
+  background:
+    radial-gradient(52% 44% at 88% 0%, color-mix(in srgb, var(--dusk) 13%, transparent), transparent 70%),
+    radial-gradient(40% 36% at 6% 8%, color-mix(in srgb, var(--ember) 9%, transparent), transparent 70%);
+}
+
+/* A project card takes one hue (--tint) and uses it three ways: a wash in
+   its top corner, its label, and its number. */
+.tint-card {
+  background:
+    radial-gradient(90% 70% at 0% 0%, color-mix(in srgb, var(--tint) 16%, transparent), transparent 62%),
+    var(--card);
+  border-color: color-mix(in srgb, var(--tint) 22%, var(--border));
+}
+
+.tint-text {
+  color: color-mix(in srgb, var(--tint) 78%, var(--foreground));
+}
+
+/* The arch behind the hero portrait: a warm backlight, not a frame. */
+.portrait-arch {
+  background:
+    radial-gradient(80% 60% at 50% 28%, color-mix(in srgb, var(--amber) 34%, transparent), transparent 72%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ember) 30%, transparent), color-mix(in srgb, var(--dusk) 22%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--amber) 30%, transparent);
+}
+
+/* Scrollbar: thin, quiet, and part of the page rather than the browser. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 30%, transparent) transparent;
+}
+
+@supports not (scrollbar-width: thin) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--foreground) 30%, transparent);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ember);
+    background-clip: content-box;
   }
 }

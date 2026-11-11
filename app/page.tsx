@@ -67,6 +67,11 @@ const stats = [
   { value: String(liveCount), label: "Live in production" },
 ];
 
+/* One hue per featured project, echoing what the project is: ember for the
+   fuel terminal, teal for logistics, amber for the care device, blue for the
+   corporate site. */
+const TINTS = ["#ff6a3d", "#2fb8a6", "#f0a53a", "#5b8cff"];
+
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export default function HomePage() {
@@ -91,7 +96,7 @@ export default function HomePage() {
               <Line delay={250}>Interfaces</Line>
               <Line delay={340}>
                 for the{" "}
-                <span className="serif-accent text-muted-foreground">
+                <span className="serif-accent accent-ink">
                   working
                 </span>
               </Line>
@@ -165,7 +170,7 @@ export default function HomePage() {
       />
 
       {/* -------------------------------------------------------- Statement */}
-      <section className="mx-auto max-w-[1600px] px-5 py-24 sm:px-8 md:py-40 lg:px-12">
+      <section className="ambient mx-auto max-w-[1600px] px-5 py-24 sm:px-8 md:py-40 lg:px-12">
         <div className="grid gap-8 lg:grid-cols-12">
           <p className="eyebrow lg:col-span-3 lg:pt-3">01 / Why interfaces</p>
           <div className="lg:col-span-9">
@@ -189,7 +194,7 @@ export default function HomePage() {
             <p className="eyebrow mb-5">02 / Selected work</p>
             <h2 className="display text-[clamp(2.5rem,6.4vw,5.5rem)]">
               Things I have{" "}
-              <span className="serif-accent text-muted-foreground">built</span>
+              <span className="serif-accent accent-ink">built</span>
             </h2>
           </div>
           <p className="max-w-sm text-muted-foreground">
@@ -206,13 +211,18 @@ export default function HomePage() {
                 key={project.title}
                 data-stack-card
                 className="sticky mb-6 last:mb-0 [@media(max-height:700px)]:static"
-                style={{ top: `calc(5.75rem + ${i * 0.875}rem)` }}
+                style={
+                  {
+                    top: `calc(5.75rem + ${i * 0.875}rem)`,
+                    "--tint": TINTS[i % TINTS.length],
+                  } as CSSProperties
+                }
               >
-                <article className="grid origin-top gap-6 rounded-[1.75rem] border border-foreground/10 bg-card p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
+                <article className="tint-card grid origin-top gap-6 rounded-[1.75rem] border p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
                   <div className="flex flex-col p-2 sm:p-3 lg:col-span-5 lg:p-4">
                     <div className="flex items-center justify-between">
-                      <span className="eyebrow">{project.kind}</span>
-                      <span className="font-serif text-2xl italic text-muted-foreground">
+                      <span className="eyebrow tint-text">{project.kind}</span>
+                      <span className="tint-text font-serif text-2xl italic">
                         0{i + 1}
                       </span>
                     </div>
@@ -271,12 +281,12 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------------------------------------------- Toolkit */}
-      <section className="mx-auto max-w-[1600px] px-5 pt-28 sm:px-8 md:pt-44 lg:px-12">
+      <section className="ambient mx-auto max-w-[1600px] px-5 pt-28 sm:px-8 md:pt-44 lg:px-12">
         <Reveal className="mb-12 md:mb-16">
           <p className="eyebrow mb-5">03 / Toolkit</p>
           <h2 className="display text-[clamp(2.5rem,6.4vw,5.5rem)]">
             What I{" "}
-            <span className="serif-accent text-muted-foreground">reach</span>{" "}
+            <span className="serif-accent accent-ink">reach</span>{" "}
             for
           </h2>
         </Reveal>
@@ -297,7 +307,7 @@ export default function HomePage() {
                 <li key={item} className="flex gap-x-[0.45em]">
                   {item}
                   {i < group.items.length - 1 && (
-                    <span className="font-normal text-foreground/20" aria-hidden="true">
+                    <span className="font-normal text-signal/60" aria-hidden="true">
                       /
                     </span>
                   )}
@@ -315,7 +325,7 @@ export default function HomePage() {
               className="flex flex-col-reverse border-b border-foreground/10 py-8 sm:border-b-0 sm:py-12 sm:[&:not(:first-child)]:border-l sm:[&:not(:first-child)]:pl-8 lg:[&:not(:first-child)]:pl-12"
             >
               <dt className="eyebrow mt-3">{stat.label}</dt>
-              <dd className="font-serif text-[clamp(4rem,9vw,8rem)] italic leading-[0.85] tracking-[-0.03em]">
+              <dd className="accent-ink w-fit pr-[0.08em] font-serif text-[clamp(4rem,9vw,8rem)] italic leading-[0.95] tracking-[-0.03em]">
                 <CountUp value={stat.value} />
               </dd>
             </Reveal>
@@ -338,7 +348,7 @@ function ProjectShot({ project, live }: { project: Project; live: boolean }) {
       fill
       sizes="(min-width: 1024px) 56vw, 92vw"
       quality={70}
-      className="object-cover object-left-top transition-transform duration-700 ease-out group-hover/shot:scale-[1.035]"
+      className="object-cover object-center transition-transform duration-700 ease-out group-hover/shot:scale-[1.035]"
     />
   );
 

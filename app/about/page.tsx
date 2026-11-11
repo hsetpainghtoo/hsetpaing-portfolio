@@ -170,7 +170,7 @@ function Block({
   );
 }
 
-const accent = "serif-accent text-muted-foreground";
+const accent = "serif-accent accent-ink";
 
 export default function AboutPage() {
   return (
@@ -332,7 +332,7 @@ export default function AboutPage() {
         <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
           {whatIDo.map((item, i) => (
             <Reveal as="li" key={item.title} delay={(i % 2) * 100}>
-              <span className="font-serif text-3xl italic text-muted-foreground">
+              <span className="accent-ink w-fit pr-1 font-serif text-3xl italic">
                 0{i + 1}
               </span>
               <h3 className="mt-3 text-xl font-medium">{item.title}</h3>
