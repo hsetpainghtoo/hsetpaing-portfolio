@@ -30,7 +30,9 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 })
 
-const siteUrl = "https://hsetpaing.vercel.app"
+/* Must be the address the site is really served from: link previews fetch
+   the share image from here, and a wrong host means no image at all. */
+const siteUrl = "https://hsetpaing-portfolio.vercel.app"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -59,21 +61,12 @@ export const metadata: Metadata = {
     title: "Hset Paing Htoo, Frontend Developer",
     description:
       "Frontend developer building responsive interfaces with React, Next.js and TypeScript.",
-    images: [
-      {
-        url: "/hph_portrait.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Hset Paing Htoo, frontend developer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Hset Paing Htoo, Frontend Developer",
     description:
       "Frontend developer building responsive interfaces with React, Next.js and TypeScript.",
-    images: ["/hph_portrait.jpg"],
   },
   robots: {
     index: true,

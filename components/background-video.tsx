@@ -5,8 +5,10 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface BackgroundVideoProps {
-  /** Self-hosted, muted clip. */
+  /** Self-hosted, muted clip. This is the light rendition phones get. */
   video: string;
+  /** Full-resolution rendition, used from laptop width up. */
+  videoHd?: string;
   /** First frame of the clip. This is what paints, and all some visitors get. */
   poster: string;
   /** Positioning for the layer itself. Defaults to filling its parent. */
@@ -34,6 +36,7 @@ interface BackgroundVideoProps {
  */
 export function BackgroundVideo({
   video,
+  videoHd,
   poster,
   className,
   mediaClassName,
@@ -74,7 +77,10 @@ export function BackgroundVideo({
         if (visible) {
           if (!requested) {
             requested = true;
-            el.src = video;
+            /* Decided once, when the footage is first needed: a phone gets
+               the small file, a laptop or monitor the sharp one. */
+            const wide = matchMedia("(min-width: 1024px)").matches;
+            el.src = wide && videoHd ? videoHd : video;
           }
           el.play().catch(() => {});
         } else {
@@ -91,7 +97,7 @@ export function BackgroundVideo({
       el.removeEventListener("canplay", onCanPlay);
       el.pause();
     };
-  }, [video, seamFade]);
+  }, [video, videoHd, seamFade]);
 
   return (
     <div
@@ -105,7 +111,7 @@ export function BackgroundVideo({
         fill
         priority={priority}
         sizes="100vw"
-        quality={70}
+        quality={80}
         className={cn("object-cover", mediaClassName)}
       />
       <video

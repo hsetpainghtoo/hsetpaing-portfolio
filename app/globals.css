@@ -80,6 +80,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-signal: var(--signal);
+  --color-arch: var(--arch);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -130,7 +131,11 @@
   --border: #d8d4c8;
   --input: #c9c4b6;
   --ring: #12120f;
+  /* The one accent: ember, the colour of the hero's terrain mesh. Always a
+     flat colour, never a gradient. */
   --signal: #d4431a;
+  /* Backdrop behind the portraits, light enough to hold a black suit. */
+  --arch: #e2ded2;
 
   --chart-1: #d4431a;
   --chart-2: #5d5a51;
@@ -142,32 +147,34 @@
 .dark,
 .theme-invert,
 .theme-dark {
-  --background: #0b0b0a;
-  --foreground: #eceae3;
-  --card: #121211;
-  --card-foreground: #eceae3;
-  --surface: #181816;
-  --popover: #121211;
-  --popover-foreground: #eceae3;
-  --primary: #eceae3;
-  --primary-foreground: #0b0b0a;
-  --secondary: #181816;
-  --secondary-foreground: #eceae3;
-  --muted: #1a1a18;
-  --muted-foreground: #9a978d;
-  --accent: #1f1f1c;
-  --accent-foreground: #eceae3;
+  /* Ink with a breath of violet in it. Still near-black; never #000. */
+  --background: #0a0a0e;
+  --foreground: #eeece6;
+  --card: #111117;
+  --card-foreground: #eeece6;
+  --surface: #17161e;
+  --popover: #111117;
+  --popover-foreground: #eeece6;
+  --primary: #eeece6;
+  --primary-foreground: #0a0a0e;
+  --secondary: #17161e;
+  --secondary-foreground: #eeece6;
+  --muted: #1a1922;
+  --muted-foreground: #a09dab;
+  --accent: #201f2a;
+  --accent-foreground: #eeece6;
   --destructive: #ef6a5e;
-  --border: #272724;
-  --input: #35352f;
-  --ring: #eceae3;
+  --border: #292733;
+  --input: #383544;
+  --ring: #eeece6;
   --signal: #ff6a3d;
+  --arch: #d6d1c4;
 
   --chart-1: #ff6a3d;
-  --chart-2: #9a978d;
-  --chart-3: #6b6960;
-  --chart-4: #eceae3;
-  --chart-5: #35352f;
+  --chart-2: #b9502f;
+  --chart-3: #a09dab;
+  --chart-4: #eeece6;
+  --chart-5: #383544;
 }
 
 @layer base {
@@ -413,7 +420,7 @@
 
 @media (prefers-contrast: more) {
   :root { --muted-foreground: #3f3d36; --border: #8f8b7e; }
-  .dark { --muted-foreground: #c4c1b6; --border: #6b6960; }
+  .dark { --muted-foreground: #c9c6d2; --border: #6d6a7a; }
 }
 
 /* Film grain. A fixed full-viewport layer costs a composite on every scroll
@@ -523,7 +530,7 @@
 
 .marquee-outline {
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 42%, transparent);
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--signal) 70%, var(--foreground));
 }
 
 /* Cursor label. */
@@ -595,5 +602,56 @@
   .footer-wordmark {
     filter: drop-shadow(0 -1px 0 rgb(255 255 255 / 0.55))
       drop-shadow(0 0 18px rgb(190 200 255 / 0.45));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Colour. One flat ember, carried by a handful of elements: accent words,
+   big numerals, card labels and the arrow in a primary button. Everything
+   else stays ink and paper.
+   --------------------------------------------------------------------------- */
+.accent-ink,
+.tint-text {
+  color: var(--signal);
+}
+
+/* Featured project cards: the site's own card tone, with the border warmed
+   by the accent so they belong to the same family as the ember labels. */
+.accent-card {
+  background: var(--card);
+  border-color: color-mix(in srgb, var(--signal) 20%, var(--border));
+}
+
+/* The arch behind the hero portrait: a flat sheet of paper tone, not a frame. */
+.portrait-arch {
+  background: var(--arch);
+}
+
+/* Scrollbar: thin, quiet, and part of the page rather than the browser. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 30%, transparent) transparent;
+}
+
+@supports not (scrollbar-width: thin) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--foreground) 30%, transparent);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--signal);
+    background-clip: content-box;
   }
 }

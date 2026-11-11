@@ -34,6 +34,7 @@ export function Footer() {
       >
         <BackgroundVideo
           video="/footer-meadow.mp4"
+          videoHd="/footer-meadow-hd.mp4"
           poster="/footer-meadow-poster.webp"
           mediaClassName="object-[50%_100%]"
         />
@@ -42,12 +43,12 @@ export function Footer() {
 
         {/* The name as glass. No text-stroke: the letters overlap slightly,
             and a stroke would draw lines through the overlaps. */}
-        <p className="footer-wordmark absolute bottom-[0.13em] left-1/2 -translate-x-1/2 select-none whitespace-nowrap text-[19.8vw] font-semibold leading-[0.74] tracking-[-0.055em]">
+        <p className="footer-wordmark absolute bottom-0 left-1/2 -translate-x-1/2 select-none whitespace-nowrap text-[19.8vw] font-semibold leading-[1.16] tracking-[-0.055em]">
           Hset Paing
         </p>
 
         {/* Fog: the wordmark's feet disappear into it. */}
-        <div className="absolute inset-x-0 bottom-0 h-[17%] bg-[linear-gradient(to_top,#e2e3f1_0%,rgb(226_227_241/0.6)_30%,rgb(226_227_241/0)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[13%] bg-[linear-gradient(to_top,#e2e3f1_0%,rgb(226_227_241/0.55)_35%,rgb(226_227_241/0)_100%)]" />
       </div>
 
       <div className="mx-auto max-w-[1600px] px-5 pb-[clamp(13rem,36vw,34rem)] pt-20 sm:px-8 md:pt-28 lg:px-12">
@@ -61,7 +62,7 @@ export function Footer() {
           </p>
           <h2 className="display max-w-[14ch] text-[clamp(2.75rem,9vw,8rem)]">
             Got something that needs{" "}
-            <span className="serif-accent text-muted-foreground">building?</span>
+            <span className="serif-accent accent-ink">building?</span>
           </h2>
         </Reveal>
 

@@ -39,7 +39,7 @@ export function PillLink({
       {variant === "solid" && (
         <span
           aria-hidden="true"
-          className="flex size-9 items-center justify-center rounded-full bg-background text-foreground"
+          className="flex size-9 items-center justify-center rounded-full bg-signal text-background"
         >
           <ArrowUpRight className="size-4 transition-transform duration-300 ease-out group-hover:rotate-45" />
         </span>

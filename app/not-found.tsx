@@ -15,7 +15,7 @@ export default function NotFound() {
         <p className="eyebrow mb-6">Error / Not found</p>
         <p
           aria-hidden="true"
-          className="rise-in font-serif text-[clamp(8rem,26vw,20rem)] italic leading-[0.8] tracking-[-0.04em]"
+          className="rise-in accent-ink w-fit pr-[0.06em] font-serif text-[clamp(8rem,26vw,20rem)] italic leading-[0.9] tracking-[-0.04em]"
         >
           404
         </p>

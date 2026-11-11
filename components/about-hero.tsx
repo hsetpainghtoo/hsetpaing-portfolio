@@ -32,12 +32,21 @@ export function AboutHero() {
   const stageRef = useRef<HTMLElement>(null);
   const plateRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [armed, setArmed] = useState(false);
+  /* Null until the footage can be used; then the rendition that suits the
+     screen. A phone gets the small file, a laptop or monitor the sharp one. */
+  const [footage, setFootage] = useState<string | null>(null);
 
   useEffect(() => {
     const stage = stageRef.current;
     const plate = plateRef.current;
     if (!stage || !plate) return;
+
+    const arm = () =>
+      setFootage(
+        matchMedia("(min-width: 1024px)").matches
+          ? "/about-terrarium-hd.mp4"
+          : "/about-terrarium.mp4"
+      );
 
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -79,7 +88,7 @@ export function AboutHero() {
       const e = event as PointerEvent;
       if (e.pointerType === "mouse") return;
       if ((e.target as Element).closest("a, button")) return;
-      setArmed(true);
+      arm();
       seeded = false;
       aim(e.clientX, e.clientY);
       stage.classList.toggle("is-full");
@@ -89,7 +98,7 @@ export function AboutHero() {
     stage.addEventListener("pointerleave", onLeave);
     stage.addEventListener("click", onTap);
 
-    const idle = fine ? window.setTimeout(() => setArmed(true), 600) : 0;
+    const idle = fine ? window.setTimeout(arm, 600) : 0;
 
     return () => {
       window.clearTimeout(idle);
@@ -104,7 +113,7 @@ export function AboutHero() {
   useEffect(() => {
     const stage = stageRef.current;
     const video = videoRef.current;
-    if (!armed || !stage || !video) return;
+    if (!footage || !stage || !video) return;
 
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) video.play().catch(() => {});
@@ -112,7 +121,7 @@ export function AboutHero() {
     });
     io.observe(stage);
     return () => io.disconnect();
-  }, [armed]);
+  }, [footage]);
 
   return (
     <section
@@ -138,7 +147,7 @@ export function AboutHero() {
           fill
           priority
           sizes={SIZES}
-          quality={75}
+          quality={80}
           className="hero-settle object-cover"
         />
 
@@ -157,14 +166,14 @@ export function AboutHero() {
           fill
           priority
           sizes={SIZES}
-          quality={75}
+          quality={80}
           className="hero-settle object-cover"
         />
 
-        {armed && (
+        {footage && (
           <video
             ref={videoRef}
-            src="/about-terrarium.mp4"
+            src={footage}
             muted
             loop
             playsInline
@@ -190,7 +199,7 @@ export function AboutHero() {
             <Line delay={420}>The person</Line>
             <Line delay={510}>
               behind{" "}
-              <span className="serif-accent text-muted-foreground">the code</span>
+              <span className="serif-accent accent-ink">the code</span>
             </Line>
           </h1>
         </div>
