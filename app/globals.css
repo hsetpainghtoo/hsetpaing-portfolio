@@ -80,6 +80,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-signal: var(--signal);
+  --color-arch: var(--arch);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -130,13 +131,11 @@
   --border: #d8d4c8;
   --input: #c9c4b6;
   --ring: #12120f;
+  /* The one accent: ember, the colour of the hero's terrain mesh. Always a
+     flat colour, never a gradient. */
   --signal: #d4431a;
-  /* The colour family. Ember is the accent proper; amber and dusk are its
-     neighbours, taken from the site's own footage (lava, fireflies, blue
-     hour). Used together as one gradient, never as three separate accents. */
-  --ember: #d4431a;
-  --amber: #b9700c;
-  --dusk: #5a48d6;
+  /* Backdrop behind the portraits, light enough to hold a black suit. */
+  --arch: #e2ded2;
 
   --chart-1: #d4431a;
   --chart-2: #5d5a51;
@@ -148,8 +147,7 @@
 .dark,
 .theme-invert,
 .theme-dark {
-  /* Ink with a breath of violet in it, so the warm accents have something
-     cool to glow against. Still near-black; never #000. */
+  /* Ink with a breath of violet in it. Still near-black; never #000. */
   --background: #0a0a0e;
   --foreground: #eeece6;
   --card: #111117;
@@ -170,13 +168,11 @@
   --input: #383544;
   --ring: #eeece6;
   --signal: #ff6a3d;
-  --ember: #ff6a3d;
-  --amber: #ffb561;
-  --dusk: #9f8fff;
+  --arch: #d6d1c4;
 
   --chart-1: #ff6a3d;
-  --chart-2: #ffb561;
-  --chart-3: #9f8fff;
+  --chart-2: #b9502f;
+  --chart-3: #a09dab;
   --chart-4: #eeece6;
   --chart-5: #383544;
 }
@@ -534,7 +530,7 @@
 
 .marquee-outline {
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--dusk) 70%, var(--foreground));
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--signal) 70%, var(--foreground));
 }
 
 /* Cursor label. */
@@ -610,44 +606,25 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Colour. One gradient, ember through amber to dusk, carried by a handful
-   of elements: accent words, big numerals, the arrow in a primary button,
-   and a wash of light behind a section. Everything else stays ink and paper.
+   Colour. One flat ember, carried by a handful of elements: accent words,
+   big numerals, card labels and the arrow in a primary button. Everything
+   else stays ink and paper.
    --------------------------------------------------------------------------- */
-.accent-ink {
-  background: linear-gradient(100deg, var(--ember) 0%, var(--amber) 48%, var(--dusk) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--ember);
-}
-
-/* Ambient light at the head of a section. Light, never the subject. */
-.ambient {
-  background:
-    radial-gradient(52% 44% at 88% 0%, color-mix(in srgb, var(--dusk) 13%, transparent), transparent 70%),
-    radial-gradient(40% 36% at 6% 8%, color-mix(in srgb, var(--ember) 9%, transparent), transparent 70%);
-}
-
-/* A project card takes one hue (--tint) and uses it three ways: a wash in
-   its top corner, its label, and its number. */
-.tint-card {
-  background:
-    radial-gradient(90% 70% at 0% 0%, color-mix(in srgb, var(--tint) 16%, transparent), transparent 62%),
-    var(--card);
-  border-color: color-mix(in srgb, var(--tint) 22%, var(--border));
-}
-
+.accent-ink,
 .tint-text {
-  color: color-mix(in srgb, var(--tint) 78%, var(--foreground));
+  color: var(--signal);
 }
 
-/* The arch behind the hero portrait: a warm backlight, not a frame. */
+/* Featured project cards: the site's own card tone, with the border warmed
+   by the accent so they belong to the same family as the ember labels. */
+.accent-card {
+  background: var(--card);
+  border-color: color-mix(in srgb, var(--signal) 20%, var(--border));
+}
+
+/* The arch behind the hero portrait: a flat sheet of paper tone, not a frame. */
 .portrait-arch {
-  background:
-    radial-gradient(80% 60% at 50% 28%, color-mix(in srgb, var(--amber) 34%, transparent), transparent 72%),
-    linear-gradient(to bottom, color-mix(in srgb, var(--ember) 30%, transparent), color-mix(in srgb, var(--dusk) 22%, transparent));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--amber) 30%, transparent);
+  background: var(--arch);
 }
 
 /* Scrollbar: thin, quiet, and part of the page rather than the browser. */
@@ -674,7 +651,7 @@ html {
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--ember);
+    background: var(--signal);
     background-clip: content-box;
   }
 }

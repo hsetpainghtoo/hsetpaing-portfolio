@@ -55,10 +55,10 @@ export function Navbar() {
         <nav
           aria-label="Main"
           className={cn(
-            "pointer-events-auto flex w-full items-center justify-between gap-1 rounded-full border p-1.5 backdrop-blur-md transition-[background-color,border-color,box-shadow] duration-300 md:w-auto",
-            scrolled || open
-              ? "border-foreground/10 bg-background/85 shadow-[0_8px_30px_-12px_rgb(0_0_0/0.25)]"
-              : "border-foreground/10 bg-background/90"
+            "pointer-events-auto flex w-full items-center justify-between gap-1 rounded-full border border-foreground/10 bg-background p-1.5 transition-shadow duration-300 md:w-auto",
+            /* Solid on purpose. A translucent, blurred pill smeared whatever
+               scrolled behind it into a dark band along its lower edge. */
+            (scrolled || open) && "shadow-[0_8px_30px_-12px_rgb(0_0_0/0.25)]"
           )}
         >
           <Link

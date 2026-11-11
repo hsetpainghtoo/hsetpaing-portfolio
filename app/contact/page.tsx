@@ -218,7 +218,7 @@ export default function ContactPage() {
             <div>
               <p className="eyebrow mb-3">Response time</p>
               <p className="text-sm text-muted-foreground">
-                I check messages on weekday evenings, Myanmar time. If
+                I check messages on weekday evenings, Thailand time. If
                 something is urgent, say so in the first line and I will
                 prioritise it.
               </p>

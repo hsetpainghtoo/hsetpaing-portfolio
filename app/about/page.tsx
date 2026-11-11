@@ -180,15 +180,15 @@ export default function AboutPage() {
       {/* Profile */}
       <section className="grid gap-10 py-14 lg:grid-cols-12 lg:py-24">
         <Reveal className="lg:col-span-4">
-          <div className="relative aspect-[5/6] max-w-sm overflow-hidden rounded-[1.75rem] bg-surface md:rounded-[2.25rem]">
+          <div className="relative aspect-[5/6] max-w-sm overflow-hidden rounded-[1.75rem] bg-arch md:rounded-[2.25rem]">
             <Image
-              src="/hph_portrait.jpg"
-              alt="Portrait of Hset Paing Htoo"
+              src="/about-page-selfie.png"
+              alt="Hset Paing Htoo in a black suit"
               fill
               priority
               sizes="(min-width: 1024px) 30vw, 384px"
               quality={75}
-              className="object-cover object-[50%_35%]"
+              className="object-cover object-top pt-[6%]"
             />
           </div>
         </Reveal>
@@ -215,11 +215,9 @@ export default function AboutPage() {
               operations and the responsive layouts.
             </p>
             <p className="md:col-span-2 md:max-w-[62ch]">
-              Outside of client work I spend time on industrial monitoring:
-              Grafana dashboards, InfluxDB, and Modbus data coming off real
-              hardware. It is a useful counterweight to building marketing
-              sites, and I am always up for a problem I have not solved
-              before.
+              Away from the keyboard I play guitar, watch anime (One Piece
+              above all) and films, play games, and read whenever I can
+              find a quiet hour.
             </p>
           </div>
         </Reveal>

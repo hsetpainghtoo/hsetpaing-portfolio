@@ -4,10 +4,10 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 /**
- * The hero portrait, in its own colour, standing in a lit arch.
+ * The hero portrait, standing in a pale arch.
  *
- * It used to be greyscale in a dark frame with a caption plate, which read
- * as a memorial photograph. Colour, a warm backlight and no plate fix that.
+ * A full-length cut-out, cropped by the arch at about the hip. The arch is
+ * a flat paper tone in both themes so the black suit always has an edge.
  *
  * The only motion is a few pixels of drift against the pointer, for depth.
  * It listens only while the hero is on screen, only for a mouse, and its
@@ -59,17 +59,21 @@ export function Portrait() {
   return (
     <div ref={rootRef} className="pt-[12%]">
       <div className="portrait-arch relative aspect-[4/5] rounded-b-[1.75rem] rounded-t-[999px]">
-        <div data-figure className="absolute inset-0 will-change-transform">
-          <Image
-            src="/profile_me_transparent.png"
-            alt="Hset Paing Htoo"
-            width={508}
-            height={830}
-            priority
-            sizes="(min-width: 1024px) 27vw, 260px"
-            quality={80}
-            className="absolute bottom-0 left-1/2 h-[113%] w-auto max-w-none -translate-x-1/2 [clip-path:inset(-20%_0_0_0_round_0_0_1.5rem_1.5rem)]"
-          />
+        {/* The clip stays put while the figure drifts inside it: open above
+            the arch so the head can break out, closed at its rounded foot. */}
+        <div className="absolute inset-0 [clip-path:inset(-20%_0_0_0_round_0_0_1.75rem_1.75rem)]">
+          <div data-figure className="absolute inset-0 will-change-transform">
+            <Image
+              src="/hero-section-selfie.png"
+              alt="Hset Paing Htoo in a black suit, taking a mirror photo"
+              width={1024}
+              height={1536}
+              priority
+              sizes="(min-width: 1024px) 45vw, 480px"
+              quality={80}
+              className="absolute -top-[11%] left-1/2 h-[190%] w-auto max-w-none -translate-x-1/2"
+            />
+          </div>
         </div>
       </div>
     </div>

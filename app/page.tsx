@@ -67,11 +67,6 @@ const stats = [
   { value: String(liveCount), label: "Live in production" },
 ];
 
-/* One hue per featured project, echoing what the project is: ember for the
-   fuel terminal, teal for logistics, amber for the care device, blue for the
-   corporate site. */
-const TINTS = ["#ff6a3d", "#2fb8a6", "#f0a53a", "#5b8cff"];
-
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export default function HomePage() {
@@ -170,7 +165,7 @@ export default function HomePage() {
       />
 
       {/* -------------------------------------------------------- Statement */}
-      <section className="ambient mx-auto max-w-[1600px] px-5 py-24 sm:px-8 md:py-40 lg:px-12">
+      <section className="mx-auto max-w-[1600px] px-5 py-24 sm:px-8 md:py-40 lg:px-12">
         <div className="grid gap-8 lg:grid-cols-12">
           <p className="eyebrow lg:col-span-3 lg:pt-3">01 / Why interfaces</p>
           <div className="lg:col-span-9">
@@ -211,14 +206,9 @@ export default function HomePage() {
                 key={project.title}
                 data-stack-card
                 className="sticky mb-6 last:mb-0 [@media(max-height:700px)]:static"
-                style={
-                  {
-                    top: `calc(5.75rem + ${i * 0.875}rem)`,
-                    "--tint": TINTS[i % TINTS.length],
-                  } as CSSProperties
-                }
+                style={{ top: `calc(5.75rem + ${i * 0.875}rem)` }}
               >
-                <article className="tint-card grid origin-top gap-6 rounded-[1.75rem] border p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
+                <article className="accent-card grid origin-top bg-card gap-6 rounded-[1.75rem] border p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
                   <div className="flex flex-col p-2 sm:p-3 lg:col-span-5 lg:p-4">
                     <div className="flex items-center justify-between">
                       <span className="eyebrow tint-text">{project.kind}</span>
@@ -281,7 +271,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------------------------------------------- Toolkit */}
-      <section className="ambient mx-auto max-w-[1600px] px-5 pt-28 sm:px-8 md:pt-44 lg:px-12">
+      <section className="mx-auto max-w-[1600px] px-5 pt-28 sm:px-8 md:pt-44 lg:px-12">
         <Reveal className="mb-12 md:mb-16">
           <p className="eyebrow mb-5">03 / Toolkit</p>
           <h2 className="display text-[clamp(2.5rem,6.4vw,5.5rem)]">
