@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { CursorLabel } from "@/components/cursor-label"
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -108,6 +109,7 @@ export default function RootLayout({
           <div className="grain-overlay" aria-hidden="true" />
           <CursorLabel />
           <Toaster position="bottom-right" />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
