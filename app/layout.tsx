@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer"
 import { CursorLabel } from "@/components/cursor-label"
 import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -110,6 +111,7 @@ export default function RootLayout({
           <CursorLabel />
           <Toaster position="bottom-right" />
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
