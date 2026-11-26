@@ -3,7 +3,7 @@ import { ArrowUpRight, Lock } from "lucide-react";
 import { Line, PageIntro } from "@/components/page-intro";
 import { Reveal } from "@/components/reveal";
 import { VideoStage } from "@/components/video-stage";
-import { projects } from "@/lib/projects";
+import { projectId, projects } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 /* Uneven on purpose: wide, narrow, narrow, wide, repeating. */
@@ -44,8 +44,16 @@ export default function ProjectsPage() {
           const animated = project.image.endsWith(".gif");
 
           return (
-            <Reveal as="li" key={project.title} className={SPANS[i % SPANS.length]}>
-              <article className="group flex h-full flex-col">
+            <Reveal
+              as="li"
+              key={project.title}
+              className={cn(
+                SPANS[i % SPANS.length],
+                /* An odd one out at the end takes the whole row, not half. */
+                i === projects.length - 1 && i % 2 === 0 && "md:col-span-2 lg:col-span-12"
+              )}
+            >
+              <article id={projectId(project.title)} className="group flex h-full scroll-mt-28 flex-col">
                 <div
                   data-cursor={hasLive ? undefined : "Private"}
                   className="relative h-60 overflow-hidden rounded-[1.5rem] bg-surface sm:h-72 md:rounded-[2rem] lg:h-[26rem]"
@@ -84,7 +92,10 @@ export default function ProjectsPage() {
                   <h2 className="mt-4 text-[clamp(1.5rem,2.4vw,2.25rem)] font-medium leading-[1.05] tracking-[-0.035em]">
                     {project.title}
                   </h2>
-                  <p className="measure mt-3 text-muted-foreground">
+                  <p className="measure mt-3 text-lg leading-snug tracking-[-0.01em]">
+                    {project.tagline}
+                  </p>
+                  <p className="measure mt-3 text-sm text-muted-foreground">
                     {project.description}
                   </p>
 

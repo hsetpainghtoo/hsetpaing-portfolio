@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Lock } from "lucide-react";
 import { CountUp } from "@/components/count-up";
 import { HeroStage } from "@/components/hero-stage";
 import { LocalTime } from "@/components/local-time";
@@ -12,7 +13,7 @@ import { Portrait } from "@/components/portrait";
 import { Reveal } from "@/components/reveal";
 import { ScrollWords } from "@/components/scroll-words";
 import { StackCards } from "@/components/stack-cards";
-import { projects, type Project } from "@/lib/projects";
+import { experience, projects, type Project } from "@/lib/projects";
 
 /* The four builds that best show the range: hardware data, operations
    software, a product launch and a corporate site. The rest are on /projects. */
@@ -57,13 +58,11 @@ const toolkit = [
 ];
 
 /* Figures derived from the real project list and start date, not invented. */
-const STARTED = new Date("2024-05-01").getTime();
-const years = ((Date.now() - STARTED) / (365.25 * 24 * 3600 * 1000)).toFixed(1);
 const liveCount = projects.filter((p) => p.liveUrl !== "#").length;
 
 const stats = [
   { value: String(projects.length), label: "Projects shipped" },
-  { value: years, label: "Years writing frontend" },
+  { value: experience.years, suffix: "+", label: "Years writing frontend" },
   { value: String(liveCount), label: "Live in production" },
 ];
 
@@ -77,7 +76,7 @@ export default function HomePage() {
         <div className="grid flex-1 grid-cols-1 gap-x-10 gap-y-10 md:grid-cols-[minmax(0,1fr)_260px] lg:grid-cols-[minmax(0,1fr)_clamp(300px,27vw,420px)] lg:grid-rows-[1fr_auto] lg:gap-y-12">
           <div className="flex flex-col justify-center md:col-span-2 lg:col-span-1">
             <p
-              className="rise-in mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-foreground/10 py-1.5 pl-2.5 pr-3.5 text-[0.8125rem] text-muted-foreground"
+              className="rise-in mb-7 inline-flex w-fit items-center gap-2.5 liquid-glass glass-lens rounded-full py-1.5 pl-2.5 pr-3.5 text-[0.8125rem] text-muted-foreground"
               style={d(150)}
             >
               <span className="relative flex size-2">
@@ -120,6 +119,14 @@ export default function HomePage() {
                 Say hello
               </PillLink>
             </div>
+            <Link
+              href="/services"
+              className="rise-in group mt-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              style={d(900)}
+            >
+              Business owner? See my services
+              <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
           </div>
 
           {/* Portrait. The arch holds the figure; the head is allowed to
@@ -208,7 +215,7 @@ export default function HomePage() {
                 className="sticky mb-6 last:mb-0 [@media(max-height:700px)]:static"
                 style={{ top: `calc(5.75rem + ${i * 0.875}rem)` }}
               >
-                <article className="accent-card grid origin-top bg-card gap-6 rounded-[1.75rem] border p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
+                <article className="liquid-glass glass-solid grid origin-top gap-6 rounded-[1.75rem] p-4 will-change-transform sm:p-5 md:rounded-[2.25rem] lg:grid-cols-12 lg:gap-10 lg:p-6">
                   <div className="flex flex-col p-2 sm:p-3 lg:col-span-5 lg:p-4">
                     <div className="flex items-center justify-between">
                       <span className="eyebrow tint-text">{project.kind}</span>
@@ -228,7 +235,7 @@ export default function HomePage() {
                       {project.technologies.slice(0, 5).map((tech) => (
                         <li
                           key={tech}
-                          className="tabular rounded-full border border-foreground/10 px-2.5 py-1 text-[0.6875rem] text-muted-foreground"
+                          className="tabular rounded-full bg-foreground/[0.06] px-2.5 py-1 text-[0.6875rem] text-muted-foreground"
                         >
                           {tech}
                         </li>
@@ -317,6 +324,7 @@ export default function HomePage() {
               <dt className="eyebrow mt-3">{stat.label}</dt>
               <dd className="accent-ink w-fit pr-[0.08em] font-serif text-[clamp(4rem,9vw,8rem)] italic leading-[0.95] tracking-[-0.03em]">
                 <CountUp value={stat.value} />
+                {stat.suffix}
               </dd>
             </Reveal>
           ))}

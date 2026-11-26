@@ -87,8 +87,10 @@ export default function ContactPage() {
       </VideoStage>
 
     <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-      <div className="grid gap-16 pt-4 lg:grid-cols-12 lg:gap-10 lg:pt-6">
-        <Reveal className="lg:col-span-7">
+      {/* Pulled up into the flower field so the form's glass has something
+          to refract. */}
+      <div className="relative z-10 -mt-28 grid gap-16 md:-mt-40 lg:-mt-56 lg:grid-cols-12 lg:gap-10">
+        <Reveal className="liquid-glass rounded-[1.75rem] p-6 sm:p-8 md:rounded-[2.25rem] md:p-10 lg:col-span-7">
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-10">
             <div>
               <Label htmlFor="name" className="eyebrow">
@@ -181,7 +183,7 @@ export default function ContactPage() {
           </form>
         </Reveal>
 
-        <Reveal as="div" delay={120} className="lg:col-span-4 lg:col-start-9">
+        <Reveal as="div" delay={120} className="liquid-glass self-start rounded-[1.75rem] p-6 sm:p-8 md:rounded-[2.25rem] lg:col-span-4 lg:col-start-9">
           <aside className="space-y-10">
             <div>
               <p className="eyebrow mb-3">Email</p>

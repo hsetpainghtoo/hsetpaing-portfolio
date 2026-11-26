@@ -26,7 +26,7 @@ export function PillLink({
     "press-feedback group inline-flex h-12 items-center rounded-full text-[0.9375rem] font-medium tracking-[-0.01em]",
     variant === "solid"
       ? "gap-3 bg-foreground pl-6 pr-1.5 text-background"
-      : "border border-foreground/15 px-6 hover:border-foreground/40 hover:bg-foreground/[0.04]",
+      : "liquid-glass glass-lens px-6 transition-transform duration-300 hover:-translate-y-0.5",
     className
   );
 

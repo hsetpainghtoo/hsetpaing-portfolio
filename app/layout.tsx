@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { CursorLabel } from "@/components/cursor-label"
+import { GlassLens } from "@/components/glass-lens"
 import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -109,6 +110,7 @@ export default function RootLayout({
           <Footer />
           <div className="grain-overlay" aria-hidden="true" />
           <CursorLabel />
+          <GlassLens />
           <Toaster position="bottom-right" />
           <Analytics />
           <SpeedInsights />
