@@ -35,8 +35,8 @@ function ChatLink({
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noreferrer noopener"
+      /* App links (viber://) open the app; only web links get a new tab. */
+      {...(href.startsWith("http") ? { target: "_blank", rel: "noreferrer noopener" } : {})}
       className={cn(
         "press-feedback inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors sm:px-7 sm:text-base",
         variant === "solid"

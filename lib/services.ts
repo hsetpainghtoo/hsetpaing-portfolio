@@ -6,9 +6,11 @@ export const servicesConfig = {
   carePlans: { basic: true, growth: false, pro: false },
   showFoundingOffer: true,
   contact: {
-    messenger: "{{MESSENGER_URL}}",
-    viber: "{{VIBER_URL}}",
-    line: "{{LINE_URL}}",
+    messenger: "https://m.me/hset.htoo.35",
+    /* Viber has no web chat link: this opens a chat with the number in the
+       Viber app (phone or desktop). Without the app installed it does nothing. */
+    viber: "viber://chat?number=%2B959781999018",
+    line: "https://line.me/ti/p/_uL1Om80qB",
   },
 } as const;
 
