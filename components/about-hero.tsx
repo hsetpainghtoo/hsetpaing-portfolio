@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Line } from "@/components/page-intro";
+import { experience } from "@/lib/projects";
 
 /* All three plates share one frame (16:9, the bowl in the same place), so
    they are stacked in a box that keeps that ratio and covers the stage. */
@@ -207,7 +208,7 @@ export function AboutHero() {
           className="rise-in max-w-sm text-muted-foreground md:col-span-4 md:col-start-9 md:pb-2 md:text-lg"
           style={{ "--d": "700ms" } as CSSProperties}
         >
-          Two and a half years in, still counting the things I want to get
+          {experience.label} in, still counting the things I want to get
           better at.
         </p>
       </div>

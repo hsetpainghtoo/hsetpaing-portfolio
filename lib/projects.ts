@@ -2,7 +2,8 @@ export interface Project {
   title: string;
   /** What kind of build it was, in two or three words. */
   kind: string;
-  /** One line for cards; the full description lives on the projects page. */
+  /** One line for cards, leading with the result. The stack lives in
+      `technologies` and the full story in `description`. */
   tagline: string;
   description: string;
   image: string;
@@ -17,7 +18,8 @@ export const projects: Project[] = [
     title: "Terminal Monitoring System",
     kind: "Industrial monitoring",
     tagline:
-      "Tank levels off Modbus hardware, turned into certified volumes, live dashboards and alerts for a fuel terminal.",
+      "Tank levels become certified volumes on a live dashboard, and engineers are alerted on Telegram and email.",
+    // TODO(owner): add real metric
     description:
       "Industrial monitoring stack for a fuel terminal, polling Modbus registers off Rosemount tank hubs into InfluxDB and a white-labelled Grafana dashboard. A calibration service turns raw level readings into certified volume and weight figures against ASTM D1250 tables and SGS strapping certificates, and a reporter service pushes threshold alerts to engineers over Telegram and email. Ships as an offline Docker package for air-gapped sites.",
     image: "/terminal_monitoring_project.png",
@@ -29,7 +31,8 @@ export const projects: Project[] = [
     title: "Wholesale Management System",
     kind: "Operations platform",
     tagline:
-      "WhatsApp order intake, an append-only stock ledger and optimised delivery routes for a Singapore distributor.",
+      "Orders arrive via WhatsApp and are logged automatically; stock, invoices and delivery routes follow.",
+    // TODO(owner): add real metric
     description:
       "Order intake, stock control, and delivery routing for a wholesale distributor in Singapore. Customers order over WhatsApp instead of logging in, stock is an append-only ledger so figures stay auditable, and multi-stop routes are waypoint-optimised before dispatch. Picking lists, delivery orders, and invoices print from what actually shipped rather than what was ordered.",
     image: "/wholesale_management_project.png",
@@ -41,7 +44,7 @@ export const projects: Project[] = [
     title: "ShouXingCare",
     kind: "Product marketing site",
     tagline:
-      "The public face of a voice-first AI companion device built for elderly care.",
+      "Explains a voice-first companion for elderly care to the families deciding whether to buy it.",
     description:
       "Marketing site for a voice-first AI companion device built for elderly care. The device holds a conversation on a wake word, keeps medicine reminders that mirror to family on Telegram, and sends one-tap emergency alerts to up to three contacts.",
     image: "/shouxingcare_project.png",
@@ -53,7 +56,7 @@ export const projects: Project[] = [
     title: "Transtak Pte Ltd Website",
     kind: "Corporate site",
     tagline:
-      "The corporate site for an engineering, logistics and e-commerce firm serving SMEs across Southeast Asia.",
+      "SMEs across Southeast Asia can see Transtak's engineering, logistics and e-commerce services in one place.",
     description: "Official corporate website for Transtak Pte Ltd, providing end-to-end engineering, logistics, and e-commerce solutions for SMEs across Southeast Asia.",
     image: "/transtak_project.png",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Radix UI", "Nodemailer", "React Bits"],
@@ -64,7 +67,7 @@ export const projects: Project[] = [
     title: "Mahar Engineering Website",
     kind: "Corporate site",
     tagline:
-      "The corporate site for a Singapore M&E contractor working on large-scale infrastructure.",
+      "Presents a Singapore M&E contractor's large-scale infrastructure work to prospective clients.",
     description: "Official corporate website for Mahar Engineering, a Singapore-registered Mechanical & Electrical (M&E) contractor specializing in large-scale infrastructure projects.",
     image: "/mahar_project.png",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Radix UI", "Nodemailer"],
@@ -74,7 +77,8 @@ export const projects: Project[] = [
   {
     title: "DET Static Website",
     kind: "Corporate site",
-    tagline: "My first static site, built for an IoT services company.",
+    tagline:
+      "Visitors can read an IoT services company's products and services in their own language.",
     description: "My first static website for my company, Digital Engineering Tech Ltd., a company that provides IoT services. I built this website to showcase my company's services and products.",
     image: "/det_project_new.png",
     technologies: ["React.js", "i18n", "Tailwind CSS"],
@@ -85,7 +89,8 @@ export const projects: Project[] = [
     title: "Myanmar Express Hub",
     kind: "Commerce platform",
     tagline:
-      "A multilingual shopping and shipping platform with an AI assistant.",
+      "Customers shop, arrange shipping and ask an AI assistant questions in their own language.",
+    // TODO(owner): add real metric
     description:
       "Myanmar Express Hub is a multilingual shopping and shipping platform built with Next.js, TypeScript, Groq API, Shadcn UI and multilingual support with i18n.",
     image: "/express_hub_new.png",
@@ -94,22 +99,11 @@ export const projects: Project[] = [
     githubUrl: "#",
   },
   {
-    title: "Fake Store API Practice Project",
-    kind: "Practice build",
-    tagline:
-      "A practice e-commerce frontend with listings, product detail and a cart, on the Fake Store API.",
-    description:
-      "A practice eCommerce frontend built with React, TypeScript, and Tailwind CSS, fetching product data from the Fake Store API to display dynamic product listings, details, and cart functionality.",
-    image: "/online-shop.gif",
-    technologies: ["React", "Tailwind CSS", "Redux Toolkit"],
-    liveUrl: "https://fake-store-flame.vercel.app/",
-    githubUrl: "https://github.com/hsetpainghtoo/FakeStore",
-  },
-  {
     title: "Fuel Station Management System (Frontend)",
     kind: "Management system",
     tagline:
-      "Inventory, sales tracking and customer management for fuel station operations.",
+      "Station staff track fuel stock, sales and customers from one screen.",
+    // TODO(owner): add real metric
     description:
       "A comprehensive solution for managing fuel station operations, including inventory management, sales tracking, and customer management.",
     image: "/fuel_station_new.png",
@@ -121,7 +115,7 @@ export const projects: Project[] = [
     title: "Roots to Rooms",
     kind: "Community platform",
     tagline:
-      "Connecting rural farmers and artisans directly with educational institutions.",
+      "Rural farmers and artisans sell directly to schools and keep a fair share of the supply chain.",
     description:
       "Roots to Rooms (R2R) is a platform connecting rural farmers and artisans directly with educational institutions. We empower local communities by giving them a fair role in the supply chain, ensuring every child has access to quality resources fueled by local talent.",
     image: "/roots_rooms_new.png",
@@ -130,6 +124,14 @@ export const projects: Project[] = [
     githubUrl: "#",
   },
 ];
+
+/** Anchor for a project on /projects, e.g. "wholesale-management-system". */
+export const projectId = (title: string) =>
+  title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** Frontend experience, used everywhere it is quoted. */
+const YEARS = "2.5";
+export const experience = { years: YEARS, label: `${YEARS}+ years` } as const;
 
 export const site = {
   name: "Hset Paing Htoo",

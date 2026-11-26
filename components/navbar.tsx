@@ -10,6 +10,7 @@ import { site } from "@/lib/projects";
 
 const links = [
   { name: "Work", href: "/projects" },
+  { name: "Services", href: "/services" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
@@ -55,9 +56,7 @@ export function Navbar() {
         <nav
           aria-label="Main"
           className={cn(
-            "pointer-events-auto flex w-full items-center justify-between gap-1 rounded-full border border-foreground/10 bg-background p-1.5 transition-shadow duration-300 md:w-auto",
-            /* Solid on purpose. A translucent, blurred pill smeared whatever
-               scrolled behind it into a dark band along its lower edge. */
+            "pointer-events-auto flex w-full items-center justify-between gap-1 liquid-glass glass-bar glass-lens rounded-full p-1.5 transition-shadow duration-300 md:w-auto",
             (scrolled || open) && "shadow-[0_8px_30px_-12px_rgb(0_0_0/0.25)]"
           )}
         >
@@ -143,7 +142,7 @@ export function Navbar() {
         id="mobile-menu"
         inert={!open}
         className={cn(
-          "z-menu fixed inset-0 flex flex-col justify-between bg-background px-6 pb-10 pt-28 transition-[opacity,visibility] duration-300 md:hidden",
+          "z-menu fixed inset-0 flex flex-col justify-between bg-background/80 px-6 backdrop-blur-2xl pb-10 pt-28 transition-[opacity,visibility] duration-300 md:hidden",
           open ? "visible opacity-100" : "invisible opacity-0"
         )}
       >
