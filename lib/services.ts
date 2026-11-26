@@ -1,6 +1,6 @@
 /* The services page reads everything from this file. Flip a flag to switch
    a package, care plan or section on; no other code needs to change.
-   Anything in {{DOUBLE_BRACES}} is a fact the owner still has to fill in. */
+   Anything in double curly braces is a fact the owner still has to fill in. */
 
 export const servicesConfig = {
   packages: { starter: true, growth: false, pro: false },
@@ -177,13 +177,13 @@ export const copy = {
   },
   timeline: {
     label: "From chat to *launch*",
-    summary: "Most Starter websites go live within {{STARTER_TIMELINE}} of our first chat.",
+    summary: "Plan on about 3–4 weeks from our first chat to launch.",
     steps: [
       { title: "Free 15-minute chat about your business", duration: "Day 1" },
-      { title: "You send your content; I send a demo and a proposal", duration: "{{DEMO_DURATION}}" },
+      { title: "You send your content; I send a demo and a proposal", duration: "Up to 1 week" },
       {
-        title: "I build the site; you review it, with {{REVISIONS}} rounds of changes",
-        duration: "{{BUILD_DURATION}}",
+        title: "I build the site; you review it, with 2 rounds of changes",
+        duration: "About 2 weeks",
       },
       { title: "Launch, Google profile live, and handover of all accounts", duration: "1 day" },
     ],
@@ -201,8 +201,8 @@ export const copy = {
   costs: {
     label: "Costs after *launch*",
     items: [
-      "Domain name (your web address): about {{DOMAIN_COST}} per year, registered in your name.",
-      "Hosting: {{HOSTING_COST}}.",
+      "Domain name (your web address): ฿400–500 per year, registered in your name.",
+      "Hosting: free for a small site like this, on an account in your name.",
       "The care plan is optional. Without it, your site stays online and stays yours.",
     ],
   },
@@ -256,21 +256,24 @@ export const copy = {
       },
       {
         q: "Which languages can my website be in?",
-        a: "{{SITE_LANGUAGES}}. I speak Burmese and English, so we can work together in Burmese.",
+        a: "English, Burmese, or both. Thai is possible if you provide the Thai text. I speak Burmese and English, so we can work together in Burmese.",
       },
-      { q: "Can I change things myself later?", a: "{{EDIT_POLICY}}" },
-      { q: "How do I pay?", a: "50% to start and 50% at launch, by {{PAYMENT_METHODS}}." },
+      {
+        q: "Can I change things myself later?",
+        a: "Yes for your Google profile: I'll show you how to update hours, photos and contact details. For website changes, message me. The Basic care plan (฿1,400/month) includes 1 hour of edits each month; without it, I quote each change.",
+      },
+      { q: "How do I pay?", a: "50% to start and 50% at launch, by bank transfer or PromptPay." },
       {
         q: "How many changes are included?",
-        a: "{{REVISIONS}} rounds of changes before launch. Small fixes after launch are covered by the care plan.",
+        a: "2 rounds of changes before launch. Small fixes after launch are covered by the Basic care plan.",
       },
       {
         q: "What isn't included?",
-        a: "Online payments, professional photography and {{NOT_INCLUDED}}. Ask me if you need them.",
+        a: "Online payments, professional photography and logo design. Ask me if you need them.",
       },
       {
         q: "Where are you based?",
-        a: "I'm based in {{CITY}}. {{MEETING_POLICY}} I work online with businesses anywhere in Thailand.",
+        a: "I'm based in Bangkok and work online with businesses anywhere in Thailand, by chat and video call.",
       },
     ],
   },
@@ -281,7 +284,7 @@ export const copy = {
   },
   contact: {
     label: "Let's talk",
-    text: "Free 15-minute chat in Burmese or English. I usually reply {{REPLY_TIME}}.",
+    text: "Free 15-minute chat in Burmese or English. I usually reply the same day.",
     messenger: "Messenger",
     viber: "Viber",
     line: "LINE",
